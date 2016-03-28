@@ -1,0 +1,38 @@
+---
+
+- hosts: all
+  become: true
+
+
+  tasks:
+
+  - name: Add a repository for JDK8 on Ubuntu 14.04
+    apt_repository: repo='ppa:openjdk-r/ppa'
+    when: "ansible_distribution == 'Ubuntu' and ansible_lsb.major_release|int <= 14"
+
+  - name: Install the JRE
+    apt: pkg=openjdk-8-jre-headless state=latest update_cache=yes
+
+  - name: Add the Elasticsearch apt repository key
+    apt_key: url=https://packages.elastic.co/GPG-KEY-elasticsearch state=present
+
+  - name: Add the Elasticsearch apt repository
+    apt_repository: repo='deb http://packages.elastic.co/elasticsearch/2.x/debian stable main' state=present
+
+  - name: Install Elasticsearch
+    apt: pkg=elasticsearch state=latest update_cache=yes
+
+  - name: Make sure Elasticsearch autostarts and is started now
+    service: name=elasticsearch enabled=yes state=started
+
+  - name: Add the Kibana apt repository
+    apt_repository: repo='deb http://packages.elastic.co/kibana/4.4/debian stable main' state=present
+
+  - name: Install Kibana
+    apt: pkg=kibana state=latest update_cache=yes
+
+  - name: Make Kibana only available on localhost since we'll proxy it through nginx
+    lineinfile: "dest=/opt/kibana/config/kibana.yml regexp=^server.host line='server.host: \"localhost\"'"
+
+  - name: Make sure Kibana autostarts and is started now
+    service: name=kibana enabled=yes state=started
