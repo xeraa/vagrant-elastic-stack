@@ -6,6 +6,11 @@
 
   tasks:
 
+  - name: Autoremove unused packages to save some disk space
+    command: apt-get -y autoremove
+    #apt: autoremove=yes in Ansible 2.1+
+
+
   - name: Add a repository for JDK8 on Ubuntu 14.04
     apt_repository: repo='ppa:openjdk-r/ppa'
     when: "ansible_distribution == 'Ubuntu' and ansible_lsb.major_release|int <= 14"
@@ -13,11 +18,12 @@
   - name: Install the JRE
     apt: pkg=openjdk-8-jre-headless state=latest update_cache=yes
 
+
   - name: Add the Elasticsearch apt repository key
     apt_key: url=https://packages.elastic.co/GPG-KEY-elasticsearch state=present
 
   - name: Add the Elasticsearch apt repository
-    apt_repository: repo='deb http://packages.elastic.co/elasticsearch/2.x/debian stable main' state=present
+    apt_repository: repo='deb https://packages.elastic.co/elasticsearch/2.x/debian stable main' state=present
 
   - name: Install Elasticsearch
     apt: pkg=elasticsearch state=latest update_cache=yes
@@ -25,14 +31,36 @@
   - name: Make sure Elasticsearch autostarts and is started now
     service: name=elasticsearch enabled=yes state=started
 
+
+  - name: Add the Logstash apt repository
+    apt_repository: repo='deb https://packages.elastic.co/logstash/2.2/debian stable main' state=present
+
+  - name: Install Logstash
+    apt: pkg=logstash state=latest update_cache=yes
+
+  - name: Make sure Logstash autostarts and is started now
+    service: name=logstash enabled=yes state=started
+
+
+  - name: Add the Beats apt repository; do not use add-apt-repository since there is no deb-src at the moment
+    lineinfile: dest=/etc/apt/sources.list.d/beats.list line="deb https://packages.elastic.co/beats/apt stable main" state=present create=yes
+
+  - name: Install Filebeats
+    apt: pkg=filebeat state=latest update_cache=yes
+
+  - name: Make sure Filebeats autostarts and is started now
+    service: name=filebeat enabled=yes state=started
+
+
   - name: Add the Kibana apt repository
-    apt_repository: repo='deb http://packages.elastic.co/kibana/4.4/debian stable main' state=present
+    apt_repository: repo='deb https://packages.elastic.co/kibana/4.4/debian stable main' state=present
 
   - name: Install Kibana
     apt: pkg=kibana state=latest update_cache=yes
 
-  - name: Make Kibana only available on localhost since we'll proxy it through nginx
-    lineinfile: "dest=/opt/kibana/config/kibana.yml regexp=^server.host line='server.host: \"localhost\"'"
-
   - name: Make sure Kibana autostarts and is started now
     service: name=kibana enabled=yes state=started
+
+
+  - name: Install nginx
+    apt: pkg=nginx state=latest

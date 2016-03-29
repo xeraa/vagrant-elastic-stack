@@ -1,0 +1,22 @@
+---
+
+- hosts: all
+  become: true
+
+
+  tasks:
+
+  - name: Make Kibana only available on localhost since we'll proxy it through nginx
+    lineinfile: "dest=/opt/kibana/config/kibana.yml regexp=^server.host line='server.host: \"localhost\"'"
+
+  - name: Restart Kibana to apply the configuration change
+    service: name=kibana state=restarted
+
+  - name: Set up the nginx credentials
+    htpasswd: path=/etc/nginx/htpasswd.users name=admin password=admin
+
+  - name: Configure nginx
+    template: src=templates/nginx dest=/etc/nginx/sites-available/default
+
+  - name: Restart nginx to apply the configuration change
+    service: name=nginx state=restarted
