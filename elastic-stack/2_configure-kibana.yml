@@ -1,6 +1,6 @@
 ---
 
-- hosts: all
+- hosts: localhost
   become: true
 
 
@@ -12,10 +12,13 @@
   - name: Restart Kibana to apply the configuration change
     service: name=kibana state=restarted
 
+  - name: Install Python Passlib so the nginx credentials can be hashed
+    apt: name=python-passlib state=latest update_cache=yes
+
   - name: Set up the nginx credentials
     htpasswd: path=/etc/nginx/htpasswd.users name=admin password=admin
 
-  - name: Configure nginx
+  - name: Add a customized nginx configuration
     template: src=templates/nginx dest=/etc/nginx/sites-available/default
 
   - name: Restart nginx to apply the configuration change

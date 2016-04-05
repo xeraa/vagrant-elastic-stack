@@ -1,4 +1,4 @@
-# Create a minimal Ubuntu Xenial box
+# Create a minimal Ubuntu box
 Vagrant.require_version ">= 1.8.1"
 Vagrant.configure(2) do |config|
 
@@ -21,6 +21,7 @@ Vagrant.configure(2) do |config|
     config.vm.define "ubuntu" do |ubuntu|
         #ubuntu.vm.box = "ubuntu/xenial64"
         ubuntu.vm.box = "ubuntu/trusty64"
+        ubuntu.vm.network :forwarded_port, guest: 80, host: 8080
         ubuntu.vm.synced_folder "elastic-stack/", "/elastic-stack/"#, type: "rsync"
     end
 

@@ -1,0 +1,30 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Create a folder for certificates
+    file: dest=/etc/pki/tls/certs state=directory owner=root group=root
+
+  - name: Create a folder for private key files
+    file: dest=/etc/pki/tls/private state=directory owner=root group=root
+
+  - name: Create the certificate for localhost — you will need to change this for remote systems
+    command: openssl req -subj '/CN=localhost/' -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout private/logstash-forwarder.key -out certs/logstash-forwarder.crt
+    args:
+      chdir: /etc/pki/tls
+
+  - name: Add the Logstash input configuration
+    template: src=templates/beats-input.conf dest=/etc/logstash/conf.d/02-beats-input.conf
+
+  - name: Add the Logstash filter configuration
+    template: src=templates/syslog-filter.conf dest=/etc/logstash/conf.d/10-syslog-filter.conf
+
+  - name: Add the Logstash output configuration
+    template: src=templates/elasticsearch-output.conf dest=/etc/logstash/conf.d/30-elasticsearch-output.conf
+
+  - name: Restart Logstash to apply the configuration change
+    service: name=logstash state=restarted

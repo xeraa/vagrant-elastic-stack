@@ -1,0 +1,16 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Load the Filebeat template
+    command: curl -XPUT 'http://localhost:9200/_template/filebeat?pretty' -d@/elastic-stack/templates/filebeat-index-template.json
+
+  - name: Change the Filebeat configuration
+    template: src=templates/filebeat.yml dest=/etc/filebeat/filebeat.yml
+
+  - name: Restart Filebeat to apply the configuration change
+    service: name=filebeat state=restarted
