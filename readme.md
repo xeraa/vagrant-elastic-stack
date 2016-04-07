@@ -13,6 +13,10 @@ $ ansible-playbook /elastic-stack/4_configure-filebeat.yml
 $ ansible-playbook /elastic-stack/5_configure-topbeat.yml
 ```
 
+Access Kibana at [http://localhost:8080/app/kibana](http://localhost:8080/app/kibana) with the credentials `admin` and `admin`. Add the indices `filebeat-*` and `topbeat-*` at [http://localhost:8080/app/kibana#/settings/indices/](http://localhost:8080/app/kibana#/settings/indices/).
+
+Then you can search the logs (**Discover**), add pre-built or custom visualizations (**Visualize**), and put together a custom **Dashboard**.
+
 
 
 ## Known Issues
