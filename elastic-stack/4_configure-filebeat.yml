@@ -14,3 +14,5 @@
 
   - name: Restart Filebeat to apply the configuration change
     service: name=filebeat state=restarted
+
+  - debug: msg="Test with curl -XGET 'http://localhost:9200/filebeat-*/_search?pretty'"

@@ -10,6 +10,9 @@
     command: apt-get -y autoremove
     #apt: autoremove=yes in Ansible 2.1+
 
+  - name: Install unzip
+    apt: pkg=unzip state=latest
+
 
   - name: Add a repository for JDK8 on Ubuntu 14.04
     apt_repository: repo='ppa:openjdk-r/ppa'
@@ -45,11 +48,17 @@
   - name: Add the Beats apt repository; do not use add-apt-repository since there is no deb-src at the moment
     lineinfile: dest=/etc/apt/sources.list.d/beats.list line="deb https://packages.elastic.co/beats/apt stable main" state=present create=yes
 
-  - name: Install Filebeats
-    apt: pkg=filebeat state=latest update_cache=yes
+  - name: Install Filebeat and Topbeat
+    apt: pkg={{ item }} state=latest update_cache=yes
+    with_items:
+      - filebeat
+      - topbeat
 
-  - name: Make sure Filebeats autostarts and is started now
-    service: name=filebeat enabled=yes state=started
+  - name: Make sure Filebeat and Topbeat autostart and are started now
+    service: name={{ item }} enabled=yes state=started
+    with_items:
+      - filebeat
+      - topbeat
 
 
   - name: Add the Kibana apt repository

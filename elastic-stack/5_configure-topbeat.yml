@@ -1,0 +1,18 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Load the Topbeat template
+    command: curl -XPUT 'http://localhost:9200/_template/topbeat?pretty' -d@/elastic-stack/templates/topbeat-index-template.json
+
+  - name: Change the Topbeat configuration
+    template: src=templates/topbeat.yml dest=/etc/topbeat/topbeat.yml
+
+  - name: Restart Topbeat to apply the configuration change
+    service: name=topbeat state=restarted
+
+  - debug: msg="Test with curl -XGET 'http://localhost:9200/topbeat-*/_search?pretty'"
