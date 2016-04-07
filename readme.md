@@ -2,7 +2,11 @@
 
 This repository will install the [Elastic Stack](https://www.elastic.co/products) (Elasticsearch, Logstash, Beats, and Kibana) with a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/).
 
-In addition, with the [Ansible playbooks](https://docs.ansible.com/ansible/playbooks.html) in the *elastic-stack/* folder you can configure the whole system step by step. Just run them in the given order inside the Vagrant box:
+
+
+## Configure the Elastic Stack with Ansible
+
+With the [Ansible playbooks](https://docs.ansible.com/ansible/playbooks.html) in the */elastic-stack/* folder you can configure the whole system step by step. Just run them in the given order inside the Vagrant box:
 
 ```
 > vagrant ssh
@@ -12,6 +16,12 @@ $ ansible-playbook /elastic-stack/3_configure-logstash.yml
 $ ansible-playbook /elastic-stack/4_configure-filebeat.yml
 $ ansible-playbook /elastic-stack/5_configure-topbeat.yml
 ```
+
+Or if you are in a hurry, run all playbooks with `/elastic-stack/all.sh` at once.
+
+
+
+## Configure Kibana
 
 Access Kibana at [http://localhost:8080/app/kibana](http://localhost:8080/app/kibana) with the credentials `admin` and `admin`. Add the indices `filebeat-*` and `topbeat-*` at [http://localhost:8080/app/kibana#/settings/indices/](http://localhost:8080/app/kibana#/settings/indices/).
 
