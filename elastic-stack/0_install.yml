@@ -10,7 +10,7 @@
     command: apt-get -y autoremove
     #apt: autoremove=yes in Ansible 2.1+
 
-  - name: Install unzip
+  - name: Install unzip for unpacking files later on
     apt: pkg=unzip state=latest
 
 
@@ -59,6 +59,9 @@
     with_items:
       - filebeat
       - topbeat
+
+  - name: Download and unpack the Beats dashboards
+    unarchive: src=https://download.elastic.co/beats/dashboards/beats-dashboards-1.2.0.zip dest=/opt/ copy=no
 
 
   - name: Add the Kibana apt repository
