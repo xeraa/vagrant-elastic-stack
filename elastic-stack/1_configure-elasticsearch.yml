@@ -5,3 +5,6 @@
 
 
   tasks:
+
+  - name: Load the dashboards
+    command: /opt/beats-dashboards-1.2.0/load.sh
