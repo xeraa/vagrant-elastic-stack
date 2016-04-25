@@ -76,3 +76,6 @@
 
   - name: Install nginx
     apt: pkg=nginx state=latest
+
+  - name: Make the all.sh script executable
+    file: path=/elastic-stack/all.sh mode=0755
