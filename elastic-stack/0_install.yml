@@ -19,40 +19,48 @@
     when: "ansible_distribution == 'Ubuntu' and ansible_lsb.major_release|int <= 14"
 
   - name: Install the JRE
-    apt: pkg=openjdk-8-jre-headless state=latest update_cache=yes
+    apt: pkg=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
 
 
-  - name: Add the Elasticsearch apt repository key
-    apt_key: url=https://packages.elastic.co/GPG-KEY-elasticsearch state=present
-
-  - name: Add the Elasticsearch apt repository
-    apt_repository: repo='deb https://packages.elastic.co/elasticsearch/2.x/debian stable main' state=present
+  - name: Get Elasticsearch
+    get_url:
+      url=https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/5.0.0-alpha1/elasticsearch-5.0.0-alpha1.deb
+      dest=/opt/elasticsearch.deb
 
   - name: Install Elasticsearch
-    apt: pkg=elasticsearch state=latest update_cache=yes
+    apt: deb=/opt/elasticsearch.deb
 
   - name: Make sure Elasticsearch autostarts and is started now
     service: name=elasticsearch enabled=yes state=started
 
 
-  - name: Add the Logstash apt repository
-    apt_repository: repo='deb https://packages.elastic.co/logstash/2.3/debian stable main' state=present
+  - name: Get Logstash
+    get_url:
+      url=https://download.elastic.co/logstash/logstash/packages/debian/logstash_5.0.0~alpha1-1_all.deb
+      dest=/opt/logstash.deb
 
   - name: Install Logstash
-    apt: pkg=logstash state=latest update_cache=yes
+    apt: deb=/opt/logstash.deb
 
   - name: Make sure Logstash autostarts and is started now
     service: name=logstash enabled=yes state=started
 
 
-  - name: Add the Beats apt repository; do not use add-apt-repository since there is no deb-src at the moment
-    lineinfile: dest=/etc/apt/sources.list.d/beats.list line="deb https://packages.elastic.co/beats/apt stable main" state=present create=yes
+  - name: Get Filebeat
+    get_url:
+      url=https://download.elastic.co/beats/filebeat/filebeat_5.0.0-alpha1_amd64.deb
+      dest=/opt/filebeat.deb
 
-  - name: Install Filebeat and Topbeat
-    apt: pkg={{ item }} state=latest update_cache=yes
-    with_items:
-      - filebeat
-      - topbeat
+  - name: Install Filebeat
+    apt: deb=/opt/filebeat.deb
+
+  - name: Get Topbeat
+    get_url:
+      url=https://download.elastic.co/beats/topbeat/topbeat_5.0.0-alpha1_amd64.deb
+      dest=/opt/topbeat.deb
+
+  - name: Install Topbeat
+    apt: deb=/opt/topbeat.deb
 
   - name: Make sure Filebeat and Topbeat autostart and are started now
     service: name={{ item }} enabled=yes state=started
@@ -61,14 +69,16 @@
       - topbeat
 
   - name: Download and unpack the Beats dashboards
-    unarchive: src=https://download.elastic.co/beats/dashboards/beats-dashboards-1.2.1.zip dest=/opt/ copy=no
+    unarchive: src=https://download.elastic.co/beats/dashboards/beats-dashboards-5.0.0-alpha1.zip dest=/opt/ copy=no
 
 
-  - name: Add the Kibana apt repository
-    apt_repository: repo='deb https://packages.elastic.co/kibana/4.4/debian stable main' state=present
+  - name: Get Kibana
+    get_url:
+      url=https://download.elastic.co/kibana/kibana/kibana_5.0.0-alpha1_amd64.deb
+      dest=/opt/kibana.deb
 
   - name: Install Kibana
-    apt: pkg=kibana state=latest update_cache=yes
+    apt: deb=/opt/kibana.deb
 
   - name: Make sure Kibana autostarts and is started now
     service: name=kibana enabled=yes state=started
