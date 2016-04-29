@@ -61,7 +61,7 @@
       - topbeat
 
   - name: Download and unpack the Beats dashboards
-    unarchive: src=https://download.elastic.co/beats/dashboards/beats-dashboards-1.2.0.zip dest=/opt/ copy=no
+    unarchive: src=https://download.elastic.co/beats/dashboards/beats-dashboards-1.2.1.zip dest=/opt/ copy=no
 
 
   - name: Add the Kibana apt repository

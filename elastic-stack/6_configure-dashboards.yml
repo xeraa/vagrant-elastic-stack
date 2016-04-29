@@ -1,0 +1,12 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Load the dashboards
+    command: ./load.sh
+    args:
+      chdir: /opt/beats-dashboards-1.2.1/
