@@ -71,6 +71,16 @@
   - name: Download and unpack the Beats dashboards
     unarchive: src=https://download.elastic.co/beats/dashboards/beats-dashboards-5.0.0-alpha1.zip dest=/opt/ copy=no
 
+  - name: Download Timelion
+    get_url:
+      url=https://download.elastic.co/kibana/timelion/timelion-5.0.0-alpha1.zip
+      dest=/opt/timelion.zip
+
+  - name: Download X-Pack
+    get_url:
+      url=https://download.elastic.co/kibana/x-pack/x-pack-5.0.0-alpha1.zip
+      dest=/opt/x-pack.zip
+
 
   - name: Get Kibana
     get_url:
