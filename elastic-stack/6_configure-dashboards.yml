@@ -9,4 +9,4 @@
   - name: Load the dashboards
     command: ./load.sh
     args:
-      chdir: /opt/beats-dashboards-1.2.1/
+      chdir: /opt/beats-dashboards-5.0.0-alpha1/
