@@ -62,14 +62,20 @@
   - name: Install Topbeat
     apt: deb=/opt/topbeat.deb
 
-  - name: Make sure Filebeat and Topbeat autostart and are started now
+  - name: Get Packetbeat
+    get_url:
+      url=https://download.elastic.co/beats/packetbeat/packetbeat_5.0.0-alpha2_amd64.deb
+      dest=/opt/packetbeat.deb
+
+  - name: Install Packetbeat
+    apt: deb=/opt/packetbeat.deb
+
+  - name: Make sure Filebeat, Topbeat, and Packetbeat autostart and are started now
     service: name={{ item }} enabled=yes state=started
     with_items:
       - filebeat
       - topbeat
-
-  - name: Download and unpack the Beats dashboards
-    unarchive: src=https://download.elastic.co/beats/dashboards/beats-dashboards-5.0.0-alpha1.zip dest=/opt/ copy=no
+      - packetbeat
 
   - name: Download Timelion
     get_url:

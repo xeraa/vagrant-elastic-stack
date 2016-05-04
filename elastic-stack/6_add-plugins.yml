@@ -1,0 +1,26 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Stop Kibana to save have more memory available
+    service: name=kibana state=stopped
+
+  - name: Add Timelion
+    command: ./bin/kibana-plugin install file:///opt/timelion.zip
+    args:
+      chdir: /opt/kibana/
+
+  #- name: Add X-Pack
+  #  command: ./bin/kibana-plugin install file:///opt/x-pack.zip
+  #  args:
+  #    chdir: /opt/kibana/
+
+  - name: Fix the permissions of the Kibana optimized folder
+    file: path=/opt/kibana/optimize/ owner=kibana group=root mode=0644 recurse=yes
+
+  - name: Restart Kibana
+    service: name=kibana state=started

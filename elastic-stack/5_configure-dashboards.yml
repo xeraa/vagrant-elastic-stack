@@ -16,3 +16,7 @@
     args:
       chdir: /usr/share/topbeat/kibana/
 
+  - name: Load the Packetbeat dashboard
+    command: ./import_dashboards.sh
+    args:
+      chdir: /usr/share/packetbeat/kibana/

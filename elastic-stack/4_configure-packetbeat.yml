@@ -1,0 +1,18 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Load the Packetbeat template
+    command: curl -XPUT 'http://localhost:9200/_template/packetbeat?pretty' -d@/etc/packetbeat/packetbeat.template.json
+
+  - name: Change the Packetbeat configuration
+    template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
+
+  - name: Restart Packetbeat to apply the configuration change
+    service: name=packetbeat state=restarted
+
+  - debug: msg="Test with curl -XGET 'http://localhost:9200/packetbeat-*/_search?pretty'"
