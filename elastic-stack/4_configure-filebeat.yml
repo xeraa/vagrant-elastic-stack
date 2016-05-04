@@ -7,7 +7,7 @@
   tasks:
 
   - name: Load the Filebeat template
-    command: curl -XPUT 'http://localhost:9200/_template/filebeat?pretty' -d@/elastic-stack/templates/filebeat-index-template.json
+    command: curl -XPUT 'http://localhost:9200/_template/filebeat?pretty' -d@/etc/filebeat/filebeat.template.json
 
   - name: Change the Filebeat configuration
     template: src=templates/filebeat.yml dest=/etc/filebeat/filebeat.yml

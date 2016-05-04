@@ -5,16 +5,24 @@ filebeat:
   # List of prospectors to fetch data.
   prospectors:
     # Each - is a prospector. Below are the prospector specific configurations
-    -
+
+      # Type of the files. Based on this the way the file is read is decided.
+      # The different types cannot be mixed in one prospector
+      #
+      # Possible options are:
+      # * log: Reads every line of the log file (default)
+      # * stdin: Reads the standard in
+    - input_type: log
+
       # Paths that should be crawled and fetched. Glob based paths.
       # To fetch all ".log" files from a specific level of subdirectories
       # /var/log/*/*.log can be used.
       # For each file found under this path, a harvester is started.
       # Make sure not file is defined twice as this can lead to unexpected behaviour.
       paths:
-        - /var/log/auth.log
+        - /var/log/*.log
         - /var/log/syslog
-        #- /var/log/*.log
+        #- /var/log/nginx/*
         #- c:\programdata\elasticsearch\logs\*
 
       # Configure the file encoding for reading files with international characters
@@ -24,27 +32,41 @@ filebeat:
       #    hz-gb-2312, euc-kr, euc-jp, iso-2022-jp, shift-jis, ...
       #encoding: plain
 
-      # Type of the files. Based on this the way the file is read is decided.
-      # The different types cannot be mixed in one prospector
-      #
-      # Possible options are:
-      # * log: Reads every line of the log file (default)
-      # * stdin: Reads the standard in
-      input_type: syslog
+
+      # Decode JSON options. Enable this if your logs are structured in JSON.
+      #json:
+        # JSON key on which to apply the line filtering and multiline settings. This key
+        # must be top level and its value must be string, otherwise it is ignored. If
+        # no text key is defined, the line filtering and multiline features cannot be used.
+        #message_key:
+
+        # By default, the decoded JSON is placed under a "json" key in the output document.
+        # If you enable this setting, the keys are copied top level in the output document.
+        #keys_under_root: false
+
+        # If keys_under_root and this setting are enabled, then the values from the decoded
+        # JSON object overwrite the fields that Filebeat normally adds (type, source, offset, etc.)
+        # in case of conflicts.
+        #overwrite_keys: false
+
+        # If this setting is enabled, Filebeat adds a "json_error" key in case of JSON
+        # unmarshaling errors or when a text key is defined in the configuration but cannot
+        # be used.
+        #add_error_key: false
 
       # Exclude lines. A list of regular expressions to match. It drops the lines that are
       # matching any regular expression from the list. The include_lines is called before
       # exclude_lines. By default, no lines are dropped.
-      # exclude_lines: ["^DBG"]
+      #exclude_lines: ["^DBG"]
 
       # Include lines. A list of regular expressions to match. It exports the lines that are
       # matching any regular expression from the list. The include_lines is called before
       # exclude_lines. By default, all the lines are exported.
-      # include_lines: ["^ERR", "^WARN"]
+      #include_lines: ["^ERR", "^WARN"]
 
       # Exclude files. A list of regular expressions to match. Filebeat drops the files that
       # are matching any regular expression from the list. By default, no files are dropped.
-      # exclude_files: [".gz$"]
+      #exclude_files: [".gz$"]
 
       # Optional additional fields. These field can be freely picked
       # to add additional information to the crawled log files for filtering
@@ -59,7 +81,7 @@ filebeat:
       #fields_under_root: false
 
       # Ignore files which were modified more then the defined timespan in the past.
-      # In case all files on your system must be read you can set this value very large.
+      # ignore_older is disabled by default, so no files are ignored by setting it to 0.
       # Time strings like 2h (2 hours), 5m (5 minutes) can be used.
       #ignore_older: 0
 
@@ -110,12 +132,12 @@ filebeat:
         # Default is 5s.
         #timeout: 5s
 
-      # Setting tail_files to true means filebeat starts readding new files at the end
+      # Setting tail_files to true means filebeat starts reading new files at the end
       # instead of the beginning. If this is used in combination with log rotation
       # this can mean that the first entries of a new file are skipped.
       #tail_files: false
 
-      # Backoff values define how agressively filebeat crawls new files for updates
+      # Backoff values define how aggressively filebeat crawls new files for updates
       # The default values can be used in most cases. Backoff defines how long it is waited
       # to check a file again after EOF is reached. Default is 1s which means the file
       # is checked every second if new lines were added. This leads to a near real time crawling.
@@ -123,7 +145,7 @@ filebeat:
       #backoff: 1s
 
       # Max backoff defines what the maximum backoff time is. After having backed off multiple times
-      # from checking the files, the waiting time will never exceed max_backoff idenependent of the
+      # from checking the files, the waiting time will never exceed max_backoff independent of the
       # backoff factor. Having it set to 10s means in the worst case a new line can be added to a log
       # file after having backed off multiple times, it takes a maximum of 10s to read the new line
       #max_backoff: 10s
@@ -143,10 +165,11 @@ filebeat:
       # but lower the ignore_older value to release files faster.
       #force_close_files: false
 
-    # Additional prospector
-    #-
+    # Additional stdin prospector
+
       # Configuration to use stdin input
-      #input_type: stdin
+    #- input_type: stdin
+
 
   # General filebeat configuration options
   #
@@ -160,10 +183,9 @@ filebeat:
   # Flush even though spool_size is not reached.
   #idle_timeout: 5s
 
-  # Name of the registry file. Per default it is put in the current working
-  # directory. In case the working directory is changed after when running
-  # filebeat again, indexing starts from the beginning again.
-  registry_file: /var/lib/filebeat/registry
+  # Name of the registry file. If a relative path is used, it is considered relative to the
+  # data path.
+  #registry_file: registry
 
   # Full Path to directory with additional prospector configuration files. Each file must end with .yml
   # These config files must have the full filebeat config part inside, but only
@@ -194,6 +216,11 @@ output:
     #username: "admin"
     #password: "s3cr3t"
 
+    # Dictionary of HTTP parameters to pass within the url with index operations.
+    #parameters:
+      #param1: value1
+      #param2: value2
+
     # Number of workers per Elasticsearch host.
     #worker: 1
 
@@ -202,7 +229,7 @@ output:
     #index: "filebeat"
 
     # A template is used to set the mapping in Elasticsearch
-    # By default template loading is disabled and no template is loaded.
+    # By default template loading is enabled and the template is loaded.
     # These settings can be adjusted to load your own template or overwrite existing ones
     #template:
 
@@ -280,7 +307,6 @@ output:
   logstash:
     # The Logstash hosts
     hosts: ["localhost:5044"]
-    bulk_max_size: 1024
 
     # Number of workers per Logstash host.
     #worker: 1
@@ -291,15 +317,19 @@ output:
     # Optional load balance the events between the Logstash hosts
     #loadbalance: true
 
-    # Optional index name. The default index name depends on the each beat.
-    # For Packetbeat, the default is set to packetbeat, for Topbeat
-    # top topbeat and for Filebeat to filebeat.
+    # Optional index name. The default index name is set to name of the beat
+    # in all lowercase.
     #index: filebeat
+
+    # SOCKS5 proxy server URL
+    #proxy_url: socks5://user:password@socks5-server:2233
+
+    # Resolve names locally when using a proxy server. Defaults to false.
+    #proxy_use_local_resolver: false
 
     # Optional TLS. By default is off.
     tls:
       # List of root certificates for HTTPS server verifications
-      #certificate_authorities: ["/etc/pki/root/ca.pem"]
       certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
 
       # Certificate for TLS client authentication
@@ -330,7 +360,7 @@ output:
     #filename: filebeat
 
     # Maximum size in kilobytes of each file. When this size is reached, the files are
-    # rotated. The default value is 10 MB.
+    # rotated. The default value is 10240 kB.
     #rotate_every_kb: 10000
 
     # Maximum number of files under path. When this number of files is reached, the
@@ -358,6 +388,17 @@ shipper:
   # logical properties.
   #tags: ["service-X", "web-tier"]
 
+  # Optional fields that you can specify to add additional information to the
+  # output. Fields can be scalar values, arrays, dictionaries, or any nested
+  # combination of these.
+  #fields:
+  #  env: staging
+
+  # If this option is set to true, the custom fields are stored as top-level
+  # fields in the output document instead of being grouped under a fields
+  # sub-dictionary. Default is false.
+  #fields_under_root: false
+
   # Uncomment the following if you want to ignore transactions created
   # by the server on which the shipper is installed. This option is useful
   # to remove duplicates if shippers are installed on multiple servers.
@@ -375,6 +416,10 @@ shipper:
   # Internal queue size for single events in processing pipeline
   #queue_size: 1000
 
+  # Sets the maximum number of CPUs that can be executing simultaneously. The
+  # default is the number of logical CPUs available in the system.
+  #max_procs:
+
   # Configure local GeoIP database support.
   # If no paths are not configured geoip is disabled.
   #geoip:
@@ -385,8 +430,8 @@ shipper:
 
 ############################# Logging #########################################
 
-# There are three options for the log ouput: syslog, file, stderr.
-# Under Windos systems, the log files are per default sent to the file output,
+# There are three options for the log output: syslog, file, stderr.
+# Under Windows systems, the log files are per default sent to the file output,
 # under all other system per default to syslog.
 logging:
 

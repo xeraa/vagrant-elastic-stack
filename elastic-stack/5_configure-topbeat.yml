@@ -7,7 +7,7 @@
   tasks:
 
   - name: Load the Topbeat template
-    command: curl -XPUT 'http://localhost:9200/_template/topbeat?pretty' -d@/elastic-stack/templates/topbeat-index-template.json
+    command: curl -XPUT 'http://localhost:9200/_template/topbeat?pretty' -d@/etc/topbeat/topbeat.template.json
 
   - name: Change the Topbeat configuration
     template: src=templates/topbeat.yml dest=/etc/topbeat/topbeat.yml

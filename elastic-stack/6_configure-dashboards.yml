@@ -6,7 +6,13 @@
 
   tasks:
 
-  - name: Load the dashboards
-    command: ./load.sh
+  - name: Load the Filebeat dashboard
+    command: ./import_dashboards.sh
     args:
-      chdir: /opt/beats-dashboards-5.0.0-alpha1/
+      chdir: /usr/share/filebeat/kibana/
+
+  - name: Load the Topbeat dashboard
+    command: ./import_dashboards.sh
+    args:
+      chdir: /usr/share/topbeat/kibana/
+

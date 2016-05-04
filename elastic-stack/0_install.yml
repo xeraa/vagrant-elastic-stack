@@ -24,7 +24,7 @@
 
   - name: Get Elasticsearch
     get_url:
-      url=https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/5.0.0-alpha1/elasticsearch-5.0.0-alpha1.deb
+      url=https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/5.0.0-alpha2/elasticsearch-5.0.0-alpha2.deb
       dest=/opt/elasticsearch.deb
 
   - name: Install Elasticsearch
@@ -36,7 +36,7 @@
 
   - name: Get Logstash
     get_url:
-      url=https://download.elastic.co/logstash/logstash/packages/debian/logstash_5.0.0~alpha1-1_all.deb
+      url=https://download.elastic.co/logstash/logstash/packages/debian/logstash-5.0.0-alpha2_all.deb
       dest=/opt/logstash.deb
 
   - name: Install Logstash
@@ -48,7 +48,7 @@
 
   - name: Get Filebeat
     get_url:
-      url=https://download.elastic.co/beats/filebeat/filebeat_5.0.0-alpha1_amd64.deb
+      url=https://download.elastic.co/beats/filebeat/filebeat_5.0.0-alpha2_amd64.deb
       dest=/opt/filebeat.deb
 
   - name: Install Filebeat
@@ -56,7 +56,7 @@
 
   - name: Get Topbeat
     get_url:
-      url=https://download.elastic.co/beats/topbeat/topbeat_5.0.0-alpha1_amd64.deb
+      url=https://download.elastic.co/beats/topbeat/topbeat_5.0.0-alpha2_amd64.deb
       dest=/opt/topbeat.deb
 
   - name: Install Topbeat
@@ -73,18 +73,18 @@
 
   - name: Download Timelion
     get_url:
-      url=https://download.elastic.co/kibana/timelion/timelion-5.0.0-alpha1.zip
+      url=https://download.elastic.co/kibana/timelion/timelion-5.0.0-alpha2.zip
       dest=/opt/timelion.zip
 
   - name: Download X-Pack
     get_url:
-      url=https://download.elastic.co/kibana/x-pack/x-pack-5.0.0-alpha1.zip
+      url=https://download.elastic.co/kibana/x-pack/x-pack-5.0.0-alpha2.zip
       dest=/opt/x-pack.zip
 
 
   - name: Get Kibana
     get_url:
-      url=https://download.elastic.co/kibana/kibana/kibana_5.0.0-alpha1_amd64.deb
+      url=https://download.elastic.co/kibana/kibana/kibana_5.0.0-alpha2_amd64.deb
       dest=/opt/kibana.deb
 
   - name: Install Kibana
