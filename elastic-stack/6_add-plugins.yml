@@ -20,7 +20,7 @@
   #    chdir: /opt/kibana/
 
   - name: Fix the permissions of the Kibana optimized folder
-    file: path=/opt/kibana/optimize/ owner=kibana group=root mode=0644 recurse=yes
+    file: path=/opt/kibana/optimize/ owner=kibana group=root mode=0777 recurse=yes
 
   - name: Restart Kibana
     service: name=kibana state=started
