@@ -22,7 +22,6 @@ filebeat:
       paths:
         - /var/log/*.log
         - /var/log/syslog
-        #- /var/log/nginx/*
         #- c:\programdata\elasticsearch\logs\*
 
       # Configure the file encoding for reading files with international characters
