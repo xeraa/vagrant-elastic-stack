@@ -28,7 +28,7 @@ Vagrant.configure(2) do |config|
 
     # Configure the VirtualBox parameters
     config.vm.provider "virtualbox" do |vb|
-        vb.name = "ansible-aws"
+        vb.name = "elastic-stack"
         vb.customize [ "modifyvm", :id, "--memory", "2560" ]
     end
 
