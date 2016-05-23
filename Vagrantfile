@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
         #ubuntu.vm.box = "ubuntu/xenial64"
         ubuntu.vm.box = "ubuntu/trusty64"
         ubuntu.vm.network :forwarded_port, guest: 80, host: 8080
-        ubuntu.vm.synced_folder "elastic-stack/", "/elastic-stack/"#, type: "rsync"
+        ubuntu.vm.synced_folder "elastic-stack/", "/elastic-stack/", type: "rsync"
     end
 
 
