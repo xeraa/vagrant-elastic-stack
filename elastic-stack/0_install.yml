@@ -6,9 +6,11 @@
 
   tasks:
 
-  - name: Autoremove unused packages to save some disk space
-    command: apt-get -y autoremove
-    #apt: autoremove=yes in Ansible 2.1+
+  - name: Get rid of Chef and Puppet to save some resources and autoremove unused packages to save some disk space
+    apt: name={{ item }} state=absent autoremove=yes
+    with_items:
+      - chef
+      - puppet
 
   - name: Install unzip for unpacking files later on
     apt: pkg=unzip state=latest
