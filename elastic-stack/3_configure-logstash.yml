@@ -12,7 +12,7 @@
   - name: Create a folder for private key files
     file: dest=/etc/pki/tls/private state=directory owner=root group=root
 
-  - name: Create the certificate for localhost — you will need to change this for remote systems
+  - name: Create the certificate for localhost; you will need to change this for remote systems
     command: openssl req -subj '/CN=localhost/' -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout private/logstash-forwarder.key -out certs/logstash-forwarder.crt
     args:
       chdir: /etc/pki/tls
