@@ -13,18 +13,18 @@
       - puppet
 
   - name: Install unzip for unpacking files later on
-    apt: pkg=unzip state=latest
+    apt: name=unzip state=latest
 
   - name: Install NTP to avoid time drift inside the VM
     apt: name=ntp state=latest
 
 
-  - name: Add a repository for JDK8 on Ubuntu 14.04
+  - name: Add the repository for JDK8 on Ubuntu 14.04
     apt_repository: repo='ppa:openjdk-r/ppa'
     when: "ansible_distribution == 'Ubuntu' and ansible_lsb.major_release|int <= 14"
 
   - name: Install the JRE
-    apt: pkg=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
+    apt: name=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
 
 
   - name: Get Elasticsearch
