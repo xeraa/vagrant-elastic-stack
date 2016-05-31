@@ -82,11 +82,6 @@
       url=https://download.elastic.co/kibana/timelion/timelion-5.0.0-alpha2.zip
       dest=/opt/timelion.zip
 
-  - name: Download X-Pack
-    get_url:
-      url=https://download.elastic.co/kibana/x-pack/x-pack-5.0.0-alpha2.zip
-      dest=/opt/x-pack.zip
-
 
   - name: Get Kibana
     get_url:
