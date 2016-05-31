@@ -13,6 +13,9 @@
   - name: Install unzip for unpacking files later on
     apt: pkg=unzip state=latest
 
+  - name: Install NTP to avoid time drift inside the VM
+    apt: name=ntp state=latest
+
 
   - name: Add a repository for JDK8 on Ubuntu 14.04
     apt_repository: repo='ppa:openjdk-r/ppa'
