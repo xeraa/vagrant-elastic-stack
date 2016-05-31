@@ -4,6 +4,10 @@
   become: true
 
 
+  vars:
+    elastic_version: 5.0.0-alpha2
+
+
   tasks:
 
   - name: Get rid of Chef and Puppet to save some resources and autoremove unused packages to save some disk space
@@ -29,7 +33,7 @@
 
   - name: Get Elasticsearch
     get_url:
-      url=https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/5.0.0-alpha2/elasticsearch-5.0.0-alpha2.deb
+      url=https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/{{ elastic_version }}/elasticsearch-{{ elastic_version }}.deb
       dest=/opt/elasticsearch.deb
 
   - name: Install Elasticsearch
@@ -41,7 +45,7 @@
 
   - name: Get Logstash
     get_url:
-      url=https://download.elastic.co/logstash/logstash/packages/debian/logstash-5.0.0-alpha2_all.deb
+      url=https://download.elastic.co/logstash/logstash/packages/debian/logstash-{{ elastic_version }}_all.deb
       dest=/opt/logstash.deb
 
   - name: Install Logstash
@@ -53,7 +57,7 @@
 
   - name: Get Filebeat
     get_url:
-      url=https://download.elastic.co/beats/filebeat/filebeat_5.0.0-alpha2_amd64.deb
+      url=https://download.elastic.co/beats/filebeat/filebeat_{{ elastic_version }}_amd64.deb
       dest=/opt/filebeat.deb
 
   - name: Install Filebeat
@@ -61,7 +65,7 @@
 
   - name: Get Topbeat
     get_url:
-      url=https://download.elastic.co/beats/topbeat/topbeat_5.0.0-alpha2_amd64.deb
+      url=https://download.elastic.co/beats/topbeat/topbeat_{{ elastic_version }}_amd64.deb
       dest=/opt/topbeat.deb
 
   - name: Install Topbeat
@@ -69,7 +73,7 @@
 
   - name: Get Packetbeat
     get_url:
-      url=https://download.elastic.co/beats/packetbeat/packetbeat_5.0.0-alpha2_amd64.deb
+      url=https://download.elastic.co/beats/packetbeat/packetbeat_{{ elastic_version }}_amd64.deb
       dest=/opt/packetbeat.deb
 
   - name: Install Packetbeat
@@ -84,13 +88,13 @@
 
   - name: Download Timelion
     get_url:
-      url=https://download.elastic.co/kibana/timelion/timelion-5.0.0-alpha2.zip
+      url=https://download.elastic.co/kibana/timelion/timelion-{{ elastic_version }}.zip
       dest=/opt/timelion.zip
 
 
   - name: Get Kibana
     get_url:
-      url=https://download.elastic.co/kibana/kibana/kibana_5.0.0-alpha2_amd64.deb
+      url=https://download.elastic.co/kibana/kibana/kibana_{{ elastic_version }}_amd64.deb
       dest=/opt/kibana.deb
 
   - name: Install Kibana
