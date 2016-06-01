@@ -5,7 +5,7 @@
 
 
   vars:
-    elastic_version: 5.0.0-alpha2
+    elastic_version: 5.0.0-alpha3
 
 
   tasks:
@@ -45,7 +45,7 @@
 
   - name: Get Logstash
     get_url:
-      url=https://download.elastic.co/logstash/logstash/packages/debian/logstash-{{ elastic_version }}_all.deb
+      url=https://download.elastic.co/logstash/logstash/packages/debian/logstash-{{ elastic_version }}.deb
       dest=/opt/logstash.deb
 
   - name: Install Logstash
@@ -57,33 +57,33 @@
 
   - name: Get Filebeat
     get_url:
-      url=https://download.elastic.co/beats/filebeat/filebeat_{{ elastic_version }}_amd64.deb
+      url=https://download.elastic.co/beats/filebeat/filebeat-{{ elastic_version }}-amd64.deb
       dest=/opt/filebeat.deb
 
   - name: Install Filebeat
     apt: deb=/opt/filebeat.deb
 
-  - name: Get Topbeat
+  - name: Get Metricbeat
     get_url:
-      url=https://download.elastic.co/beats/topbeat/topbeat_{{ elastic_version }}_amd64.deb
-      dest=/opt/topbeat.deb
+      url=https://download.elastic.co/beats/metricbeat/metricbeat-{{ elastic_version }}-amd64.deb
+      dest=/opt/metricbeat.deb
 
-  - name: Install Topbeat
-    apt: deb=/opt/topbeat.deb
+  - name: Install Metricbeat
+    apt: deb=/opt/metricbeat.deb
 
   - name: Get Packetbeat
     get_url:
-      url=https://download.elastic.co/beats/packetbeat/packetbeat_{{ elastic_version }}_amd64.deb
+      url=https://download.elastic.co/beats/packetbeat/packetbeat-{{ elastic_version }}-amd64.deb
       dest=/opt/packetbeat.deb
 
   - name: Install Packetbeat
     apt: deb=/opt/packetbeat.deb
 
-  - name: Make sure Filebeat, Topbeat, and Packetbeat autostart and are started now
+  - name: Make sure Filebeat, Mtricbeat, and Packetbeat autostart and are started now
     service: name={{ item }} enabled=yes state=started
     with_items:
       - filebeat
-      - topbeat
+      - metricbeat
       - packetbeat
 
   - name: Download Timelion

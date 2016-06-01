@@ -11,10 +11,10 @@
     args:
       chdir: /usr/share/filebeat/kibana/
 
-  - name: Load the Topbeat dashboard
+  - name: Load the Metricbeat dashboard
     command: ./import_dashboards.sh
     args:
-      chdir: /usr/share/topbeat/kibana/
+      chdir: /usr/share/metricbeat/kibana/
 
   - name: Load the Packetbeat dashboard
     command: ./import_dashboards.sh

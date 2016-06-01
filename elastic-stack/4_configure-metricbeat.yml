@@ -1,0 +1,18 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Load the Metricbeat template
+    command: curl -XPUT 'http://localhost:9200/_template/metricbeat?pretty' -d@/etc/metricbeat/metricbeat.template.json
+
+  - name: Change the Metricbeat configuration
+    template: src=templates/metricbeat.yml dest=/etc/metricbeat/metricbeat.yml
+
+  - name: Restart Metricbeat to apply the configuration change
+    service: name=metricbeat state=restarted
+
+  - debug: msg="Test with curl -XGET 'http://localhost:9200/metricbeat-*/_search?pretty'"

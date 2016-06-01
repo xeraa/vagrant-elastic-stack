@@ -39,13 +39,6 @@ packetbeat.protocols:
     ports: [2049]
 
 
-output:
-  logstash:
-    hosts: ["localhost:5044"]
-    tls:
-      certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
-
-
-logging:
-  files:
-    rotateeverybytes: 10485760 # = 10MB
+output.logstash:
+  hosts: ["localhost:5044"]
+  tls.certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
