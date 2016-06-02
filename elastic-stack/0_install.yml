@@ -104,7 +104,7 @@
     service: name=kibana enabled=yes state=started
 
 
-  - name: Install nginx
+  - name: Install nginx so we can use it as a reverse proxy
     apt: pkg=nginx state=latest
 
   - name: Install Python Passlib so the nginx credentials can be hashed
