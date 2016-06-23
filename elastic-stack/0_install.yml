@@ -109,3 +109,10 @@
 
   - name: Make the all.sh script executable
     file: path=/elastic-stack/all.sh mode=0755
+
+
+  - name: Get the injector plugin to generate test data
+    get_url:
+      url=https://download.elastic.co/workshops/basic-kibana/injector/injector-5.0.jar
+      dest=/elastic-stack/injector-5.0.jar
+      mode=0755
