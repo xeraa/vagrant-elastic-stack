@@ -23,6 +23,10 @@
     apt: name=ntp state=latest
 
 
+  - name: Add the repository for JDK8 on Ubuntu 14.04
+    apt_repository: repo='ppa:openjdk-r/ppa'
+    when: "ansible_distribution == 'Ubuntu' and ansible_lsb.major_release|int <= 14"
+
   - name: Install the JRE
     apt: name=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
 
