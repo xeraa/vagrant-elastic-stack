@@ -29,3 +29,13 @@ Or if you are in a hurry, run all playbooks with `/elastic-stack/all.sh` at once
 Access Kibana at [http://localhost:8080/app/kibana](http://localhost:8080/app/kibana) with the credentials `admin` and `admin`. You will be prompted to select a default index — select any, for example the `filebeat-*` index.
 
 Then you can search the logs (**Discover**), add pre-built or custom visualizations (**Visualize**), and put together a custom **Dashboard**.
+
+
+
+## Generate test data
+
+You can use */elastic-stack/injector-5.0.jar* to generate test data in the `person` index. To generate 100,000 documents in batches of 1,000 run the following command:
+
+```
+$ java -jar /elastic-stack/injector-5.0.jar 100000 1000
+```
