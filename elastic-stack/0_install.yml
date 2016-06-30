@@ -86,11 +86,6 @@
       - metricbeat
       - packetbeat
 
-  - name: Download Timelion
-    get_url:
-      url=https://download.elastic.co/kibana/timelion/timelion-{{ elastic_version }}.zip
-      dest=/opt/timelion.zip
-
 
   - name: Get Kibana
     get_url:
@@ -102,6 +97,11 @@
 
   - name: Make sure Kibana autostarts and is started now
     service: name=kibana enabled=yes state=started
+
+  - name: Download Timelion
+    get_url:
+      url=https://download.elastic.co/kibana/timelion/timelion-{{ elastic_version }}.zip
+      dest=/opt/timelion.zip
 
 
   - name: Install nginx so we can use it as a reverse proxy
