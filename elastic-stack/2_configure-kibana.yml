@@ -7,7 +7,7 @@
   tasks:
 
   - name: Make Kibana only available on localhost since we'll proxy it through nginx
-    lineinfile: "dest=/opt/kibana/config/kibana.yml regexp=^server.host line='server.host: \"localhost\"'"
+    lineinfile: "dest=/etc/kibana/kibana.yml regexp=^server.host line='server.host: \"localhost\"'"
 
   - name: Restart Kibana to apply the configuration change
     service: name=kibana state=restarted

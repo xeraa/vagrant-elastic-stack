@@ -10,12 +10,10 @@
     service: name=kibana state=stopped
 
   - name: Add Timelion
-    command: ./bin/kibana-plugin install file:///opt/timelion.zip
-    args:
-      chdir: /opt/kibana/
+    command: /usr/share/kibana/bin/kibana-plugin install file:///opt/timelion.zip
 
   - name: Fix the permissions of the Kibana optimized folder
-    file: path=/opt/kibana/optimize/ owner=kibana group=root mode=0777 recurse=yes
+    file: path=/usr/share/kibana/optimize/ owner=kibana group=root mode=0777 recurse=yes
 
   - name: Restart Kibana
     service: name=kibana state=started
