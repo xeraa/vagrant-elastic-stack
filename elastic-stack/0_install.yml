@@ -118,5 +118,5 @@
   - name: Get the injector plugin to generate test data
     get_url:
       url=https://download.elastic.co/workshops/basic-kibana/injector/injector-5.0.jar
-      dest=/elastic-stack/injector-5.0.jar
+      dest=/opt/injector-5.0.jar
       mode=0755

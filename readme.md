@@ -34,8 +34,8 @@ Then you can search the logs (**Discover**), add pre-built or custom visualizati
 
 ## Generate test data
 
-You can use */elastic-stack/injector-5.0.jar* to generate test data in the `person` index. To generate 100,000 documents in batches of 1,000 run the following command:
+You can use */opt/injector-5.0.jar* to generate test data in the `person` index. To generate 100,000 documents in batches of 1,000 run the following command:
 
 ```
-$ java -jar /elastic-stack/injector-5.0.jar 100000 1000
+$ java -jar /opt/injector-5.0.jar 100000 1000
 ```
