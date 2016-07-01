@@ -57,7 +57,7 @@
 
   - name: Get Filebeat
     get_url:
-      url=https://download.elastic.co/beats/filebeat/filebeat-{{ elastic_version }}-amd64.deb
+      url=https://download.elastic.co/beats/filebeat/filebeat-{{ elastic_version }}-i386.deb
       dest=/opt/filebeat.deb
 
   - name: Install Filebeat
@@ -65,7 +65,7 @@
 
   - name: Get Metricbeat
     get_url:
-      url=https://download.elastic.co/beats/metricbeat/metricbeat-{{ elastic_version }}-amd64.deb
+      url=https://download.elastic.co/beats/metricbeat/metricbeat-{{ elastic_version }}-i386.deb
       dest=/opt/metricbeat.deb
 
   - name: Install Metricbeat
@@ -73,7 +73,7 @@
 
   - name: Get Packetbeat
     get_url:
-      url=https://download.elastic.co/beats/packetbeat/packetbeat-{{ elastic_version }}-amd64.deb
+      url=https://download.elastic.co/beats/packetbeat/packetbeat-{{ elastic_version }}-i386.deb
       dest=/opt/packetbeat.deb
 
   - name: Install Packetbeat
@@ -89,7 +89,7 @@
 
   - name: Get Kibana
     get_url:
-      url=https://download.elastic.co/kibana/kibana/kibana_{{ elastic_version }}_amd64.deb
+      url=https://download.elastic.co/kibana/kibana/kibana-{{ elastic_version }}-i386.deb
       dest=/opt/kibana.deb
 
   - name: Install Kibana
