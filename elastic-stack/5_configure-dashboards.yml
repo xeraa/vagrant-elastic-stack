@@ -7,16 +7,16 @@
   tasks:
 
   - name: Load the Filebeat dashboard
-    command: ./import_dashboards.sh
+    command: ./import_dashboards
     args:
-      chdir: /usr/share/filebeat/kibana/
+      chdir: /usr/share/filebeat/scripts/
 
   - name: Load the Metricbeat dashboard
-    command: ./import_dashboards.sh
+    command: ./import_dashboards
     args:
-      chdir: /usr/share/metricbeat/kibana/
+      chdir: /usr/share/metricbeat/scripts/
 
   - name: Load the Packetbeat dashboard
-    command: ./import_dashboards.sh
+    command: ./import_dashboards
     args:
-      chdir: /usr/share/packetbeat/kibana/
+      chdir: /usr/share/packetbeat/scripts/
