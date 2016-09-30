@@ -12,7 +12,7 @@
   - name: Change the Filebeat configuration
     template: src=templates/filebeat.yml dest=/etc/filebeat/filebeat.yml
 
-  - name: Restart Filebeat to apply the configuration change
-    service: name=filebeat state=restarted
+  - name: Start Filebeat
+    service: name=filebeat state=started
 
   - debug: msg="Test with curl -XGET 'http://localhost:9200/filebeat-*/_search?pretty'"

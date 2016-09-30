@@ -18,5 +18,5 @@
   - name: Add a customized nginx configuration
     template: src=templates/nginx dest=/etc/nginx/sites-available/default
 
-  - name: Restart nginx to apply the configuration change
-    service: name=nginx state=restarted
+  - name: Start Kibana
+    service: name=kibana state=started

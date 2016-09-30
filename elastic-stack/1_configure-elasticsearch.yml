@@ -5,3 +5,6 @@
 
 
   tasks:
+
+  - name: Start Elasticsearch
+    service: name=elasticsearch state=started

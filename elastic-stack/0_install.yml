@@ -39,8 +39,8 @@
   - name: Install Elasticsearch
     apt: deb=/opt/elasticsearch.deb
 
-  - name: Make sure Elasticsearch autostarts and is started now
-    service: name=elasticsearch enabled=yes state=started
+  - name: Make sure Elasticsearch autostarts, but is stopped until it is properly configured
+    service: name=elasticsearch enabled=yes state=stopped
 
 
   - name: Get Logstash
@@ -51,8 +51,8 @@
   - name: Install Logstash
     apt: deb=/opt/logstash.deb
 
-  - name: Make sure Logstash autostarts and is started now
-    service: name=logstash enabled=yes state=started
+  - name: Make sure Logstash autostarts, but is stopped until it is properly configured
+    service: name=logstash enabled=yes state=stopped
 
 
   - name: Get Filebeat
@@ -79,8 +79,8 @@
   - name: Install Packetbeat
     apt: deb=/opt/packetbeat.deb
 
-  - name: Make sure Filebeat, Mtricbeat, and Packetbeat autostart and are started now
-    service: name={{ item }} enabled=yes state=started
+  - name: Make sure Filebeat, Mtricbeat, and Packetbeat autostart, but are stopped until they are properly configured
+    service: name={{ item }} enabled=yes state=stopped
     with_items:
       - filebeat
       - metricbeat
@@ -95,8 +95,8 @@
   - name: Install Kibana
     apt: deb=/opt/kibana.deb
 
-  - name: Make sure Kibana autostarts and is started now
-    service: name=kibana enabled=yes state=started
+  - name: Make sure Kibana autostarts, but is stopped until it is properly configured
+    service: name=kibana enabled=yes state=stopped
 
   - name: Download Timelion
     get_url:

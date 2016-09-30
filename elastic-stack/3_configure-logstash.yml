@@ -26,5 +26,5 @@
   - name: Add the Logstash output configuration to Elasticsearch
     template: src=templates/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
 
-  - name: Restart Logstash to apply the configuration change
-    service: name=logstash state=restarted
+  - name: Start Logstash
+    service: name=logstash state=started

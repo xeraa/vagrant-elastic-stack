@@ -12,7 +12,7 @@
   - name: Change the Packetbeat configuration
     template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
 
-  - name: Restart Packetbeat to apply the configuration change
-    service: name=packetbeat state=restarted
+  - name: Start Packetbeat
+    service: name=packetbeat state=started
 
   - debug: msg="Test with curl -XGET 'http://localhost:9200/packetbeat-*/_search?pretty'"

@@ -12,7 +12,7 @@
   - name: Change the Metricbeat configuration
     template: src=templates/metricbeat.yml dest=/etc/metricbeat/metricbeat.yml
 
-  - name: Restart Metricbeat to apply the configuration change
-    service: name=metricbeat state=restarted
+  - name: Start Metricbeat
+    service: name=metricbeat state=started
 
   - debug: msg="Test with curl -XGET 'http://localhost:9200/metricbeat-*/_search?pretty'"
