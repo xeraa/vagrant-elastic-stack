@@ -8,4 +8,3 @@ ansible-playbook /elastic-stack/4_configure-filebeat.yml
 ansible-playbook /elastic-stack/4_configure-metricbeat.yml
 ansible-playbook /elastic-stack/4_configure-packetbeat.yml
 ansible-playbook /elastic-stack/5_configure-dashboards.yml
-ansible-playbook /elastic-stack/6_add-plugins.yml
