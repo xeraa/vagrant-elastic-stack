@@ -6,17 +6,8 @@
 
   tasks:
 
-  - name: Make Kibana only available on localhost since we'll proxy it through nginx
-    lineinfile: "dest=/etc/kibana/kibana.yml regexp=^server.host line='server.host: \"localhost\"'"
-
-  - name: Restart Kibana to apply the configuration change
-    service: name=kibana state=restarted
-
-  - name: Set up the nginx credentials
-    htpasswd: path=/etc/nginx/htpasswd.users name=admin password=admin
-
-  - name: Add a customized nginx configuration
-    template: src=templates/nginx dest=/etc/nginx/sites-available/default
+  - name: Make Kibana available on all network interfaces
+    lineinfile: "dest=/etc/kibana/kibana.yml regexp='^# server.host' line='server.host: \"0.0.0.0\"' state=present"
 
   - name: Start Kibana
     service: name=kibana state=started

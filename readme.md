@@ -25,9 +25,7 @@ Or if you are in a hurry, run all playbooks with `/elastic-stack/all.sh` at once
 
 ## Configure Kibana
 
-Access Kibana at [http://localhost:8080/app/kibana](http://localhost:8080/app/kibana) with the credentials `admin` and `admin`. You will be prompted to select a default index — select any, for example the `filebeat-*` index.
-
-Then you can search the logs (**Discover**), add pre-built or custom visualizations (**Visualize**), and put together a custom **Dashboard**.
+Access Kibana at [http://localhost:8080/app/kibana](http://localhost:8080/app/kibana). You will be prompted to select a default index — select any, for example the `filebeat-*` index.
 
 
 
