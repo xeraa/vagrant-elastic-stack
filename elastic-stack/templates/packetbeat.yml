@@ -1,44 +1,60 @@
-packetbeat.interfaces:
-  device: any
+packetbeat.interfaces.device: any
 
 
-packetbeat.protocols:
-  icmp:
-    enabled: true
-
-  amqp:
-    ports: [5672]
-
-  dns:
-    ports: [53]
-    include_authorities: true
-    include_additionals: true
-
-  http:
-    ports: [80, 8080, 8000, 5000, 8002]
-
-  memcache:
-    ports: [11211]
-
-  mysql:
-    ports: [3306]
-
-  pgsql:
-    ports: [5432]
-
-  redis:
-    ports: [6379]
-
-  thrift:
-    ports: [9090]
-
-  mongodb:
-    ports: [27017]
-
-  nfs:
-    ports: [2049]
+packetbeat.flows:
+  timeout: 30s
+  period: 10s
 
 
-output.logstash:
-  hosts: ["localhost:5044"]
-  tls.certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
+packetbeat.protocols.icmp:
+  enabled: true
+
+
+packetbeat.protocols.amqp:
+  ports: [5672]
+
+
+packetbeat.protocols.cassandra:
+  ports: [9042]
+
+
+packetbeat.protocols.dns:
+  ports: [53]
+  include_authorities: true
+  include_additionals: true
+
+
+packetbeat.protocols.http:
+  ports: [80, 8080, 8000, 5000, 8002, 5601]
+
+
+packetbeat.protocols.memcache:
+  ports: [11211]
+
+
+packetbeat.protocols.mysql:
+  ports: [3306]
+
+
+packetbeat.protocols.pgsql:
+  ports: [5432]
+
+
+packetbeat.protocols.redis:
+  ports: [6379]
+
+
+packetbeat.protocols.thrift:
+  ports: [9090]
+
+
+packetbeat.protocols.mongodb:
+  ports: [27017]
+
+
+packetbeat.protocols.nfs:
+  ports: [2049]
+
+
+output.elasticsearch:
+  hosts: ["http://localhost:9200"]

@@ -4,6 +4,7 @@ metricbeat.modules:
 - module: system
   metricsets:
     - cpu
+    - load
     #- core
     #- diskio
     - filesystem
@@ -14,9 +15,7 @@ metricbeat.modules:
   enabled: true
   period: 10s
   processes: ['.*']
-  cpu_ticks: false
 
 
 output.logstash:
-  hosts: ["localhost:5044"]
-  tls.certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
+  hosts: ["localhost:9200"]
