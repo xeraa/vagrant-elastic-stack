@@ -17,5 +17,5 @@ metricbeat.modules:
   processes: ['.*']
 
 
-output.logstash:
-  hosts: ["localhost:9200"]
+output.elasticsearch:
+  hosts: ["http://localhost:9200"]
