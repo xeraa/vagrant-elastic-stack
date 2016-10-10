@@ -5,7 +5,8 @@
 
 
   vars:
-    elastic_version: 5.0.0-beta1
+    elastic_version: 5.0.0-rc1
+    elastic_download: https://artifacts.elastic.co
 
 
   tasks:
@@ -33,7 +34,7 @@
 
   - name: Get Elasticsearch
     get_url:
-      url=https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elastic_version }}.deb
+      url={{ elastic_download }}/downloads/elasticsearch/elasticsearch-{{ elastic_version }}.deb
       dest=/opt/elasticsearch.deb
 
   - name: Install Elasticsearch
@@ -45,7 +46,7 @@
 
   - name: Get Logstash
     get_url:
-      url=https://artifacts.elastic.co/downloads/logstash/logstash-{{ elastic_version }}.deb
+      url={{ elastic_download }}/downloads/logstash/logstash-{{ elastic_version }}.deb
       dest=/opt/logstash.deb
 
   - name: Install Logstash
@@ -57,7 +58,7 @@
 
   - name: Get Filebeat
     get_url:
-      url=https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ elastic_version }}-i386.deb
+      url={{ elastic_download }}/downloads/beats/filebeat/filebeat-{{ elastic_version }}-i386.deb
       dest=/opt/filebeat.deb
 
   - name: Install Filebeat
@@ -65,7 +66,7 @@
 
   - name: Get Metricbeat
     get_url:
-      url=https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-{{ elastic_version }}-i386.deb
+      url={{ elastic_download }}/downloads/beats/metricbeat/metricbeat-{{ elastic_version }}-i386.deb
       dest=/opt/metricbeat.deb
 
   - name: Install Metricbeat
@@ -73,7 +74,7 @@
 
   - name: Get Packetbeat
     get_url:
-      url=https://artifacts.elastic.co/downloads/beats/packetbeat/packetbeat-{{ elastic_version }}-i386.deb
+      url={{ elastic_download }}/downloads/beats/packetbeat/packetbeat-{{ elastic_version }}-i386.deb
       dest=/opt/packetbeat.deb
 
   - name: Install Packetbeat
@@ -89,7 +90,7 @@
 
   - name: Get Kibana
     get_url:
-      url=https://artifacts.elastic.co/downloads/kibana/kibana-{{ elastic_version }}-i386.deb
+      url={{ elastic_download }}/downloads/kibana/kibana-{{ elastic_version }}-i386.deb
       dest=/opt/kibana.deb
 
   - name: Install Kibana
