@@ -10,6 +10,6 @@
     template: src=templates/filebeat.yml dest=/etc/filebeat/filebeat.yml
 
   - name: Start Filebeat
-    service: name=filebeat state=started
+    service: name=filebeat state=restarted
 
   - debug: msg="Test with curl -XGET 'http://localhost:9200/filebeat-*/_search?pretty'"

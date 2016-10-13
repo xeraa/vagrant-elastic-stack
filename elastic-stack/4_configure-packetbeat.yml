@@ -10,6 +10,6 @@
     template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
 
   - name: Start Packetbeat
-    service: name=packetbeat state=started
+    service: name=packetbeat state=restarted
 
   - debug: msg="Test with curl -XGET 'http://localhost:9200/packetbeat-*/_search?pretty'"

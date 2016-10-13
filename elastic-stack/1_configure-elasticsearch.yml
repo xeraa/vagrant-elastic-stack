@@ -11,4 +11,4 @@
   - lineinfile: dest=/etc/elasticsearch/jvm.options regexp="^-Xmx" line="-Xmx512m" state=present
 
   - name: Start Elasticsearch
-    service: name=elasticsearch state=started
+    service: name=elasticsearch state=restarted

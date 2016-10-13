@@ -16,4 +16,4 @@
     lineinfile: "dest=/etc/kibana/kibana.yml regexp='^logging.dest' line='logging.dest: /var/log/kibana/kibana.log' state=present"
 
   - name: Start Kibana
-    service: name=kibana state=started
+    service: name=kibana state=restarted

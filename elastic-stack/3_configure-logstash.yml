@@ -16,4 +16,4 @@
     template: src=templates/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
 
   - name: Start Logstash
-    service: name=logstash state=started
+    service: name=logstash state=restarted
