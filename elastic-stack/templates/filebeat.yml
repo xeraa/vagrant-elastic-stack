@@ -15,4 +15,3 @@ filebeat.prospectors:
 
 output.logstash:
   hosts: ["localhost:5044"]
-  tls.certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
