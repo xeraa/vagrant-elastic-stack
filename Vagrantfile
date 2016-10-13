@@ -5,8 +5,8 @@ Vagrant.configure(2) do |config|
 
     # Configure the base box
     config.vm.define "ubuntu" do |ubuntu|
-        ubuntu.vm.box = "ubuntu/xenial32" #Use a 32bit version to avoid issues with old computers
-        #ubuntu.vm.box = "ubuntu/trusty32"
+        #ubuntu.vm.box = "ubuntu/xenial32" #Use a 32bit version to avoid issues with old computers
+        ubuntu.vm.box = "ubuntu/trusty32"
         ubuntu.vm.network :forwarded_port, guest: 5601, host: 5601
         ubuntu.vm.synced_folder "elastic-stack/", "/elastic-stack/"#, type: "rsync"
     end
