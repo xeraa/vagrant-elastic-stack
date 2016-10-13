@@ -1,0 +1,28 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Stop Elasticsearch
+    service: name=elasticsearch state=stopped
+
+  - name: Add X-Pack to Elasticsearch
+    expect:
+      command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/x-pack.zip
+      responses:
+        "Continue with installation?": y
+
+  - name: Start Elasticsearch
+    service: name=elasticsearch state=started
+
+  - name: Stop Kibana
+    service: name=kibana state=stopped
+
+  - name: Add X-Pack to Kibana
+    command: /usr/share/kibana/bin/kibana-plugin install file:///opt/x-pack.zip
+
+  - name: Start Kibana
+    service: name=kibana state=started

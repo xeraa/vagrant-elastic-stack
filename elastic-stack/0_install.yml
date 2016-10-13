@@ -32,6 +32,13 @@
     apt: name=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
 
 
+  - name: Install pip to get current Python dependencies
+    apt: name=python-pip state=latest
+
+  - name: Install pexpect to handle interactive prompts in X-Pack
+    pip: name=pexpect state=latest
+
+
   - name: Get Elasticsearch
     get_url:
       url={{ elastic_download }}/downloads/elasticsearch/elasticsearch-{{ elastic_version }}.deb
@@ -100,6 +107,10 @@
     service: name=kibana enabled=yes state=stopped
 
 
+  - name: Download X-Pack
+    get_url:
+      url={{ elastic_download }}/downloads/packs/x-pack/x-pack-{{ elastic_version }}.zip
+      dest=/opt/x-pack.zip
 
 
   - name: Make the all.sh script executable
