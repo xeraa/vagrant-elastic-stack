@@ -87,7 +87,7 @@
   - name: Install Packetbeat
     apt: deb=/opt/packetbeat.deb
 
-  - name: Make sure Filebeat, Mtricbeat, and Packetbeat autostart, but are stopped until they are properly configured
+  - name: Make sure Filebeat, Metricbeat, and Packetbeat autostart, but are stopped until they are properly configured
     service: name={{ item }} enabled=yes state=stopped
     with_items:
       - filebeat
