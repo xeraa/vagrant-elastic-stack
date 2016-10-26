@@ -5,7 +5,7 @@
 
 
   vars:
-    elastic_version: 5.0.0-rc1
+    elastic_version: 5.0.0
     elastic_download: https://artifacts.elastic.co
 
 
