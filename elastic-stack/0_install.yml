@@ -7,6 +7,7 @@
   vars:
     elastic_version: 5.0.1
     elastic_download: https://artifacts.elastic.co
+    platform: amd64 #i386
 
 
   tasks:
@@ -65,7 +66,7 @@
 
   - name: Get Filebeat
     get_url:
-      url={{ elastic_download }}/downloads/beats/filebeat/filebeat-{{ elastic_version }}-i386.deb
+      url={{ elastic_download }}/downloads/beats/filebeat/filebeat-{{ elastic_version }}-{{ platform }}.deb
       dest=/opt/filebeat.deb
 
   - name: Install Filebeat
@@ -73,7 +74,7 @@
 
   - name: Get Metricbeat
     get_url:
-      url={{ elastic_download }}/downloads/beats/metricbeat/metricbeat-{{ elastic_version }}-i386.deb
+      url={{ elastic_download }}/downloads/beats/metricbeat/metricbeat-{{ elastic_version }}-{{ platform }}.deb
       dest=/opt/metricbeat.deb
 
   - name: Install Metricbeat
@@ -81,7 +82,7 @@
 
   - name: Get Packetbeat
     get_url:
-      url={{ elastic_download }}/downloads/beats/packetbeat/packetbeat-{{ elastic_version }}-i386.deb
+      url={{ elastic_download }}/downloads/beats/packetbeat/packetbeat-{{ elastic_version }}-{{ platform }}.deb
       dest=/opt/packetbeat.deb
 
   - name: Install Packetbeat
@@ -97,7 +98,7 @@
 
   - name: Get Kibana
     get_url:
-      url={{ elastic_download }}/downloads/kibana/kibana-{{ elastic_version }}-i386.deb
+      url={{ elastic_download }}/downloads/kibana/kibana-{{ elastic_version }}-{{ platform }}.deb
       dest=/opt/kibana.deb
 
   - name: Install Kibana
