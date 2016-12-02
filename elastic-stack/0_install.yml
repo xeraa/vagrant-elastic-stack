@@ -5,9 +5,9 @@
 
 
   vars:
-    elastic_version: 5.0.1
+    elastic_version: 5.0.2
     elastic_download: https://artifacts.elastic.co
-    platform: amd64 #i386
+    platform: i386 #amd64
 
 
   tasks:
