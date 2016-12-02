@@ -5,16 +5,32 @@ metricbeat.modules:
   metricsets:
     - cpu
     - load
-    #- core
-    #- diskio
+    - core
+    - diskio
     - filesystem
-    #- fsstat
+    - fsstat
     - memory
     - network
     - process
   enabled: true
   period: 10s
   processes: ['.*']
+
+- module: redis
+  metricsets: ["info"]
+  enabled: true
+  period: 10s
+  hosts: ["127.0.0.1:6379"]
+
+- module: nginx
+  metricsets: ["stubstatus"]
+  enabled: true
+  period: 10s
+  hosts: ["http://127.0.0.1"]
+
+- module: mongodb
+  metricsets: ["status"]
+  hosts: ["localhost:27017"]
 
 
 output.elasticsearch:

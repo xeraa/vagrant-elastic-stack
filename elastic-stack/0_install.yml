@@ -33,6 +33,15 @@
     apt: name=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
 
 
+  - name: Install Redis, nginx, and MongoDB so we have a queue and services in action
+    apt: name={{ item }} state=latest
+    with_items:
+      - redis-server
+      - redis-tools
+      - nginx
+      - mongodb
+
+
   - name: Install pip to get current Python dependencies
     apt: name=python-pip state=latest
 
