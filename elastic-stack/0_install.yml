@@ -114,8 +114,11 @@
       dest=/opt/x-pack.zip
 
 
-  - name: Make the all.sh script executable
-    file: path=/elastic-stack/all.sh mode=0755
+  - name: Make the shell scripts executable
+    file: path=/elastic-stack/{{ item }} mode=0755
+    with_items:
+      - all.sh
+      - fix-time.sh
 
 
   - name: Get the injector plugin to generate test data
