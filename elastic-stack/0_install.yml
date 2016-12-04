@@ -41,6 +41,13 @@
       - nginx
       - mongodb
 
+  - name: Make sure Redis server, nginx, and MongoDB autostart and are started
+    service: name={{ item }} enabled=yes state=started
+    with_items:
+      - redis-server
+      - nginx
+      - mongodb
+
 
   - name: Install pip to get current Python dependencies
     apt: name=python-pip state=latest
