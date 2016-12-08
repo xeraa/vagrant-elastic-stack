@@ -30,6 +30,14 @@ Access Kibana at [http://localhost:5601/app/kibana](http://localhost:5601/app/ki
 
 
 
+## Credentials
+
+If you have added X-Pack (by running `ansible-playbook /elastic-stack/6_add-xpack.yml` or `/elastic-stack/all.sh`) you will need to login into Kibana with the default credentials — username `elastic` and password `changeme`.
+
+Metricbeat and Logstash are configured with the same credentials automatically.
+
+
+
 ## Generate test data
 
 You can use */opt/injector-5.0.jar* to generate test data in the `person` index. To generate 100,000 documents in batches of 1,000 run the following command:

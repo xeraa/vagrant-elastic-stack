@@ -18,6 +18,7 @@
   - name: Start Elasticsearch
     service: name=elasticsearch state=started
 
+
   - name: Stop Kibana
     service: name=kibana state=stopped
 
@@ -26,3 +27,45 @@
 
   - name: Start Kibana
     service: name=kibana state=started
+
+
+  - name: Readd the original Logstash output so this playbook can be run multiple times
+    template: src=templates/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
+
+  - name: Set the user in the Logstash to Elasticsearch output
+    lineinfile:
+      dest: /etc/logstash/conf.d/20-elasticsearch-output.conf
+      insertafter: '^    hosts =>'
+      line: '    user => "elastic"'
+      state: present
+
+  - name: Set the password in the Logstash to Elasticsearch output
+    lineinfile:
+      dest: /etc/logstash/conf.d/20-elasticsearch-output.conf
+      insertafter: '^    user =>'
+      line: '    password => "changeme"'
+      state: present
+
+  - name: Restart Logstash
+    service: name=logstash state=restarted
+
+
+  - name: Readd the original Metricbeat configuration so this playbook can be run multiple times
+    template: src=templates/metricbeat.yml dest=/etc/metricbeat/metricbeat.yml
+
+  - name: Set the user in the Metricbeat configuration
+    lineinfile:
+      dest: /etc/metricbeat/metricbeat.yml
+      insertafter: '^  hosts: ["http://localhost:9200"]'
+      line: '  username: "elastic"'
+      state: present
+
+  - name: Set the password in the Metricbeat configuration
+    lineinfile:
+      dest: /etc/metricbeat/metricbeat.yml
+      insertafter: '^  username:'
+      line: '  password: "changeme"'
+      state: present
+
+  - name: Restart Metricbeat
+    service: name=metricbeat state=restarted
