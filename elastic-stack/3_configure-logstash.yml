@@ -9,6 +9,9 @@
   - name: Add the Logstash input configuration for Beats
     template: src=templates/beats-input.conf dest=/etc/logstash/conf.d/00-beats-input.conf
 
+  - name: Add the Logstash input configuration for Redis
+    template: src=templates/redis-input.conf dest=/etc/logstash/conf.d/01-redis-input.conf
+
   - name: Add the Logstash filter configuration for Syslog
     template: src=templates/syslog-filter.conf dest=/etc/logstash/conf.d/10-syslog-filter.conf
 

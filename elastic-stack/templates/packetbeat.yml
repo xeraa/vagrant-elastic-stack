@@ -56,5 +56,8 @@ packetbeat.protocols.nfs:
   ports: [2049]
 
 
-output.elasticsearch:
-  hosts: ["http://localhost:9200"]
+output.redis:
+  hosts: ["localhost:6379"]
+  datatype: "list"
+  key: "packetbeat"
+  db: 0
