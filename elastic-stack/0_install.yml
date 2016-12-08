@@ -21,6 +21,9 @@
   - name: Install unzip for unpacking files later on
     apt: name=unzip state=latest
 
+  - name: Install Vim, because plain Vi is driving me crazy
+    apt: name=vim state=latest
+
   - name: Install cURL, which is missing on the Bento image
     apt: name=curl state=latest
 
