@@ -7,10 +7,18 @@
   vars:
     elastic_version: 5.0.2
     elastic_download: https://artifacts.elastic.co
-    platform: i386 #amd64
 
 
   tasks:
+
+  - name: Get the platform (i386 or amd64) of the virtual machine
+    command: dpkg --print-architecture
+    register: print_architecture
+
+  - name: And set the actual platform value as a variable
+    set_fact:
+      platform: "{{ print_architecture.stdout }}"
+
 
   - name: Get rid of Chef and Puppet to save some resources and autoremove unused packages to save some disk space
     apt: name={{ item }} state=absent autoremove=yes
