@@ -8,8 +8,8 @@ Vagrant.configure(2) do |config|
         # Use a 32bit version for workshops to avoid issues with 64bit virtualization
         # But use 64bit for Docker demos, since it requires a 64bit host
         # Avoid https://atlas.hashicorp.com/ubuntu/ since those are notoriously broken
-        ubuntu.vm.box = "bento/ubuntu-16.04-i386"
-        #ubuntu.vm.box = "bento/ubuntu-16.04"
+        #ubuntu.vm.box = "bento/ubuntu-16.04-i386"
+        ubuntu.vm.box = "bento/ubuntu-16.04"
         ubuntu.vm.network :forwarded_port, guest: 5601, host: 5601
         ubuntu.vm.synced_folder "elastic-stack/", "/elastic-stack/"#, type: "rsync"
     end
