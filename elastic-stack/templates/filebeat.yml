@@ -2,15 +2,14 @@ filebeat.prospectors:
 
 - input_type: log
   paths:
-    - /var/log/*.log
     - /var/log/syslog
-    - /var/log/elasticsearch/elasticsearch/*.log
-    - /var/log/logstash/logstash-plain.log
-    - /var/log/filebeat/filebeat
-    - /var/log/metricbeat/metricbeat
-    - /var/log/packetbeat/packetbeat
+  document_type: syslog
+
+- input_type: log
+  paths:
     - /var/log/kibana/kibana.log
-    #- c:\programdata\elasticsearch\logs\*
+  document_type: kibana
+  json.message_key: log
 
 
 output.logstash:
