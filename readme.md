@@ -2,6 +2,15 @@
 
 This repository will install the [Elastic Stack](https://www.elastic.co/products) (Elasticsearch, Logstash, Kibana, and Beats) and optionally X-Pack with a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) 1.8.6+ and 2.5GB of RAM.
 
+Features:
+
+* Parse Syslog and collect Kibana's JSON log
+* Metricbeat collecting system metrics plus nginx, MongoDB, and Redis
+* Packetbeat sending its data via Redis
+* On 64bit instances Redis in a container, monitored by Metricbeat's Docker module and Filebeat collects the *json-file* logs
+* Dashboards for Packetbeat and Metricbeat
+* X-Pack with security
+
 ![](screenshot.png)
 
 
