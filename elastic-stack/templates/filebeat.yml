@@ -11,6 +11,12 @@ filebeat.prospectors:
   document_type: kibana
   json.message_key: log
 
+- input_type: log
+  paths:
+    - /var/lib/docker/containers/*/*.log
+  document_type: docker
+  json.message_key: log
+
 
 output.logstash:
   hosts: ["localhost:5044"]

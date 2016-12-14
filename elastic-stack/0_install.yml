@@ -42,27 +42,73 @@
     apt: name=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
 
 
-  - name: Install Redis, nginx, and MongoDB so we have a queue and services in action
-    apt: name={{ item }} state=latest
-    with_items:
-      - redis-server
-      - redis-tools
-      - nginx
-      - mongodb
-
-  - name: Make sure Redis server, nginx, and MongoDB autostart and are started
-    service: name={{ item }} enabled=yes state=started
-    with_items:
-      - redis-server
-      - nginx
-      - mongodb
-
-
   - name: Install pip to get current Python dependencies
     apt: name=python-pip state=latest
 
   - name: Install pexpect to handle interactive prompts in X-Pack
     pip: name=pexpect state=latest
+
+
+  - name: Get the Docker key on 64bit
+    apt_key:
+      keyserver: "hkp://p80.pool.sks-keyservers.net:80"
+      id: 58118E89F3A912897C070ADBF76221572C52609D
+      state: present
+    when: "platform == 'amd64'"
+
+  - name: Add the Docker repository
+    apt_repository:
+      repo: "deb https://apt.dockerproject.org/repo ubuntu-xenial main"
+      state: present
+    when: "platform == 'amd64'"
+
+  - name: Install Docker
+    apt: name=docker-engine state=latest update_cache=yes
+    when: "platform == 'amd64'"
+
+  - name: Make sure Docker autostarts and is started
+    service: name=docker enabled=yes state=started
+    when: "platform == 'amd64'"
+
+  - name: Install docker-py to handle Docker from Ansible
+    pip: name=docker-py state=latest
+    when: "platform == 'amd64'"
+
+
+  - name: Get a Redis container on 64bit
+    docker_container:
+      name: myredis
+      image: redis
+      command: redis-server --appendonly yes
+      state: started
+      published_ports:
+        - 0.0.0.0:6379:6379
+      volumes:
+        - /data
+      log_driver: json-file
+    when: "platform == 'amd64'"
+
+  - name: Install Redis as a service on 32bit
+    apt: name=redis-server state=latest
+    when: "platform == 'i386'"
+
+  - name: Make sure Redis autostarts and is started on 32bit
+    service: name=redis-server enabled=yes state=started
+    when: "platform == 'i386'"
+
+
+  - name: Install Redis CLI, nginx, and MongoDB so we have services in action
+    apt: name={{ item }} state=latest
+    with_items:
+      - redis-tools
+      - nginx
+      - mongodb
+
+  - name: Make sure nginx and MongoDB autostart and are started
+    service: name={{ item }} enabled=yes state=started
+    with_items:
+      - nginx
+      - mongodb
 
 
   - name: Get Elasticsearch
