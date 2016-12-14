@@ -36,7 +36,10 @@
     apt: name=curl state=latest
 
   - name: Install NTP to avoid time drift inside the VM
-    apt: name=ntp state=latest
+    apt: name={{ item }} state=latest
+    with_items:
+      - ntp
+      - ntpdate
 
   - name: Install the JRE
     apt: name=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
