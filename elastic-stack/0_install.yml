@@ -48,9 +48,6 @@
   - name: Install pip to get current Python dependencies
     apt: name=python-pip state=latest
 
-  - name: Install pexpect to handle interactive prompts in X-Pack
-    pip: name=pexpect state=latest
-
 
   - name: Get the Docker key on 64bit
     apt_key:

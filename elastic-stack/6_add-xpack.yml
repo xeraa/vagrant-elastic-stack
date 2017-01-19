@@ -10,10 +10,7 @@
     service: name=elasticsearch state=stopped
 
   - name: Add X-Pack to Elasticsearch
-    expect:
-      command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/x-pack.zip
-      responses:
-        "Continue with installation?": y
+    command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/x-pack.zip --batch
 
   - name: Start Elasticsearch
     service: name=elasticsearch state=started
