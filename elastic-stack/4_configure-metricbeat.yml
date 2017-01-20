@@ -11,5 +11,3 @@
 
   - name: Start Metricbeat
     service: name=metricbeat state=restarted
-
-  - debug: msg="Test with curl -XGET 'http://localhost:9200/metricbeat-*/_search?pretty'"
