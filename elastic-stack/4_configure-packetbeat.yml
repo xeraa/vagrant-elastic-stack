@@ -7,7 +7,8 @@
   tasks:
 
   - name: Explicitly PUT the Packetbeat mapping, since it doesn't happen automatically via Redis
-    command: curl -XPUT --data-binary @/etc/packetbeat/packetbeat.template.json localhost:9200/_template/packetbeat
+    command: >
+      curl -XPUT --data-binary @/etc/packetbeat/packetbeat.template.json http://localhost:9200/_template/packetbeat
 
   - name: Change the Packetbeat configuration
     template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
