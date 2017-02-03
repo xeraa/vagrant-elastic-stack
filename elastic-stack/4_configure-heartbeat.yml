@@ -1,0 +1,13 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Change the Heartbeat configuration
+    template: src=templates/heartbeat.yml dest=/etc/heartbeat/heartbeat.yml
+
+  - name: Start Heartbeat
+    service: name=heartbeat state=restarted

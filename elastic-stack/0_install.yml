@@ -143,6 +143,14 @@
   - name: Install Filebeat
     apt: deb=/opt/filebeat.deb
 
+  - name: Get Heartbeat
+    get_url:
+      url={{ elastic_download }}/downloads/beats/heartbeat/heartbeat-{{ elastic_version }}-{{ platform }}.deb
+      dest=/opt/heartbeat.deb
+
+  - name: Install Heartbeat
+    apt: deb=/opt/heartbeat.deb
+
   - name: Get Metricbeat
     get_url:
       url={{ elastic_download }}/downloads/beats/metricbeat/metricbeat-{{ elastic_version }}-{{ platform }}.deb
@@ -159,10 +167,11 @@
   - name: Install Packetbeat
     apt: deb=/opt/packetbeat.deb
 
-  - name: Make sure Filebeat, Metricbeat, and Packetbeat autostart, but are stopped until they are properly configured
+  - name: Make sure Filebeat, Heartbeat, Metricbeat, and Packetbeat autostart, but are stopped until they are properly configured
     service: name={{ item }} enabled=yes state=stopped
     with_items:
       - filebeat
+      - heartbeat
       - metricbeat
       - packetbeat
 

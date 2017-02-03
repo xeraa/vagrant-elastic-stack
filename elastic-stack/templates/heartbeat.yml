@@ -1,0 +1,9 @@
+heartbeat.monitors:
+- type: http
+  urls: ["http://localhost:80"]
+  schedule: '@every 10s'
+  check.response.status: 200
+
+
+output.elasticsearch:
+  hosts: ["localhost:9200"]

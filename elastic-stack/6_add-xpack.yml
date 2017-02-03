@@ -26,7 +26,7 @@
     service: name=kibana state=started
 
 
-  - name: Readd the original Logstash output so this playbook can be run multiple times
+  - name: Read the original Logstash output so this playbook can be run multiple times
     template: src=templates/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
 
   - name: Set the user in the Logstash to Elasticsearch output
@@ -47,7 +47,28 @@
     service: name=logstash state=restarted
 
 
-  - name: Readd the original Metricbeat configuration so this playbook can be run multiple times
+  - name: Read the original Heartbeat configuration so this playbook can be run multiple times
+    template: src=templates/heartbeat.yml dest=/etc/heartbeat/heartbeat.yml
+
+  - name: Set the user in the Heartbeat configuration
+    lineinfile:
+      dest: /etc/heartbeat/heartbeat.yml
+      insertafter: '^  hosts: ["http://localhost:9200"]'
+      line: '  username: "elastic"'
+      state: present
+
+  - name: Set the password in the Heartbeat configuration
+    lineinfile:
+      dest: /etc/heartbeat/heartbeat.yml
+      insertafter: '^  username:'
+      line: '  password: "changeme"'
+      state: present
+
+  - name: Restart Heartbeat
+    service: name=heartbeat state=restarted
+
+
+  - name: Read the original Metricbeat configuration so this playbook can be run multiple times
     template: src=templates/metricbeat.yml dest=/etc/metricbeat/metricbeat.yml
 
   - name: Set the user in the Metricbeat configuration

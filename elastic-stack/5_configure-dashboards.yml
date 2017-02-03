@@ -9,6 +9,9 @@
   - name: Load the Filebeat dashboard
     command: /usr/share/filebeat/scripts/import_dashboards
 
+  - name: Load the Heartbeat dashboard
+    command: /usr/share/heartbeat/scripts/import_dashboards
+
   - name: Load the Metricbeat dashboard
     command: /usr/share/metricbeat/scripts/import_dashboards
 

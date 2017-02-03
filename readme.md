@@ -4,7 +4,9 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 Features:
 
-* Parse Syslog and collect Kibana's JSON log
+* Filebeat collecting Syslog and Kibana's JSON log
+* Logstash parsing the Syslog file
+* Heartbeat pinging nginx
 * Metricbeat collecting system metrics plus nginx, MongoDB, and Redis
 * Packetbeat sending its data via Redis
 * On 64bit instances Redis in a container, monitored by Metricbeat's Docker module and Filebeat collects the *json-file* logs
