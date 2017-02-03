@@ -37,7 +37,7 @@ Or if you are in a hurry, run all playbooks with `/elastic-stack/all.sh` at once
 
 ## Configure Kibana
 
-Access Kibana at [http://localhost:5601](http://localhost:5601). You will be prompted to select a default index — select any, for example the `filebeat-*` index.
+Access Kibana at [http://localhost:5601](http://localhost:5601).
 
 
 

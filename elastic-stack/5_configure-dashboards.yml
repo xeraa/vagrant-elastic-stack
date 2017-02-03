@@ -14,3 +14,8 @@
 
   - name: Load the Packetbeat dashboard
     command: /usr/share/packetbeat/scripts/import_dashboards
+
+  - name: Add a default index pattern using Metricbeat
+    command: >
+      curl -XPUT http://localhost:9200/.kibana/config/5.2.0 -d '{"defaultIndex" : "metricbeat-*"}'
+
