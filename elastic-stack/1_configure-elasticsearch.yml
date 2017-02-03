@@ -41,3 +41,19 @@
 
   - name: Start Elasticsearch
     service: name=elasticsearch state=restarted
+
+  - name: Wait for Elasticsearch to become available
+    wait_for:
+      port: 9200
+      delay: 5
+
+  - name: Set the number of shards to two and the number of replicas to 0
+    command: >
+      curl -XPUT 'http://localhost:9200/_template/default' -d '{
+          "template": "*",
+          "order" : 0,
+          "settings": {
+              "number_of_shards": 2,
+              "number_of_replicas": 0
+          }
+      }'
