@@ -10,14 +10,6 @@ packetbeat.protocols.icmp:
   enabled: true
 
 
-packetbeat.protocols.amqp:
-  ports: [5672]
-
-
-packetbeat.protocols.cassandra:
-  ports: [9042]
-
-
 packetbeat.protocols.dns:
   ports: [53]
   include_authorities: true
@@ -25,35 +17,15 @@ packetbeat.protocols.dns:
 
 
 packetbeat.protocols.http:
-  ports: [80, 8080, 8000, 5000, 8002, 5601]
-
-
-packetbeat.protocols.memcache:
-  ports: [11211]
-
-
-packetbeat.protocols.mysql:
-  ports: [3306]
-
-
-packetbeat.protocols.pgsql:
-  ports: [5432]
+  ports: [80, 5601]
 
 
 packetbeat.protocols.redis:
   ports: [6379]
 
 
-packetbeat.protocols.thrift:
-  ports: [9090]
-
-
 packetbeat.protocols.mongodb:
   ports: [27017]
-
-
-packetbeat.protocols.nfs:
-  ports: [2049]
 
 
 output.redis:
