@@ -12,9 +12,11 @@ metricbeat.modules:
     - memory
     - network
     - process
+    - socket
   enabled: true
   period: 10s
   processes: ['.*']
+  cgroups: true
 
 - module: redis
   metricsets: ["info"]
