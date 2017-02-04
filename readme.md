@@ -58,3 +58,9 @@ You can use */opt/injector-5.0.jar* to generate test data in the `person` index.
 ```
 $ java -jar /opt/injector-5.0.jar 100000 1000
 ```
+
+
+
+## Logstash demo: Raffle
+
+You can play around with a Logstash example by calling `sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -f /elastic-stack/raffle/raffle.conf` (it can take some time) and you will find the result in the index *raffle*.
