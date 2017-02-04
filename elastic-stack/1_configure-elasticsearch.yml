@@ -39,6 +39,10 @@
       line: "action.destructive_requires_name: true"
       state: present
 
+  - name: Set the right ulimits
+    shell: ulimit -n 65536
+  - shell: ulimit -l unlimited
+
   - name: Start Elasticsearch
     service: name=elasticsearch state=restarted
 
