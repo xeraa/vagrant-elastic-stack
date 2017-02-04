@@ -8,7 +8,7 @@ Features:
 * Logstash parsing the Syslog file
 * Heartbeat pinging nginx
 * Metricbeat collecting system metrics plus nginx, MongoDB, and Redis
-* Packetbeat sending its data via Redis
+* Packetbeat sending its data via Redis and monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
 * On 64bit instances Redis in a container, monitored by Metricbeat's Docker module and Filebeat collects the *json-file* logs
 * Dashboards for Packetbeat and Metricbeat
 * X-Pack with security
@@ -34,7 +34,7 @@ $ ansible-playbook /elastic-stack/5_configure-dashboards.yml
 $ ansible-playbook /elastic-stack/6_add-xpack.yml
 ```
 
-Or if you are in a hurry, run all playbooks with `/elastic-stack/all.sh` at once.
+Or if you are in a hurry, run all playbooks with `$ /elastic-stack/all.sh` at once.
 
 
 
@@ -46,7 +46,7 @@ Access Kibana at [http://localhost:5601](http://localhost:5601).
 
 ## Credentials
 
-If you have added X-Pack (by running `ansible-playbook /elastic-stack/6_add-xpack.yml` or `/elastic-stack/all.sh`) you will need to login into Kibana with the default credentials — username `elastic` and password `changeme`.
+If you have added X-Pack (by running `$ ansible-playbook /elastic-stack/6_add-xpack.yml` or `$ /elastic-stack/all.sh`) you will need to login into Kibana with the default credentials — username `elastic` and password `changeme`.
 
 Metricbeat and Logstash are configured with the same credentials automatically.
 
@@ -64,4 +64,4 @@ $ java -jar /opt/injector-5.0.jar 100000 1000
 
 ## Logstash demo: Raffle
 
-You can play around with a Logstash example by calling `sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -f /elastic-stack/raffle/raffle.conf` (it can take some time) and you will find the result in the `raffle` index.
+You can play around with a Logstash example by calling `$ sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -f /elastic-stack/raffle/raffle.conf` (it can take some time) and you will find the result in the `raffle` index.
