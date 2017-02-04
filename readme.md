@@ -1,4 +1,4 @@
-# Elastic Stack 5.1
+# Elastic Stack 5.2
 
 This repository will install the [Elastic Stack](https://www.elastic.co/products) (Elasticsearch, Logstash, Kibana, and Beats) and optionally X-Pack with a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) 1.8.6+ and 2.5GB of RAM.
 
@@ -27,6 +27,7 @@ $ ansible-playbook /elastic-stack/1_configure-elasticsearch.yml
 $ ansible-playbook /elastic-stack/2_configure-kibana.yml
 $ ansible-playbook /elastic-stack/3_configure-logstash.yml
 $ ansible-playbook /elastic-stack/4_configure-filebeat.yml
+$ ansible-playbook /elastic-stack/4_configure-heartbeat.yml
 $ ansible-playbook /elastic-stack/4_configure-metricbeat.yml
 $ ansible-playbook /elastic-stack/4_configure-packetbeat.yml
 $ ansible-playbook /elastic-stack/5_configure-dashboards.yml
@@ -63,4 +64,4 @@ $ java -jar /opt/injector-5.0.jar 100000 1000
 
 ## Logstash demo: Raffle
 
-You can play around with a Logstash example by calling `sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -f /elastic-stack/raffle/raffle.conf` (it can take some time) and you will find the result in the index *raffle*.
+You can play around with a Logstash example by calling `sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -f /elastic-stack/raffle/raffle.conf` (it can take some time) and you will find the result in the `raffle` index.
