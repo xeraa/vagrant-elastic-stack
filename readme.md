@@ -11,7 +11,7 @@ Features:
 * Packetbeat sending its data via Redis and monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
 * On 64bit instances Redis in a container, monitored by Metricbeat's Docker module and Filebeat collects the *json-file* logs
 * Dashboards for Packetbeat and Metricbeat
-* X-Pack with security
+* X-Pack with security and monitoring of Elasticsearch, Logstash, and Kibana
 
 ![](screenshot.png)
 
