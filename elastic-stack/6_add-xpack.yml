@@ -16,6 +16,18 @@
     service: name=elasticsearch state=started
 
 
+  - name: Stop Logstash
+    service: name=logstash state=stopped
+
+  - name: Add X-Pack to Logstash
+    command: ./bin/logstash-plugin install file:///opt/x-pack.zip
+    args:
+      chdir: /usr/share/logstash/
+
+  - name: Start Logstash
+    service: name=logstash state=started
+
+
   - name: Stop Kibana
     service: name=kibana state=stopped
 
