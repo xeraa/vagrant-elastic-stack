@@ -18,5 +18,10 @@
   - name: Add the Logstash output configuration to Elasticsearch
     template: src=templates/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
 
+  - name: Create the pattern directory
+    file: path=/opt/logstash/patterns/ state=directory recurse=yes
+  - name: Add the nginx pattern, so we can use it for workshops later on
+    template: src=templates/nginx-pattern dest=/opt/logstash/patterns/nginx
+
   - name: Start Logstash
     service: name=logstash state=restarted
