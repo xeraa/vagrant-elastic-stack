@@ -2,10 +2,11 @@
 
 - hosts: all
   become: true
+  vars_files:
+    - vars.yml
 
 
   vars:
-    elastic_version: 5.2.1
     elastic_download: https://artifacts.elastic.co
 
 
