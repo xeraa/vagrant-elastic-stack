@@ -34,11 +34,13 @@ metricbeat.modules:
   metricsets: ["status"]
   hosts: ["localhost:27017"]
 
+{% if ansible_architecture == "x86_64" %}
 - module: docker
   metricsets: ["cpu", "info", "memory", "network", "diskio", "container"]
   hosts: ["unix:///var/run/docker.sock"]
   enabled: true
   period: 10s
+{% endif %}
 
 
 output.elasticsearch:
