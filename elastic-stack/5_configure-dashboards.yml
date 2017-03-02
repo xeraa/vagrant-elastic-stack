@@ -12,8 +12,10 @@
   - name: Load the Filebeat dashboard
     command: /usr/share/filebeat/scripts/import_dashboards
 
-  - name: Load the Heartbeat dashboard
-    command: /usr/share/heartbeat/scripts/import_dashboards
+  - name: >
+      Load the Heartbeat dashboard
+      Use the nightlies since the dashboard is only available on master ATM
+    command: /usr/share/heartbeat/scripts/import_dashboards --url https://beats-nightlies.s3.amazonaws.com/dashboards/beats-dashboards-6.0.0-alpha1-SNAPSHOT.zip
 
   - name: Load the Metricbeat dashboard
     command: /usr/share/metricbeat/scripts/import_dashboards
