@@ -106,6 +106,9 @@
       - nginx
       - mongodb
 
+  - name: Change the nginx configuration to expose /server-status, which Metricbeat nginx uses
+    template: src=templates/nginx-sites dest=/etc/nginx/sites-enabled/default
+
   - name: Make sure nginx and MongoDB autostart and are started
     service: name={{ item }} enabled=yes state=started
     with_items:
