@@ -1,15 +1,6 @@
-# Elastic Stack 5.2
+# Elastic Stack in a Box
 
-This repository will install the [Elastic Stack](https://www.elastic.co/products) (Elasticsearch, Logstash, Kibana, and Beats) and optionally X-Pack with a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (1.8.6+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 2.5GB of RAM.
-
-If that sounds too complicated, there is also the final result: An OVA image, which you can import directly into [VirtualBox](https://www.virtualbox.org):
-
-* Download the image from [https://s3.eu-central-1.amazonaws.com/xeraa/public/elastic-stack.ova](https://s3.eu-central-1.amazonaws.com/xeraa/public/elastic-stack.ova).
-* Load the OVA file into VirtualBox: File -> Import Appliance... -> Select the file and start it
-* Connect to the instance with the credentials `vagrant` and `vagrant` in the VirtualBox window.
-* Or use SSH with the same credentials:
-  * Windows: Use [http://www.putty.org](http://www.putty.org) and connect to `vagrant@127.0.0.1` on port 2222.
-  * Mac and Linux: `$ ssh vagrant@127.0.0.1 -p 2222 -o PreferredAuthentications=password`
+This repository will install the [Elastic Stack](https://www.elastic.co/products) (Elasticsearch, Logstash, Kibana, and Beats) and optionally X-Pack. You can either start from scratch and configure everything with [Vagrant and Ansible](#vagrant-and-ansible) or you can [download the final OVA image](#ova-image).
 
 
 
@@ -20,15 +11,18 @@ If that sounds too complicated, there is also the final result: An OVA image, wh
 * Heartbeat pinging nginx
 * Metricbeat collecting system metrics plus nginx, MongoDB, and Redis
 * Packetbeat sending its data via Redis and monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
-* On 64bit instances Redis in a container, monitored by Metricbeat's Docker module and Filebeat collects the *json-file* logs
-* Dashboards for Packetbeat and Metricbeat
-* X-Pack with security and monitoring of Elasticsearch, Logstash, and Kibana
+* On 64bit instances Redis in a container, monitored by Metricbeat's Docker module, and Filebeat collects the *json-file* log
+* Dashboards for Heartbeat, Metricbeat, and Packetbeat
+* X-Pack with security and monitoring for Elasticsearch, Logstash, and Kibana
+* The pattern for nginx is already prepared in */opt/logstash/patterns/* and you can collect */var/log/nginx/access.log* with Filebeat and add a filter in Logstash with the pattern as an exercise
 
 ![](screenshot.png)
 
 
 
-## Configure the Elastic Stack with Ansible
+## Vagrant and Ansible
+
+Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (1.8.6+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 2.5GB of RAM.
 
 With the [Ansible playbooks](https://docs.ansible.com/ansible/playbooks.html) in the */elastic-stack/* folder you can configure the whole system step by step. Just run them in the given order inside the Vagrant box:
 
@@ -49,21 +43,30 @@ Or if you are in a hurry, run all playbooks with `$ /elastic-stack/all.sh` at on
 
 
 
-## Configure Kibana
+## OVA Image
+
+If Vagrant and Ansible sound too complicated, there is also the final result: An OVA image, which you can import directly into [VirtualBox](https://www.virtualbox.org):
+
+* Download the image from [https://s3.eu-central-1.amazonaws.com/xeraa/public/elastic-stack.ova](https://s3.eu-central-1.amazonaws.com/xeraa/public/elastic-stack.ova).
+* Load the OVA file into VirtualBox and make sure you have 2.5GB of RAM available for it: File -> Import Appliance... -> Select the file and start it
+* Connect to the instance with the credentials `vagrant` and `vagrant` in the VirtualBox window.
+* Or use SSH with the same credentials:
+  * Windows: Use [http://www.putty.org](http://www.putty.org) and connect to `vagrant@127.0.0.1` on port 2222.
+  * Mac and Linux: `$ ssh vagrant@127.0.0.1 -p 2222 -o PreferredAuthentications=password`
+
+
+
+## Kibana
 
 Access Kibana at [http://localhost:5601](http://localhost:5601).
 
+If you have added X-Pack (by running `$ ansible-playbook /elastic-stack/6_add-xpack.yml` or `$ /elastic-stack/all.sh` or used the final OVA image) you will need to login into Kibana with the default credentials — username `elastic` and password `changeme`.
 
-
-## Credentials
-
-If you have added X-Pack (by running `$ ansible-playbook /elastic-stack/6_add-xpack.yml` or `$ /elastic-stack/all.sh`) you will need to login into Kibana with the default credentials — username `elastic` and password `changeme`.
-
-Metricbeat and Logstash are configured with the same credentials automatically.
+The Beats are configured with the same credentials automatically.
 
 
 
-## Generate test data
+## Test Data
 
 You can use */opt/injector-5.0.jar* to generate test data in the `person` index. To generate 100,000 documents in batches of 1,000 run the following command:
 
@@ -73,6 +76,6 @@ $ java -jar /opt/injector-5.0.jar 100000 1000
 
 
 
-## Logstash demo: Raffle
+## Logstash Demo
 
 You can play around with a Logstash example by calling `$ sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -f /elastic-stack/raffle/raffle.conf` (it can take some time) and you will find the result in the `raffle` index.
