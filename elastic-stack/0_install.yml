@@ -109,6 +109,9 @@
   - name: Change the nginx configuration to expose /server-status, which Metricbeat nginx uses
     template: src=templates/nginx-sites dest=/etc/nginx/sites-enabled/default
 
+  - name: Enable the default HTML site of nginx
+    command: mv /var/www/html/index.nginx-debian.html /var/www/html/index.html
+
   - name: Make sure nginx and MongoDB autostart and are started
     service: name={{ item }} enabled=yes state=started
     with_items:
