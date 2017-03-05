@@ -2,7 +2,18 @@
 
 This repository will install the [Elastic Stack](https://www.elastic.co/products) (Elasticsearch, Logstash, Kibana, and Beats) and optionally X-Pack with a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (1.8.6+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 2.5GB of RAM.
 
-Features:
+If that sounds too complicated, there is also the final result: An OVA image, which you can import directly into [VirtualBox](https://www.virtualbox.org):
+
+* Download the image from [https://s3.eu-central-1.amazonaws.com/xeraa/public/elastic-stack.ova](https://s3.eu-central-1.amazonaws.com/xeraa/public/elastic-stack.ova).
+* Load the OVA file into VirtualBox: File -> Import Appliance... -> Select the file and start it
+* Connect to the instance with the credentials `vagrant` and `vagrant` in the VirtualBox window.
+* Or use SSH with the same credentials:
+  * Windows: Use [http://www.putty.org](http://www.putty.org) and connect to `vagrant@127.0.0.1` on port 2222.
+  * Mac and Linux: `$ ssh vagrant@127.0.0.1 -p 2222 -o PreferredAuthentications=password`
+
+
+
+## Features
 
 * Filebeat collecting Syslog and Kibana's JSON log
 * Logstash parsing the Syslog file
