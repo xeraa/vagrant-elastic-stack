@@ -6,10 +6,6 @@
     - vars.yml
 
 
-  vars:
-    elastic_download: https://artifacts.elastic.co
-
-
   tasks:
 
   - name: Get the platform (i386 or amd64) of the virtual machine
