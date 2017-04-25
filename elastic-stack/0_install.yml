@@ -118,6 +118,9 @@
       - nginx
       - mongodb
 
+  - name: Reload the nginx configuration so that our change is applied
+    service: name=nginx state=reloaded
+
 
   - name: Get Elasticsearch
     get_url:
