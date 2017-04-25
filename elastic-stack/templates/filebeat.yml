@@ -1,9 +1,10 @@
 filebeat.prospectors:
 
-- input_type: log
-  paths:
-    - /var/log/syslog
-  document_type: syslog
+#- input_type: log
+#  paths:
+#    - /var/log/syslog
+#  document_type: syslog
+
 
 - input_type: log
   paths:
@@ -20,5 +21,13 @@ filebeat.prospectors:
 {% endif %}
 
 
-output.logstash:
-  hosts: ["localhost:5044"]
+filebeat.modules:
+- module: system
+- module: nginx
+
+
+output.elasticsearch:
+  hosts: ["localhost:9200"]
+
+#output.logstash:
+#  hosts: ["localhost:5044"]
