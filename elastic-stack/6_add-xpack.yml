@@ -59,6 +59,27 @@
     service: name=logstash state=restarted
 
 
+  - name: Read the original Filebeat configuration so this playbook can be run multiple times
+    template: src=templates/filebeat.yml dest=/etc/filebeat/filebeat.yml
+
+  - name: Set the user in the Filebeat configuration
+    lineinfile:
+      dest: /etc/filebeat/filebeat.yml
+      insertafter: '^  hosts: ["http://localhost:9200"]'
+      line: '  username: "elastic"'
+      state: present
+
+  - name: Set the password in the Filebeat configuration
+    lineinfile:
+      dest: /etc/filebeat/filebeat.yml
+      insertafter: '^  username:'
+      line: '  password: "changeme"'
+      state: present
+
+  - name: Restart Filebeat
+    service: name=filebeat state=restarted
+
+
   - name: Read the original Heartbeat configuration so this playbook can be run multiple times
     template: src=templates/heartbeat.yml dest=/etc/heartbeat/heartbeat.yml
 
