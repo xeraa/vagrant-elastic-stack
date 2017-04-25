@@ -6,13 +6,13 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 ## Features
 
-* Filebeat collecting Syslog and Kibana's JSON log
-* Logstash parsing the Syslog file
+* ~~Filebeat collecting Syslog and Kibana's JSON log, Logstash parsing the Syslog file~~
+* Filebeat modules for nginx and system
 * Heartbeat pinging nginx
 * Metricbeat collecting system metrics plus nginx, MongoDB, and Redis
-* Packetbeat sending its data via Redis and monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
+* Packetbeat sending its data via Redis + Logstash, monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
 * On 64bit instances Redis in a container, monitored by Metricbeat's Docker module, and Filebeat collects the *json-file* log
-* Dashboards for Heartbeat, Metricbeat, and Packetbeat
+* Dashboards for Filebeat, Heartbeat, Metricbeat, and Packetbeat
 * X-Pack with security and monitoring for Elasticsearch, Logstash, and Kibana
 * The pattern for nginx is already prepared in */opt/logstash/patterns/* and you can collect */var/log/nginx/access.log* with Filebeat and add a filter in Logstash with the pattern as an exercise
 
