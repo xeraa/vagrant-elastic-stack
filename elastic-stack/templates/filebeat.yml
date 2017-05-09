@@ -26,8 +26,9 @@ filebeat.modules:
 - module: nginx
 
 
-output.elasticsearch:
-  hosts: ["localhost:9200"]
-
 #output.logstash:
 #  hosts: ["localhost:5044"]
+
+
+output.elasticsearch:
+  hosts: ["localhost:9200"]
