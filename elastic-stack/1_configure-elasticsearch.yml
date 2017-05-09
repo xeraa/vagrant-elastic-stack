@@ -59,7 +59,7 @@
 
   - name: Set the number of shards to two and the number of replicas to 0
     command: >
-      curl -XPUT 'http://localhost:9200/_template/default' -d '{
+      curl -XPUT 'http://localhost:9200/_template/default' -H "Content-Type: application/json" -d '{
           "template": "*",
           "order" : 0,
           "settings": {

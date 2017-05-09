@@ -22,4 +22,4 @@
 
   - name: Add a default index pattern using Metricbeat
     command: >
-      curl -XPUT http://localhost:9200/.kibana/config/{{ elastic_version }} -d '{"defaultIndex" : "metricbeat-*"}'
+      curl -XPUT http://localhost:9200/.kibana/config/{{ elastic_version }} -H "Content-Type: application/json" -d '{"defaultIndex" : "metricbeat-*"}'
