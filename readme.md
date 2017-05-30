@@ -68,10 +68,10 @@ The Beats are configured with the same credentials automatically.
 
 ## Test Data
 
-You can use */opt/injector-5.0.jar* to generate test data in the `person` index. To generate 100,000 documents in batches of 1,000 run the following command:
+You can use */opt/injector-5.3.jar* to generate test data in the `person` index. To generate 100,000 documents in batches of 1,000 run the following command:
 
 ```
-$ java -jar /opt/injector-5.0.jar 100000 1000
+$ java -jar /opt/injector-5.3.jar 100000 1000
 ```
 
 
