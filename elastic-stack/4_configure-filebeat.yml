@@ -6,6 +6,12 @@
 
   tasks:
 
+  - name: Register the Docker ID of the Redis container so we can mark the output correctly
+    command: 'docker inspect --format="{%raw%}{{.Id}}{%endraw%}" myredis'
+    register: myredis_docker
+  - set_fact:
+      myredis_docker_id: "{{ myredis_docker.stdout }}"
+
   - name: Change the Filebeat configuration
     template: src=templates/filebeat.yml dest=/etc/filebeat/filebeat.yml
 

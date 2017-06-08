@@ -14,9 +14,17 @@ filebeat.prospectors:
 {% if ansible_architecture == "x86_64" %}
 - input_type: log
   paths:
-    - /var/lib/docker/containers/*/*.log
+    - /var/lib/docker/containers/{{ myredis_docker_id }}/{{ myredis_docker_id }}-json.log
   document_type: docker
   json.message_key: log
+  fields:
+    cgroup.id: "{{ myredis_docker_id }}"
+
+
+processors:
+- add_docker_metadata:
+    match_fields: ["fields.cgroup.id"]
+    host: "unix:///var/run/docker.sock"
 {% endif %}
 
 

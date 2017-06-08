@@ -40,6 +40,12 @@ metricbeat.modules:
   hosts: ["unix:///var/run/docker.sock"]
   enabled: true
   period: 10s
+
+
+processors:
+- add_docker_metadata:
+    match_fields: ["system.process.cgroup.id"]
+    host: "unix:///var/run/docker.sock"
 {% endif %}
 
 
