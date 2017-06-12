@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Elastic Stack Workshop</title>
+
+        <style>
+
+            .header {
+                font-size: 36px;
+                line-height: 49px;
+                font-family: "Open Sans","arial, helvetica, sans-serif";
+                display: block;
+                -webkit-font-smoothing: antialiased;
+                font-weight: 300;
+            }
+
+            .logo {
+                vertical-align: top;
+                border: 0;
+            }
+
+            html {
+                background-color: #e6e9e9;
+                background-image: -webkit-linear-gradient(270deg,rgb(230,233,233) 0%,rgb(216,221,221) 100%);
+                background-image: linear-gradient(270deg,rgb(230,233,233) 0%,rgb(216,221,221) 100%);
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .virtual_div {
+                text-align: center;
+                background-color: beige;
+                border-color: black;
+                border-width: thin;
+                border-style: solid;
+                padding: 1em 1em 1em;
+            }
+            .left {
+                text-align: left;
+            }
+            body {
+                margin: 0 auto;
+                padding: 2em 2em 4em;
+                max-width: 900px;
+                font-family: Helvetica, Arial, sans-serif;
+                font-size: 1.2em;
+                line-height: 1.5em;
+                color: #545454;
+                background-color: #ffffff;
+                box-shadow: 0 0 2px rgba(0, 0, 0, 0.06);
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                color: white;
+                font-weight: 400;
+                line-height: 1.5em;
+                background-color: rgb(7,165,222);
+                font: Arial;
+                padding-left: 15px;
+                box-shadow: 10px 10px 5px rgb(144, 144, 145);
+            }
+            h2, h3 {
+                background: #3399cc; /* Old browsers */
+                background: -moz-linear-gradient(top,  #3399cc 0%, #003366 0%, #3399cc 100%); /* FF3.6-15 */
+                background: -webkit-linear-gradient(top,  #3399cc 0%,#003366 0%,#3399cc 100%); /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to bottom,  #3399cc 0%,#003366 0%,#3399cc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3399cc', endColorstr='#3399cc',GradientType=0 ); /* IE6-9 */
+
+            }
+
+            h1 {
+                background: #3399cc;
+                background: -moz-linear-gradient(top,  #3399cc 0%, #207cca 0%, #009999 100%); /* FF3.6-15 */
+                background: -webkit-linear-gradient(top,  #3399cc 0%,#207cca 0%,#009999 100%); /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to bottom,  #3399cc 0%,#207cca 0%,#009999 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3399cc', endColorstr='#009999',GradientType=0 ); /* IE6-9 */
+
+            }
+
+            h3 {
+                font-weight: bold;
+            }
+            p.summary {
+                margin-top: 3em;
+                margin-bottom: 3em;
+            }
+
+            a {
+                color: #0083e8;
+            }
+
+            b, strong {
+                font-weight: 600;
+            }
+
+            samp {
+                display: none;
+            }
+
+
+            img {
+                -webkit-animation: colorize 2s cubic-bezier(0, 0, .78, .36) 1;
+                animation: colorize 2s cubic-bezier(0, 0, .78, .36) 1;
+                background: transparent;
+                border: 10px solid rgba(0, 0, 0, 0.12);
+                border-radius: 4px;
+                display: block;
+                margin: 1.3em auto;
+                max-width: 95%;
+            }
+
+            @-webkit-keyframes colorize {
+                0% {
+                    -webkit-filter: grayscale(100%);
+                }
+                100% {
+                    -webkit-filter: grayscale(0%);
+                }
+            }
+
+            @keyframes colorize {
+                0% {
+                    filter: grayscale(100%);
+                }
+                100% {
+                    filter: grayscale(0%);
+                }
+            }
+
+            pre code {
+                padding: 0;
+                color: #3f3b36;
+                background-color: transparent;
+                font-size: 1.0rem;
+                line-height: 2rem;
+                text-shadow: none;
+            }
+
+            code {
+                font-weight: lighter;
+                font-family: Monaco,'MonacoRegular',monospace;
+            }
+
+            pre {
+                width: 92%;
+                overflow: auto;
+                margin: 1rem 0;
+                margin-top: 1rem;
+                margin-right: 0px;
+                margin-bottom: 1rem;
+                margin-left: 0px;
+                padding: 1rem 0.8rem 1rem 1.2rem;
+                padding-top: 1rem;
+                padding-right: 0.8rem;
+                padding-bottom: 1rem;
+                padding-left: 1.2rem;
+                color: #3f3b36;
+                border: 1px solid #39bdb1;
+                border-left: 1rem solid #39bdb1;
+                font: lighter 1.0rem/2rem Monaco,'MonacoRegular',monospace;
+                font-style: normal;
+                font-variant-ligatures: normal;
+                font-variant-caps: normal;
+                font-variant-numeric: normal;
+                font-weight: lighter;
+                font-stretch: normal;
+                font-size: 1.0rem;
+                line-height: 1.4rem;
+                font-family: Monaco, MonacoRegular, monospace;
+                background-position-x: 0px;
+                background-position-y: -0.9rem;
+                background-repeat-x: repeat;
+                background-repeat-y: repeat;
+                background-attachment: initial;
+                background-origin: initial;
+                background-clip: initial;
+                background-color: initial;
+                background-size: 1px 4rem;
+                box-shadow: 10px 10px 5px rgb(144, 144, 145);
+            }
+
+            pre.bash {
+                background-color: black;
+                color: white;
+                font-family: Monaco,MonacoRegular,monospace;
+            }
+
+            hr {
+                margin-bottom: 4em;
+                margin-top: 4em;
+                border : 0;
+                height: 1px;
+                background-image: linear-gradient(to right, #66ccff, #006699, #66ccff);
+            }
+
+            ol li {
+                margin-top: 3rem;
+            }
+            ul li {
+                margin-top: 0
+            }
+
+            kbd {
+                font-family: Courier, Monaco,'MonacoRegular',monospace;
+                font-weight: bold;
+                font-size: 1.2rem;
+                line-height: 1.5rem;
+            }
+
+            h2 {
+                font-size: 2.5rem;
+            }
+        </style>
+
+    </head>
+    <body>
+        <img class="logo" src="./elastic-logo.svg" width="300">
+        <h1 class="header">Elastic Stack Workshop</h1>
+        <p>To follow the workshop you need to have a working setup with a bunch of dependencies. Simply get the virtual machine of this repository up and running and you are good to go.</p>
+
+        <h2>Requirements</h2>
+
+        <p>Your system needs to satisfy the following conditions.</p>
+
+        <h3>Windows</h3>
+        <ul>
+            <li>64bit Windows</li>
+            <li><a href="https://docs.fedoraproject.org/en-US/Fedora/13/html/Virtualization_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html">VT-x (Intel) or AMD-V (on AMD CPUs)</a> must be enabled in the BIOS to support 64bit guests</li>
+            <li><a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox 5.1+</a></li>
+            <li><a href="https://www.vagrantup.com/downloads.html">Vagrant 1.9+</a></li>
+            <li>SSH client such as <a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html">PuTTy</a></li>
+        </ul>
+
+        <h3>Mac</h3>
+        <ul>
+            <li><a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox 5.1+</a></li>
+            <li><a href="https://www.vagrantup.com/downloads.html">Vagrant 1.9+</a></li>
+        </ul>
+
+        <h3>Linux</h3>
+        <ul>
+            <li>64bit Linux</li>
+            <li><a href="https://docs.fedoraproject.org/en-US/Fedora/13/html/Virtualization_Guide/sect-Virtualization-Troubleshooting-Enabling_Intel_VT_and_AMD_V_virtualization_hardware_extensions_in_BIOS.html">VT-x (Intel) or AMD-V (on AMD CPUs)</a> must be enabled in the BIOS to support 64bit guests</li>
+            <li><a href="https://www.virtualbox.org/wiki/Linux_Downloads">VirtualBox 5.1+</a></li>
+            <li><a href="https://www.vagrantup.com/downloads.html">Vagrant 1.9+</a></li>
+        </ul>
+
+        <h2>Virtual Machine</h2>
+
+        <p>Clone the repository <a href="https://github.com/xeraa/vagrant-elastic-stack.git">https://github.com/xeraa/vagrant-elastic-stack.git</a> and run the following command in that folder (where the <i>Vagrantfile</i> is located) <pre>vagrant up</pre>
+        This will take quite a while; just let it run. Once this is done you can log into the VM with <pre>vagrant ssh</pre>
+        Then you can configure the entire machine with <pre>/elastic-stack/all.sh</pre>
+        Once that has finished successfully you will be able to access Kibana at <a href="http://localhost:5601/">http://localhost:5601/</a>. Now you are ready for the workshop.</p>
+
+        <p><br>PS: If you don't get it up and running, please open an issue <a href="https://github.com/xeraa/vagrant-elastic-stack/issues">in the repository</a>. If everything else fails you can also get the final VM before we start with the workshop, but it takes a little while to copy everything, so please don't rely on that too much.</p>
+
+    </body>
+</html>
+
