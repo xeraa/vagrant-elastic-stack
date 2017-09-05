@@ -28,8 +28,23 @@ packetbeat.protocols.mongodb:
   ports: [27017]
 
 
+{% if output == "elasticsearch" %}
+output.elasticsearch:
+  hosts: ["http://localhost:9200"]
+{% endif %}
+
+
+{% if output == "redis" %}
 output.redis:
   hosts: ["localhost:6379"]
   datatype: "list"
   key: "packetbeat"
   db: 0
+{% endif %}
+
+
+setup.kibana:
+  host: "localhost:5601"
+
+
+setup.dashboards.enabled: true

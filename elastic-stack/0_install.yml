@@ -142,43 +142,32 @@
     service: name=logstash enabled=yes state=stopped
 
 
-  - name: Get Filebeat
+  - name: Get the Beats
     get_url:
-      url={{ elastic_download }}/downloads/beats/filebeat/filebeat-{{ elastic_version }}-{{ platform }}.deb
-      dest=/opt/filebeat.deb
-
-  - name: Install Filebeat
-    apt: deb=/opt/filebeat.deb
-
-  - name: Get Heartbeat
-    get_url:
-      url={{ elastic_download }}/downloads/beats/heartbeat/heartbeat-{{ elastic_version }}-{{ platform }}.deb
-      dest=/opt/heartbeat.deb
-
-  - name: Install Heartbeat
-    apt: deb=/opt/heartbeat.deb
-
-  - name: Get Metricbeat
-    get_url:
-      url={{ elastic_download }}/downloads/beats/metricbeat/metricbeat-{{ elastic_version }}-{{ platform }}.deb
-      dest=/opt/metricbeat.deb
-
-  - name: Install Metricbeat
-    apt: deb=/opt/metricbeat.deb
-
-  - name: Get Packetbeat
-    get_url:
-      url={{ elastic_download }}/downloads/beats/packetbeat/packetbeat-{{ elastic_version }}-{{ platform }}.deb
-      dest=/opt/packetbeat.deb
-
-  - name: Install Packetbeat
-    apt: deb=/opt/packetbeat.deb
-
-  - name: Make sure Filebeat, Heartbeat, Metricbeat, and Packetbeat autostart, but are stopped until they are properly configured
-    service: name={{ item }} enabled=yes state=stopped
+      url={{ elastic_download }}/downloads/beats/{{ item }}/{{ item }}-{{ elastic_version }}-{{ platform }}.deb
+      dest=/opt/{{ item }}.deb
     with_items:
+      - auditbeat
       - filebeat
       - heartbeat
+      - metricbeat
+      - packetbeat
+
+  - name: Install the Beats
+    apt: deb=/opt/{{ item }}.deb
+    with_items:
+      - auditbeat
+      - filebeat
+      - heartbeat
+      - metricbeat
+      - packetbeat
+
+  - name: Make sure the Beats autostart, but are stopped until they are properly configured
+    service: name={{ item }} enabled=yes state=stopped
+    with_items:
+      - auditbeat
+      - filebeat
+      - heartbeat-elastic
       - metricbeat
       - packetbeat
 

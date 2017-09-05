@@ -1,0 +1,26 @@
+- module: audit
+  metricsets: ["kernel"]
+  kernel.resolve_ids: true
+  kernel.failure_mode: silent
+  kernel.backlog_limit: 8196
+  kernel.rate_limit: 0
+  kernel.include_raw_message: true
+  kernel.include_warnings: true
+
+- module: audit
+  metricsets: [file]
+  file.paths:
+  - /home/ubuntu/
+  file.max_file_size: 100 MiB
+  file.hash_types: [sha1]
+
+
+output.elasticsearch:
+  hosts: ["localhost:9200"]
+
+
+setup.kibana:
+  host: "localhost:5601"
+
+
+setup.dashboards.enabled: true
