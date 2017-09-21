@@ -1,0 +1,72 @@
+{
+  "variables": {
+    "vpc": "{{env `BUILD_VPC_ID`}}",
+    "subnet": "{{env `BUILD_SUBNET_ID`}}",
+    "aws_region": "{{env `AWS_REGION`}}",
+    "ami_name": "packer-{{isotime \"2006-01-02_15-04-06\"}}"
+  },
+  "builders": [{
+    "name": "Packer AMI Builder",
+    "type": "amazon-ebs",
+    "region": "{{user `aws_region`}}",
+    "source_ami_filter": {
+        "filters": {
+            "name": "ubuntu/images/hvm-ssd/ubuntu-xenial*",
+            "virtualization-type": "hvm",
+            "root-device-type": "ebs"
+        },
+        "owners": ["099720109477"],
+        "most_recent": true
+    },
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "{{user `ami_name` | clean_ami_name}}",
+    "tags": {
+      "Name": "{{user `ami_name`}}"
+    },
+    "run_tags": { 
+      "Name": "{{user `ami_name`}}"
+    },
+    "run_volume_tags": {
+      "Name": "{{user `ami_name`}}"
+    },
+    "snapshot_tags": {
+      "Name": "{{user `ami_name`}}"
+    },
+    "ami_description": "Packer AMI Builder demo",
+    "associate_public_ip_address": "true",
+    "vpc_id": "{{user `vpc`}}",
+    "subnet_id": "{{user `subnet`}}"
+  }],
+  "provisioners": [
+    {
+        "type": "shell",
+        "script": "elastic-stack/upgrade_os.sh",
+        "execute_command": "sudo -S bash {{.Path}}"
+    },
+    {
+        "type": "shell",
+        "script": "elastic-stack/ansible.sh",
+        "execute_command": "sudo -S bash {{.Path}}"
+    },
+    {
+        "type": "ansible-local",
+        "playbook_file": "./elastic-stack/0_install.yml",
+        "playbook_dir": "./elastic-stack/",
+        "staging_directory": "/elastic-stack/"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "rm .ssh/authorized_keys ; sudo rm /root/.ssh/authorized_keys"
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "manifest",
+      "output": "manifest.json",
+      "strip_path": true
+    }
+  ]
+}

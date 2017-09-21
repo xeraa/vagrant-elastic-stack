@@ -53,6 +53,23 @@ If Vagrant and Ansible sound too complicated, there is also the final result: An
 * Or use SSH with the same credentials:
   * Windows: Use [http://www.putty.org](http://www.putty.org) and connect to `vagrant@127.0.0.1` on port 2222.
   * Mac and Linux: `$ ssh vagrant@127.0.0.1 -p 2222 -o PreferredAuthentications=password`
+  
+  
+  
+## Packer AWS AMI
+
+If you want to deploy this to Amazon, you can use Packer to build the AMI image, using the latest official Ubuntu 16.04 Xenial LTS release from Canonical. You will need:
+* Packer https://www.packer.io/downloads.html
+* AWS CLI http://docs.aws.amazon.com/cli/latest/userguide/installing.html
+* AWS IAM Role to deploy EC2 instances
+* jq https://stedolan.github.io/jq/
+
+```shell
+./build_packer.sh
+```
+
+The example script is configured to the "us-east-1" region, it will use your locally installed AWS CLI to find the first / default VPC ID, the first subnet within that VPC, build the AMI, save the results to manifest.json file, and use jq to extract the AMI id.
+You can easily integrate this into a Jenkins pipeline to automate the build of your ELK stack, and optionally use Terraform to deploy the AMI.
 
 
 
