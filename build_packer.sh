@@ -27,5 +27,5 @@ packer inspect packer.json
 
 packer build packer.json
 
-export BUILD_AMI_ID=$(jq '.builds[].artifact_id' -r manifest.json | cut -d':' -f2);
+export BUILD_AMI_ID=$(jq '.builds[-1].artifact_id' -r manifest.json | cut -d':' -f2);
 echo $BUILD_AMI_ID;
