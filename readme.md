@@ -96,3 +96,92 @@ $ java -jar /opt/injector.jar 100000 1000
 ## Logstash Demo
 
 You can play around with a Logstash example by calling `$ sudo /usr/share/logstash/bin/logstash --path.settings /etc/logstash -f /elastic-stack/raffle/raffle.conf` (it can take some time) and you will find the result in the `raffle` index.
+
+
+
+## Release Notes
+
+Elastic
+- https://www.elastic.co/downloads/past-releases
+
+Elasticsearch
+- https://github.com/elastic/elasticsearch/releases
+- https://www.elastic.co/guide/en/elasticsearch/reference/current/es-release-notes.html
+
+Logstash
+- https://github.com/elastic/logstash/releases
+- https://www.elastic.co/guide/en/logstash/current/releasenotes.html
+
+Kibana
+- https://github.com/elastic/kibana/releases
+- https://www.elastic.co/guide/en/kibana/current/release-notes.html
+
+Beats
+- https://github.com/elastic/beats/releases
+
+X-Pack
+- https://www.elastic.co/guide/en/x-pack/current/xpack-introduction.html
+- https://www.elastic.co/guide/en/x-pack/current/xpack-change-list.html
+
+
+
+## Log files
+```shell
+
+# filebeat
+/var/log/filebeat/filebeat
+
+# metricbeat
+/var/log/metricbeat/metricbeat
+
+# heartbeat
+/var/log/heartbeat/heartbeat
+
+# logstash
+/var/log/logstash/logstash-plain.log
+/var/log/logstash/logstash.stdout
+/var/log/logstash/logstash.log
+
+# elasticsearch
+/var/log/elasticsearch/elasticsearch.log
+/var/log/elasticsearch/elasticsearch.log.*
+/var/log/elasticsearch/elasticsearch_deprecation.log
+/var/log/elasticsearch/elasticsearch_index_search_slowlog.log
+/var/log/elasticsearch/elasticsearch_index_indexing_slowlog.log.log
+
+# kibana
+/var/log/kibana.log
+/var/log/kibana/kibana.stderr
+/var/log/kibana/kibana.stdout
+```
+
+
+
+## Application folders
+```shell
+
+# filebeat
+/etc/filebeat
+/usr/share/filebeat
+
+# metricbeat
+/etc/metricbeat
+/usr/share/metricbeat
+
+# heartbeat
+/etc/heartbeat
+/usr/share/heartbeat
+
+# logstash
+/etc/logstash
+/usr/share/logstash
+
+# elasticsearch
+/etc/elasticsearch/
+/usr/share/elasticsearch/
+
+# kibana
+/etc/kibana
+/usr/share/kibana
+/opt/kibana
+```
