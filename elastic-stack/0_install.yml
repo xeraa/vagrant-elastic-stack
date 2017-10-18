@@ -46,21 +46,23 @@
     apt: name=python-pip state=latest
 
 
+  # https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/#install-using-the-repository
   - name: Get the Docker key on 64bit
     apt_key:
-      keyserver: "hkp://p80.pool.sks-keyservers.net:80"
-      id: 58118E89F3A912897C070ADBF76221572C52609D
+      url: "https://download.docker.com/linux/ubuntu/gpg"
+      id: 0EBFCD88
       state: present
     when: "platform == 'amd64'"
 
   - name: Add the Docker repository
     apt_repository:
-      repo: "deb https://apt.dockerproject.org/repo ubuntu-xenial main"
+      repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
       state: present
     when: "platform == 'amd64'"
 
+  # https://docs.docker.com/release-notes/docker-ce/
   - name: Install Docker
-    apt: name=docker-engine state=latest update_cache=yes
+    apt: name=docker-ce state=latest update_cache=yes
     when: "platform == 'amd64'"
 
   - name: Make sure Docker autostarts and is started
