@@ -1,0 +1,33 @@
+filebeat.prospectors:
+
+#- input_type: log
+#  paths:
+#    - /var/log/syslog
+#  document_type: syslog
+
+- input_type: log
+  paths:
+    - /var/log/kibana/kibana.log
+  document_type: kibana
+  json.message_key: log
+
+- input_type: log
+  paths:
+    - /var/lib/docker/containers/*/*.log
+  document_type: docker
+  json.message_key: log
+
+
+filebeat.modules:
+- module: system
+- module: nginx
+
+
+#output.logstash:
+#  hosts: ["localhost:5044"]
+
+
+output.elasticsearch:
+  hosts: ["localhost:9200"]
+  username: "elastic"
+  password: "changeme"

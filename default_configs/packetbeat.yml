@@ -1,0 +1,35 @@
+packetbeat.interfaces.device: any
+
+
+packetbeat.flows:
+  timeout: 30s
+  period: 10s
+
+
+packetbeat.protocols.icmp:
+  enabled: true
+
+
+packetbeat.protocols.dns:
+  ports: [53]
+  include_authorities: true
+  include_additionals: true
+
+
+packetbeat.protocols.http:
+  ports: [80, 5601]
+
+
+packetbeat.protocols.redis:
+  ports: [6379]
+
+
+packetbeat.protocols.mongodb:
+  ports: [27017]
+
+
+output.redis:
+  hosts: ["localhost:6379"]
+  datatype: "list"
+  key: "packetbeat"
+  db: 0

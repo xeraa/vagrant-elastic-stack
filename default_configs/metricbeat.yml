@@ -1,0 +1,47 @@
+metricbeat.modules:
+
+
+- module: system
+  metricsets:
+    - cpu
+    - load
+    - core
+    - diskio
+    - filesystem
+    - fsstat
+    - memory
+    - network
+    - process
+    - socket
+  enabled: true
+  period: 10s
+  processes: ['.*']
+  cgroups: true
+
+- module: redis
+  metricsets: ["info"]
+  enabled: true
+  period: 10s
+  hosts: ["127.0.0.1:6379"]
+
+- module: nginx
+  metricsets: ["stubstatus"]
+  enabled: true
+  period: 10s
+  hosts: ["http://127.0.0.1"]
+
+- module: mongodb
+  metricsets: ["status"]
+  hosts: ["localhost:27017"]
+
+- module: docker
+  metricsets: ["cpu", "info", "memory", "network", "diskio", "container"]
+  hosts: ["unix:///var/run/docker.sock"]
+  enabled: true
+  period: 10s
+
+
+output.elasticsearch:
+  hosts: ["http://localhost:9200"]
+  username: "elastic"
+  password: "changeme"
