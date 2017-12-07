@@ -6,3 +6,4 @@
 
 .project
 manifest.json
+**/*.box
