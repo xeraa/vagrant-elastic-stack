@@ -1,44 +1,97 @@
-filebeat.prospectors:
+#==========================  Modules configuration ============================
+filebeat.modules:
 
-#- input_type: log
-#  paths:
-#    - /var/log/syslog
-#  document_type: syslog
+#------------------------------- System Module -------------------------------
+- module: system
+#------------------------------- Auditd Module -------------------------------
+- module: auditd
+#------------------------------ logstash Module ------------------------------
+- module: logstash
+#------------------------------- mongodb Module ------------------------------
+- module: mongodb
+#-------------------------------- Nginx Module -------------------------------
+- module: nginx
+#-------------------------------- Redis Module -------------------------------
+- module: redis
 
-- input_type: log
+
+#=========================== Filebeat inputs =============================
+
+# List of inputs to fetch data.
+filebeat.inputs:
+- type: log
+  enabled: true
   paths:
     - /var/log/kibana/kibana.log
-  document_type: kibana
+  fields:
+    type: kibana
   json.message_key: log
 
-{% if ansible_architecture == "x86_64" %}
-- input_type: log
+- type: log
+  enabled: false
   paths:
-    - /var/lib/docker/containers/*/*-json.log
-  document_type: docker
-  json.message_key: log
+    - /var/log/syslog
+  fields:
+    type: syslog
 
+filebeat.autodiscover:
+  # List of enabled autodiscover providers
+  providers:
+    - type: docker
+      templates:
+        - condition:
+            equals.docker.container.image: busybox
+          config:
+            - type: log
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
 
 processors:
 - add_docker_metadata: ~
-{% endif %}
+- add_host_metadata: ~
 
+#================================ Outputs ======================================
 
-filebeat.modules:
-- module: system
-- module: nginx
-
-
-#output.logstash:
-#  hosts: ["localhost:5044"]
-
-
+#-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
   hosts: ["localhost:9200"]
 
+#----------------------------- Logstash output ---------------------------------
+output.logstash:
+  enabled: false
+  hosts: ["localhost:5044"]
+
+#============================== Kibana =====================================
 
 setup.kibana:
   host: "localhost:5601"
 
-
 setup.dashboards.enabled: true
+
+#============================== Xpack Monitoring =====================================
+
+xpack.monitoring.enabled: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
