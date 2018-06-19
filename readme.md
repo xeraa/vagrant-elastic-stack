@@ -13,11 +13,10 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 * Packetbeat sending its data via Redis + Logstash, monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
 * On 64bit instances Redis in a container, monitored by Metricbeat's Docker module, and Filebeat collects the *json-file* log
 * Dashboards for Filebeat, Heartbeat, Metricbeat, and Packetbeat
-* X-Pack with security and monitoring for Elasticsearch, Logstash, and Kibana
+* X-Pack monitoring for Elasticsearch, Logstash, Beats, and Kibana
 * The pattern for nginx is already prepared in */opt/logstash/patterns/* and you can collect */var/log/nginx/access.log* with Filebeat and add a filter in Logstash with the pattern as an exercise
 
 ![](screenshot.png)
-
 
 
 ## Vagrant and Ansible
@@ -35,8 +34,6 @@ $ ansible-playbook /elastic-stack/4_configure-filebeat.yml
 $ ansible-playbook /elastic-stack/4_configure-heartbeat.yml
 $ ansible-playbook /elastic-stack/4_configure-metricbeat.yml
 $ ansible-playbook /elastic-stack/4_configure-packetbeat.yml
-$ ansible-playbook /elastic-stack/5_configure-dashboards.yml
-$ ansible-playbook /elastic-stack/6_add-xpack.yml
 ```
 
 Or if you are in a hurry, run all playbooks with `$ /elastic-stack/all.sh` at once.
@@ -59,10 +56,6 @@ If Vagrant and Ansible sound too complicated, there is also the final result: An
 ## Kibana
 
 Access Kibana at [http://localhost:5601](http://localhost:5601).
-
-If you have added X-Pack (by running `$ ansible-playbook /elastic-stack/6_add-xpack.yml` or `$ /elastic-stack/all.sh` or used the final OVA image) you will need to login into Kibana with the default credentials — username `elastic` and password `changeme`.
-
-The Beats are configured with the same credentials automatically.
 
 
 
