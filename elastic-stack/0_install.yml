@@ -184,11 +184,6 @@
     service: name=kibana enabled=yes state=stopped
 
 
-  - name: Download X-Pack
-    get_url:
-      url={{ elastic_download }}/downloads/packs/x-pack/x-pack-{{ elastic_version }}.zip
-      dest=/opt/x-pack.zip
-
   - name: Download all dashboard
     get_url:
       url={{ elastic_download }}/downloads/beats/beats-dashboards/beats-dashboards-{{ elastic_version }}.zip
@@ -214,6 +209,6 @@
 
   - name: Get the injector plugin to generate test data
     get_url:
-      url=https://download.elastic.co/workshops/basic-kibana/injector/injector-5.3.jar
+      url=https://download.elastic.co/workshops/basic-kibana/injector/injector-6.0.jar
       dest=/opt/injector.jar
       mode=0755
