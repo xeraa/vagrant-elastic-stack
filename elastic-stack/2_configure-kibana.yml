@@ -17,3 +17,12 @@
 
   - name: Start Kibana
     service: name=kibana state=restarted
+
+  - name: Wait for Kibana to become available
+    wait_for:
+      port: 5601
+      delay: 5
+
+  - name: Activate monitoring
+    command: curl -XPUT 'http://127.0.0.1:5601/api/monitoring/v1/elasticsearch_settings/set/collection_enabled'
+    
