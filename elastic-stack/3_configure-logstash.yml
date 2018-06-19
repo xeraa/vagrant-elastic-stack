@@ -2,9 +2,13 @@
 
 - hosts: localhost
   become: true
-
+  vars_files:
+    - vars.yml
 
   tasks:
+
+  - name: Add the Logstash configuration which activates monitoring
+    template: src=templates/logstash.yml dest=/etc/logstash/logstash.yml
 
   - name: Add the Logstash input configuration for Beats
     template: src=templates/beats-input.conf dest=/etc/logstash/conf.d/00-beats-input.conf
