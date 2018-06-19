@@ -11,3 +11,4 @@
 
   - name: Restart Heartbeat
     service: name=heartbeat-elastic state=restarted
+

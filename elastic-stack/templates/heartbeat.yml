@@ -1,16 +1,33 @@
+############################# Heartbeat ######################################
+
+# Configure monitors
 heartbeat.monitors:
 - type: http
-  urls: ["http://localhost:80"]
   schedule: '@every 10s'
-  check.response.status: 200
+  urls: ["http://localhost:80"]
 
+  check.response:
+    status: 200
 
+#================================ Outputs ======================================
+
+#-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
   hosts: ["localhost:9200"]
 
+#----------------------------- Logstash output ---------------------------------
+output.logstash:
+  enabled: false
+  hosts: ["localhost:5044"]
+
+#============================== Kibana =====================================
 
 setup.kibana:
   host: "localhost:5601"
 
-
 setup.dashboards.enabled: true
+
+#============================== Xpack Monitoring =====================================
+
+xpack.monitoring.enabled: true
+
