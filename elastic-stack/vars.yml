@@ -1,4 +1,4 @@
 elastic_version: 6.3.0
 elastic_download: https://artifacts.elastic.co
 
-elastic_password: changeme0
+#elastic_password: changeme0

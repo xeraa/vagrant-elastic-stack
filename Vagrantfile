@@ -1,5 +1,5 @@
 # Create a minimal Ubuntu box
-Vagrant.require_version ">= 1.8.6"
+Vagrant.require_version ">= 2.1.2"
 Vagrant.configure(2) do |config|
 
 
@@ -9,8 +9,8 @@ Vagrant.configure(2) do |config|
         # Use a 32bit version for workshops to avoid issues with 64bit virtualization
         # But use 64bit for Docker demos, since it requires a 64bit host
         # Avoid https://atlas.hashicorp.com/ubuntu/ since those are notoriously broken
-        #ubuntu.vm.box = "bento/ubuntu-16.04-i386"
-        ubuntu.vm.box = "bento/ubuntu-16.04"
+        #ubuntu.vm.box = "bento/ubuntu-18.04-i386"
+        ubuntu.vm.box = "bento/ubuntu-18.04"
 
         ubuntu.vm.hostname = "elastic-stack"
 
@@ -31,6 +31,10 @@ Vagrant.configure(2) do |config|
 
     # Configure the box with Ansible
     config.vm.provision "ansible_local" do |ansible|
+        ansible.compatibility_mode = "2.0"
+        # Workaround as 2.6.0 is buggy with Docker
+        ansible.install_mode = "pip"
+        ansible.version = "2.5.5"
         ansible.playbook = "/elastic-stack/0_install.yml"
     end
 
