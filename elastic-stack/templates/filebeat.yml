@@ -23,9 +23,9 @@ filebeat.inputs:
   enabled: true
   paths:
     - /var/log/kibana/kibana.log
-  fields:
-    type: kibana
   json.message_key: log
+#  fields:
+#    type: kibana
 
 - type: log
   enabled: false
@@ -34,26 +34,34 @@ filebeat.inputs:
   fields:
     type: syslog
 
-filebeat.autodiscover:
-  # List of enabled autodiscover providers
-  providers:
-    - type: docker
-      templates:
-        - condition:
-            equals.docker.container.image: busybox
-          config:
-            - type: log
-              paths:
-                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+- type: log
+  enabled: false
+  paths:
+    - /var/log/nginx/access.log
+  fields:
+    type: nginx-access
+
+# filebeat.autodiscover:
+#   # List of enabled autodiscover providers
+#   providers:
+#     - type: docker
+#       templates:
+#         - condition:
+#             equals.docker.container.image: busybox
+#           config:
+#             - type: log
+#               paths:
+#                 - /var/lib/docker/containers/${data.docker.container.id}/*.log
 
 processors:
-- add_docker_metadata: ~
+#- add_docker_metadata: ~
 - add_host_metadata: ~
 
 #================================ Outputs ======================================
 
 #-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
+  enabled: true
   hosts: ["localhost:9200"]
 
 #----------------------------- Logstash output ---------------------------------
@@ -71,3 +79,6 @@ setup.dashboards.enabled: true
 #============================== Xpack Monitoring =====================================
 
 xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch:
+  hosts: ["localhost:9200"]
+
