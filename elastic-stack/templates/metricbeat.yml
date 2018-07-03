@@ -1,60 +1,124 @@
+########################## Metricbeat Configuration ###########################
+
+#============================== Autodiscover ===================================
+
+# Autodiscover allows you to detect changes in the system and spawn new modules
+# as they happen.
+
+metricbeat.autodiscover:
+  providers:
+    - type: docker
+
+#==========================  Modules configuration ============================
 metricbeat.modules:
 
 
+#------------------------------- System Module -------------------------------
 - module: system
   metricsets:
-    - cpu
-    - load
-    - core
-    - diskio
-    - filesystem
-    - fsstat
-    - memory
-    - network
-    - process
-    - socket
+    - cpu             # CPU usage
+    - filesystem      # File system usage for each mountpoint
+    - fsstat          # File system summary metrics
+    - load            # CPU load averages
+    - memory          # Memory usage
+    - network         # Network IO
+    - process         # Per process metrics
+    - process_summary # Process summary
+    - uptime          # System Uptime
+    - core           # Per CPU core usage
+    - diskio         # Disk IO
+    #- raid           # Raid
+    - socket         # Sockets and connection info (linux only)
   enabled: true
   period: 10s
   processes: ['.*']
-  cgroups: true
 
-- module: redis
-  metricsets: ["info"]
+  process.cgroups.enabled: true
+
+#------------------------------- Docker Module -------------------------------
+
+{% if ansible_architecture == "x86_64" %}
+- module: docker
+  metricsets:
+    - "container"
+    - "cpu"
+    - "diskio"
+    - "healthcheck"
+    - "info"
+    #- "image"
+    - "memory"
+    - "network"
+  hosts: ["unix:///var/run/docker.sock"]
+  period: 10s
+  enabled: true
+{% endif %}
+
+#---------------------------- Elasticsearch Module ---------------------------
+- module: elasticsearch
+  metricsets: ["node", "node_stats"]
+  period: 10s
+  hosts: ["localhost:9200"]
+  enabled: true
+
+#------------------------------- Kibana Module -------------------------------
+- module: kibana
+  metricsets: ["status"]
+  period: 10s
+  hosts: ["localhost:5601"]
+  enabled: true
+
+#------------------------------ Logstash Module ------------------------------
+- module: logstash
+  metricsets: ["node", "node_stats"]
   enabled: true
   period: 10s
-  hosts: ["127.0.0.1:6379"]
+  hosts: ["localhost:9600"]
 
+#------------------------------- MongoDB Module ------------------------------
+- module: mongodb
+  metricsets: ["dbstats", "status"]
+  enabled: true
+  hosts: ["localhost:27017"]
+
+#-------------------------------- Nginx Module -------------------------------
 - module: nginx
   metricsets: ["stubstatus"]
   enabled: true
   period: 10s
   hosts: ["http://127.0.0.1"]
 
-- module: mongodb
-  metricsets: ["status"]
-  hosts: ["localhost:27017"]
-
-{% if ansible_architecture == "x86_64" %}
-- module: docker
-  metricsets: ["cpu", "info", "memory", "network", "diskio", "container"]
-  hosts: ["unix:///var/run/docker.sock"]
+#-------------------------------- Redis Module -------------------------------
+- module: redis
+  metricsets: ["info", "keyspace"]
   enabled: true
   period: 10s
+  hosts: ["127.0.0.1:6379"]
 
+#================================ Processors ===================================
 
 processors:
-- add_docker_metadata:
-    match_fields: ["system.process.cgroup.id"]
-    host: "unix:///var/run/docker.sock"
-{% endif %}
+- add_docker_metadata: ~
 
+#================================ Outputs ======================================
 
+#-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
-  hosts: ["http://localhost:9200"]
+  hosts: ["localhost:9200"]
 
+#----------------------------- Logstash output ---------------------------------
+output.logstash:
+  enabled: false
+  hosts: ["localhost:5044"]
+
+#============================== Kibana =====================================
 
 setup.kibana:
   host: "localhost:5601"
 
-
 setup.dashboards.enabled: true
+
+#============================== Xpack Monitoring =====================================
+
+xpack.monitoring.enabled: true
+
+

@@ -6,8 +6,16 @@
 
   tasks:
 
+  - name: Remove the ingest-geoip plugin if existing
+    command: /usr/share/elasticsearch/bin/elasticsearch-plugin remove ingest-geoip --purge
+    ignore_errors: yes
+
   - name: Add the ingest-geoip plugin to Elasticsearch
     command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/ingest-geoip.zip --batch
+
+  - name: Remove the ingest-user-agent plugin if existing
+    command: /usr/share/elasticsearch/bin/elasticsearch-plugin remove ingest-user-agent --purge
+    ignore_errors: yes
 
   - name: Add the ingest-user-agent plugin to Elasticsearch
     command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/ingest-user-agent.zip --batch
@@ -57,13 +65,15 @@
       port: 9200
       delay: 5
 
-  - name: Set the number of shards to two and the number of replicas to 0
+  - name: Set the number of shards to one and the number of replicas to 0
     command: >
       curl -XPUT 'http://localhost:9200/_template/default' -H "Content-Type: application/json" -d '{
           "template": "*",
           "order" : 0,
           "settings": {
-              "number_of_shards": 2,
+              "number_of_shards": 1,
               "number_of_replicas": 0
           }
       }'
+    args:
+      warn: false # set warn=false to prevent warning

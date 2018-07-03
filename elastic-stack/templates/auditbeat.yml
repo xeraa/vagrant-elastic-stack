@@ -1,26 +1,39 @@
-- module: audit
-  metricsets: ["kernel"]
-  kernel.resolve_ids: true
-  kernel.failure_mode: silent
-  kernel.backlog_limit: 8196
-  kernel.rate_limit: 0
-  kernel.include_raw_message: true
-  kernel.include_warnings: true
+#==========================  Modules configuration ============================
+auditbeat.modules:
 
-- module: audit
-  metricsets: [file]
-  file.paths:
+- module: file_integrity
+  paths:
   - /home/ubuntu/
-  file.max_file_size: 100 MiB
-  file.hash_types: [sha1]
+  max_file_size: 100 MiB
+  hash_types: [sha1]
 
 
+- module: auditd
+  resolve_ids: true
+  failure_mode: silent
+  backlog_limit: 8196
+  rate_limit: 0
+  include_raw_message: true
+  include_warnings: true
+
+#================================ Outputs ======================================
+
+#-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
   hosts: ["localhost:9200"]
 
+#----------------------------- Logstash output ---------------------------------
+output.logstash:
+  enabled: false
+  hosts: ["localhost:5044"]
+
+#============================== Kibana =====================================
 
 setup.kibana:
   host: "localhost:5601"
 
-
 setup.dashboards.enabled: true
+
+#============================== Xpack Monitoring =====================================
+
+xpack.monitoring.enabled: true

@@ -41,34 +41,19 @@
   - name: Install the JRE
     apt: name=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
 
-
   - name: Install pip to get current Python dependencies
     apt: name=python-pip state=latest
 
-
-  - name: Get the Docker key on 64bit
-    apt_key:
-      keyserver: "hkp://p80.pool.sks-keyservers.net:80"
-      id: 58118E89F3A912897C070ADBF76221572C52609D
-      state: present
-    when: "platform == 'amd64'"
-
-  - name: Add the Docker repository
-    apt_repository:
-      repo: "deb https://apt.dockerproject.org/repo ubuntu-xenial main"
-      state: present
-    when: "platform == 'amd64'"
-
   - name: Install Docker
-    apt: name=docker-engine state=latest update_cache=yes
+    apt: name=docker.io state=latest
     when: "platform == 'amd64'"
 
   - name: Make sure Docker autostarts and is started
     service: name=docker enabled=yes state=started
     when: "platform == 'amd64'"
 
-  - name: Install docker-py to handle Docker from Ansible
-    pip: name=docker-py state=latest
+  - name: Install docker for python to handle Docker from Ansible
+    pip: name=docker state=latest
     when: "platform == 'amd64'"
 
 
@@ -103,7 +88,7 @@
       - mongodb
 
   - name: Change the nginx configuration to expose /server-status, which Metricbeat nginx uses
-    template: src=templates/nginx-sites dest=/etc/nginx/sites-enabled/default
+    template: src=templates/nginx/nginx-sites dest=/etc/nginx/sites-enabled/default
 
   - name: Enable the default HTML site of nginx
     command: cp /var/www/html/index.nginx-debian.html /var/www/html/index.html
@@ -184,15 +169,10 @@
     service: name=kibana enabled=yes state=stopped
 
 
-  - name: Download X-Pack
-    get_url:
-      url={{ elastic_download }}/downloads/packs/x-pack/x-pack-{{ elastic_version }}.zip
-      dest=/opt/x-pack.zip
-
-  - name: Download all dashboard
-    get_url:
-      url={{ elastic_download }}/downloads/beats/beats-dashboards/beats-dashboards-{{ elastic_version }}.zip
-      dest=/opt/dashboards.zip
+#  - name: Download all dashboard
+#    get_url:
+#      url={{ elastic_download }}/downloads/beats/beats-dashboards/beats-dashboards-{{ elastic_version }}.zip
+#      dest=/opt/dashboards.zip
 
   - name: Download the ingest-geoip plugin
     get_url:
@@ -214,6 +194,6 @@
 
   - name: Get the injector plugin to generate test data
     get_url:
-      url=https://download.elastic.co/workshops/basic-kibana/injector/injector-5.3.jar
+      url=https://download.elastic.co/workshops/basic-kibana/injector/injector-6.2.jar
       dest=/opt/injector.jar
       mode=0755
