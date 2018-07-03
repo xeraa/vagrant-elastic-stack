@@ -53,7 +53,9 @@ setup.dashboards.enabled: true
 #============================== Xpack Monitoring =====================================
 
 xpack.monitoring.enabled: true
+{% if output != "elasticsearch" %}
 xpack.monitoring.elasticsearch:
   hosts: ["localhost:9200"]
+{% endif %}
 
 
