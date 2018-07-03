@@ -27,20 +27,6 @@ filebeat.inputs:
 #  fields:
 #    type: kibana
 
-- type: log
-  enabled: false
-  paths:
-    - /var/log/syslog
-  fields:
-    type: syslog
-
-- type: log
-  enabled: false
-  paths:
-    - /var/log/nginx/access.log
-  fields:
-    type: nginx-access
-
 # filebeat.autodiscover:
 #   # List of enabled autodiscover providers
 #   providers:
@@ -79,6 +65,6 @@ setup.dashboards.enabled: true
 #============================== Xpack Monitoring =====================================
 
 xpack.monitoring.enabled: true
-xpack.monitoring.elasticsearch:
-  hosts: ["localhost:9200"]
+#xpack.monitoring.elasticsearch:
+#  hosts: ["localhost:9200"]
 
