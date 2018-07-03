@@ -6,8 +6,16 @@
 
   tasks:
 
+  - name: Remove the ingest-geoip plugin if existing
+    command: /usr/share/elasticsearch/bin/elasticsearch-plugin remove ingest-geoip --purge
+    ignore_errors: yes
+
   - name: Add the ingest-geoip plugin to Elasticsearch
     command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/ingest-geoip.zip --batch
+
+  - name: Remove the ingest-user-agent plugin if existing
+    command: /usr/share/elasticsearch/bin/elasticsearch-plugin remove ingest-user-agent --purge
+    ignore_errors: yes
 
   - name: Add the ingest-user-agent plugin to Elasticsearch
     command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/ingest-user-agent.zip --batch
@@ -67,3 +75,5 @@
               "number_of_replicas": 0
           }
       }'
+    args:
+      warn: false # set warn=false to prevent warning
