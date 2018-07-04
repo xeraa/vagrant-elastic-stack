@@ -25,10 +25,10 @@ metricbeat.modules:
     - process         # Per process metrics
     - process_summary # Process summary
     - uptime          # System Uptime
-    - core           # Per CPU core usage
-    - diskio         # Disk IO
+    - core            # Per CPU core usage
+    - diskio          # Disk IO
     #- raid           # Raid
-    - socket         # Sockets and connection info (linux only)
+    - socket          # Sockets and connection info (linux only)
   enabled: true
   period: 10s
   processes: ['.*']
@@ -120,5 +120,3 @@ setup.dashboards.enabled: true
 #============================== Xpack Monitoring =====================================
 
 xpack.monitoring.enabled: true
-
-

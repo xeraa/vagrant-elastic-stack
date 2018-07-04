@@ -22,4 +22,3 @@
     wait_for:
       port: 5601
       delay: 5
-    

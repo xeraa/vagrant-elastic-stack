@@ -65,6 +65,4 @@ setup.dashboards.enabled: true
 #============================== Xpack Monitoring =====================================
 
 xpack.monitoring.enabled: true
-#xpack.monitoring.elasticsearch:
-#  hosts: ["localhost:9200"]
 

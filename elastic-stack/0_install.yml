@@ -52,7 +52,7 @@
     service: name=docker enabled=yes state=started
     when: "platform == 'amd64'"
 
-  - name: Install docker for python to handle Docker from Ansible
+  - name: Install Docker for Python to handle Docker from Ansible
     pip: name=docker state=latest
     when: "platform == 'amd64'"
 
@@ -168,11 +168,6 @@
   - name: Make sure Kibana autostarts, but is stopped until it is properly configured
     service: name=kibana enabled=yes state=stopped
 
-
-#  - name: Download all dashboard
-#    get_url:
-#      url={{ elastic_download }}/downloads/beats/beats-dashboards/beats-dashboards-{{ elastic_version }}.zip
-#      dest=/opt/dashboards.zip
 
   - name: Download the ingest-geoip plugin
     get_url:

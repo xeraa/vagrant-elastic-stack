@@ -5,7 +5,6 @@ heartbeat.monitors:
 - type: http
   schedule: '@every 10s'
   urls: ["http://localhost:80"]
-
   check.response:
     status: 200
 
