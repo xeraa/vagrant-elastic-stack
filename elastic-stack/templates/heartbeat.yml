@@ -8,6 +8,12 @@ heartbeat.monitors:
   check.response:
     status: 200
 
+#================================ Processors ===================================
+
+processors:
+- add_docker_metadata: ~
+- add_host_metadata: ~
+
 #================================ Outputs ======================================
 
 #-------------------------- Elasticsearch output -------------------------------

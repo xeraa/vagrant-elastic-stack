@@ -40,7 +40,7 @@ filebeat.inputs:
 #                 - /var/lib/docker/containers/${data.docker.container.id}/*.log
 
 processors:
-#- add_docker_metadata: ~
+- add_docker_metadata: ~
 - add_host_metadata: ~
 
 #================================ Outputs ======================================

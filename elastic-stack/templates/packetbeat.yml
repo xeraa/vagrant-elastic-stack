@@ -25,6 +25,12 @@ packetbeat.protocols:
 - type: mongodb
   ports: [27017]
 
+#================================ Processors ===================================
+
+processors:
+- add_docker_metadata: ~
+- add_host_metadata: ~
+
 #================================ Outputs ======================================
 
 {% if output == "elasticsearch" %}

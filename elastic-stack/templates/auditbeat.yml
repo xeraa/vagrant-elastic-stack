@@ -10,6 +10,12 @@ auditbeat.modules:
   include_raw_message: true
   include_warnings: true
 
+#================================ Processors ===================================
+
+processors:
+- add_docker_metadata: ~
+- add_host_metadata: ~
+
 #================================ Outputs ======================================
 
 #-------------------------- Elasticsearch output -------------------------------
