@@ -6,14 +6,12 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 ## Features
 
-* ~~Filebeat collecting Syslog and Kibana's JSON log, Logstash parsing the Syslog file~~
-* Filebeat modules for nginx and system
-* Heartbeat pinging nginx
-* Metricbeat collecting system metrics plus nginx, MongoDB, and Redis
+* Filebeat `system`, `auditd`, `logstash`, `mongodb`, `nginx` and `redis` modules
+* Filebeat collecting kibana json logs from `/var/log/kibana/kibana.log`
+* Auditbeat `file_integrity` module on `/home/vagrant/` dir and `auditd` module
+* Heartbeat pinging nginx every 10s
+* Metricbeat `system`, `docker`, `elasticsearch`, `kibana`, `logstash`, `mongodb`, `nginx` and `redis` modules
 * Packetbeat sending its data via Redis + Logstash, monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
-* On 64bit instances Redis in a container, monitored by Metricbeat's Docker module, and Filebeat collects the *json-file* log
-* Dashboards for Filebeat, Heartbeat, Metricbeat, and Packetbeat
-* X-Pack monitoring for Elasticsearch, Logstash, Beats, and Kibana
 * The pattern for nginx is already prepared in */opt/logstash/patterns/* and you can collect */var/log/nginx/access.log* with Filebeat and add a filter in Logstash with the pattern as an exercise
 
 ![](screenshot.png)
@@ -21,7 +19,7 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 ## Vagrant and Ansible
 
-Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (1.8.6+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 2.5GB of RAM.
+Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (2.1.2+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 2.5GB of RAM.
 
 With the [Ansible playbooks](https://docs.ansible.com/ansible/playbooks.html) in the */elastic-stack/* folder you can configure the whole system step by step. Just run them in the given order inside the Vagrant box:
 
@@ -51,7 +49,20 @@ If Vagrant and Ansible sound too complicated, there is also the final result: An
   * Windows: Use [http://www.putty.org](http://www.putty.org) and connect to `vagrant@127.0.0.1` on port 2222.
   * Mac and Linux: `$ ssh vagrant@127.0.0.1 -p 2222 -o PreferredAuthentications=password`
 
+It might happen that *beat services don't start properly because elasticsearch is not available.
+If you don't see any data coming in your Kibana dashboards, you can check that elasticsearch is running then start manually the services again:
 
+```sh
+# Check Elasticsearch is running
+curl localhost:9200
+
+# Start all services
+sudo service filebeat start
+sudo service packetbeat start
+sudo service auditbeat start
+sudo service heartbeat-elastic start
+sudo service metricbeat start
+```
 
 ## Kibana
 

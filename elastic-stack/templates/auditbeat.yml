@@ -3,16 +3,10 @@ auditbeat.modules:
 
 - module: file_integrity
   paths:
-  - /home/ubuntu/
-  max_file_size: 100 MiB
-  hash_types: [sha1]
-
+  - /home/vagrant/
 
 - module: auditd
-  resolve_ids: true
-  failure_mode: silent
   backlog_limit: 8196
-  rate_limit: 0
   include_raw_message: true
   include_warnings: true
 
@@ -21,11 +15,6 @@ auditbeat.modules:
 #-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
   hosts: ["localhost:9200"]
-
-#----------------------------- Logstash output ---------------------------------
-output.logstash:
-  enabled: false
-  hosts: ["localhost:5044"]
 
 #============================== Kibana =====================================
 
