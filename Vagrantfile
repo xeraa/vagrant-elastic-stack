@@ -10,7 +10,7 @@ Vagrant.configure(2) do |config|
         # But use 64bit for Docker demos, since it requires a 64bit host
         # Avoid https://atlas.hashicorp.com/ubuntu/ since those are notoriously broken
         #ubuntu.vm.box = "bento/ubuntu-18.04-i386"
-        ubuntu.vm.box = "bento/ubuntu-18.04"
+        ubuntu.vm.box = "bento/ubuntu-16.04"
 
         ubuntu.vm.hostname = "elastic-stack"
 
