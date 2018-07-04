@@ -9,6 +9,43 @@ auditbeat.modules:
   backlog_limit: 8196
   include_raw_message: true
   include_warnings: true
+  resolve_ids: true
+  audit_rules: |
+    ## Define audit rules here.
+    ## Create file watches (-w) or syscall audits (-a action,filter).
+    ## * action can be either always or never.
+    ## * filter specifies which kernel rule-matching filter is applied to the event,
+    ##   which can be one of the following: task, exit, user, and exclude.
+    ## Several system calls can be grouped into one rule, each specified after the -S option.
+    ## Add a keyword (-k) to the log event.
+
+    # Things that affect identity
+    -w /etc/group -p wa -k identity
+    -w /etc/passwd -p wa -k identity
+    -w /etc/gshadow -p wa -k identity
+    -w /etc/shadow -p wa -k identity
+    -w /etc/security/opasswd -p wa -k identity
+
+    # Log permission errors
+    -a always,exit -F arch=b64 -S open,creat,truncate,ftruncate,openat,open_by_handle_at -F exit=-EPERM -k access
+
+    # Log processes that call the connect system call for IPv4 and IPv6
+    -a always,exit -F arch=b64 -S connect -F a0=2 -k connect
+    -a always,exit -F arch=b64 -S connect -F a0=10 -k connect
+
+    # Detect when an admin may be abusing power by looking in a user's home directory
+    -a always,exit -F dir=/home -F uid=0 -F auid>=1000 -F auid!=4294967295 -C auid!=obj_uid -k power-abuse
+
+    # Log all executed processes
+    -a always,exit -S execve
+
+    # Log all elevation of privileges
+    -a always,exit -F arch=b64 -S setuid -F a0=0 -F exe=/usr/bin/su -k elevated-privs
+    -a always,exit -F arch=b32 -S setuid -F a0=0 -F exe=/usr/bin/su -k elevated-privs
+    -a always,exit -F arch=b64 -S setresuid -F a0=0 -F exe=/usr/bin/sudo -k elevated-privs
+    -a always,exit -F arch=b32 -S setresuid -F a0=0 -F exe=/usr/bin/sudo -k elevated-privs
+    -a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k elevated-privs
+    -a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k elevated-privs
 
 #================================ Processors ===================================
 
