@@ -4,15 +4,9 @@ auditbeat.modules:
 - module: file_integrity
   paths:
   - /home/vagrant/
-  max_file_size: 100 MiB
-  hash_types: [sha1]
-
 
 - module: auditd
-  resolve_ids: true
-  failure_mode: silent
   backlog_limit: 8196
-  rate_limit: 0
   include_raw_message: true
   include_warnings: true
 
