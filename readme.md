@@ -8,7 +8,7 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 * Filebeat `system`, `auditd`, `logstash`, `mongodb`, `nginx` and `redis` modules
 * Filebeat collecting kibana json logs from `/var/log/kibana/kibana.log`
-* Auditbeat `file_integrity` module on `/home/ubuntu/` dir and `auditd` module
+* Auditbeat `file_integrity` module on `/home/vagrant/` dir and `auditd` module
 * Heartbeat pinging nginx every 10s
 * Metricbeat `system`, `docker`, `elasticsearch`, `kibana`, `logstash`, `mongodb`, `nginx` and `redis` modules
 * Packetbeat sending its data via Redis + Logstash, monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
