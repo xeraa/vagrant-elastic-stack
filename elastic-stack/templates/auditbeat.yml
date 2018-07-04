@@ -22,11 +22,6 @@ auditbeat.modules:
 output.elasticsearch:
   hosts: ["localhost:9200"]
 
-#----------------------------- Logstash output ---------------------------------
-output.logstash:
-  enabled: false
-  hosts: ["localhost:5044"]
-
 #============================== Kibana =====================================
 
 setup.kibana:
