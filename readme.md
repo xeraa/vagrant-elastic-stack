@@ -49,7 +49,20 @@ If Vagrant and Ansible sound too complicated, there is also the final result: An
   * Windows: Use [http://www.putty.org](http://www.putty.org) and connect to `vagrant@127.0.0.1` on port 2222.
   * Mac and Linux: `$ ssh vagrant@127.0.0.1 -p 2222 -o PreferredAuthentications=password`
 
+It might happen that *beat services don't start properly because elasticsearch is not available.
+If you don't see any data coming in your Kibana dashboards, you can check that elasticsearch is running then start manually the services again:
 
+```sh
+# Check Elasticsearch is running
+curl localhost:9200
+
+# Start all services
+sudo service filebeat start
+sudo service packetbeat start
+sudo service auditbeat start
+sudo service heartbeat-elastic start
+sudo service metricbeat start
+```
 
 ## Kibana
 
