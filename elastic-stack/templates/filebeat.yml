@@ -11,6 +11,8 @@ filebeat.modules:
 - module: mongodb
 #-------------------------------- Nginx Module -------------------------------
 - module: nginx
+#-------------------------------- osquery Module -----------------------------
+- module: osquery
 #-------------------------------- Redis Module -------------------------------
 - module: redis
 

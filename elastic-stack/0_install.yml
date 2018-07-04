@@ -103,6 +103,56 @@
     service: name=nginx state=reloaded
 
 
+  - name: Add osquery's repository key
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
+      state: present
+
+  - name: Add osquery's server repository
+    apt_repository:
+      repo: "deb [arch=amd64] https://osquery-packages.s3.amazonaws.com/{{ ansible_distribution_release }} {{ ansible_distribution_release }} main"
+      state: present
+
+  - name: Install osquery
+    apt: name=osquery update_cache=true
+
+  - name: Stop osquery since it sometimes need a few seconds between stop and start to work properly
+    service: name=osqueryd state=stopped
+
+  - name: Allow osquery to access the rsyslog.conf
+    blockinfile:
+      path: /etc/rsyslog.conf
+      block: |
+        template(
+          name="OsqueryCsvFormat"
+          type="string"
+          string="%timestamp:::date-rfc3339,csv%,%hostname:::csv%,%syslogseverity:::csv%,%syslogfacility-text:::csv%,%syslogtag:::csv%,%msg:::csv%\n"
+        )
+        *.* action(type="ompipe" Pipe="/var/osquery/syslog_pipe" template="OsqueryCsvFormat")
+
+  - name: Restart rsyslog
+    service: name=rsyslog state=restarted
+
+  - name: Provide the base configuration for osquery
+    template: src=templates/osquery/osquery.conf dest=/etc/osquery/osquery.conf
+
+  - name: Get the it-compliance configuration
+    get_url:
+      url: https://raw.githubusercontent.com/facebook/osquery/master/packs/it-compliance.conf
+      dest: /etc/osquery/it-compliance.conf
+      mode: 0644
+
+  - name: Get the ossec-rootkit configuration
+    get_url:
+      url: https://raw.githubusercontent.com/facebook/osquery/master/packs/ossec-rootkit.conf
+      dest: /etc/osquery/ossec-rootkit.conf
+      mode: 0644
+
+  - name: Restart osquery and make sure it autostarts
+    service: name=osqueryd state=restarted enabled=yes
+
+
   - name: Get Elasticsearch
     get_url:
       url={{ elastic_download }}/downloads/elasticsearch/elasticsearch-{{ elastic_version }}.deb
