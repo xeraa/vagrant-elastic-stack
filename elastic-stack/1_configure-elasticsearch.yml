@@ -66,14 +66,16 @@
       delay: 5
 
   - name: Set the number of shards to one and the number of replicas to 0
-    command: >
-      curl -XPUT 'http://localhost:9200/_template/default' -H "Content-Type: application/json" -d '{
-          "template": "*",
-          "order" : 0,
-          "settings": {
-              "number_of_shards": 1,
-              "number_of_replicas": 0
-          }
-      }'
-    args:
-      warn: false # set warn=false to prevent warning
+    uri:
+      url: http://localhost:9200/_template/template_global
+      body_format: json
+      method: PUT
+      body:
+        template: "*"
+        order: 0
+        settings:
+          number_of_shards: 1
+          number_of_replicas: 0
+      status_code:
+        - 200
+        - 201
