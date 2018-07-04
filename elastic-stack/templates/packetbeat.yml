@@ -1,35 +1,67 @@
+###################### Packetbeat Configuration Example #######################
+
+#============================== Network device ================================
+
 packetbeat.interfaces.device: any
 
+#================================== Flows =====================================
 
 packetbeat.flows:
   timeout: 30s
   period: 10s
 
+#========================== Transaction protocols =============================
 
-packetbeat.protocols.icmp:
-  enabled: true
-
-
-packetbeat.protocols.dns:
+packetbeat.protocols:
+- type: icmp
+- type: dns
   ports: [53]
   include_authorities: true
   include_additionals: true
-
-
-packetbeat.protocols.http:
+- type: http
   ports: [80, 5601]
-
-
-packetbeat.protocols.redis:
+- type: redis
   ports: [6379]
-
-
-packetbeat.protocols.mongodb:
+- type: mongodb
   ports: [27017]
 
+#================================ Processors ===================================
 
+processors:
+- add_docker_metadata: ~
+- add_host_metadata: ~
+
+#================================ Outputs ======================================
+
+{% if output == "elasticsearch" %}
+#-------------------------- Elasticsearch output -------------------------------
+output.elasticsearch:
+  hosts: ["http://localhost:9200"]
+{% endif %}
+
+{% if output == "redis" %}
+#------------------------------- Redis output ----------------------------------
 output.redis:
+  enabled: true
   hosts: ["localhost:6379"]
   datatype: "list"
   key: "packetbeat"
-  db: 0
+  bulk_max_size: 100 # Fixing occasional "Failed to read integer reply: Expected digit" errors
+{% endif %}
+
+#============================== Kibana =====================================
+
+setup.kibana:
+  host: "localhost:5601"
+
+setup.dashboards.enabled: true
+
+#============================== Xpack Monitoring =====================================
+
+xpack.monitoring.enabled: true
+{% if output != "elasticsearch" %}
+xpack.monitoring.elasticsearch:
+  hosts: ["localhost:9200"]
+{% endif %}
+
+

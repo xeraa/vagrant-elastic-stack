@@ -41,34 +41,19 @@
   - name: Install the JRE
     apt: name=openjdk-8-jre-headless state=latest update_cache=yes install_recommends=no
 
-
   - name: Install pip to get current Python dependencies
     apt: name=python-pip state=latest
 
-
-  - name: Get the Docker key on 64bit
-    apt_key:
-      keyserver: "hkp://p80.pool.sks-keyservers.net:80"
-      id: 58118E89F3A912897C070ADBF76221572C52609D
-      state: present
-    when: "platform == 'amd64'"
-
-  - name: Add the Docker repository
-    apt_repository:
-      repo: "deb https://apt.dockerproject.org/repo ubuntu-xenial main"
-      state: present
-    when: "platform == 'amd64'"
-
   - name: Install Docker
-    apt: name=docker-engine state=latest update_cache=yes
+    apt: name=docker.io state=latest
     when: "platform == 'amd64'"
 
   - name: Make sure Docker autostarts and is started
     service: name=docker enabled=yes state=started
     when: "platform == 'amd64'"
 
-  - name: Install docker-py to handle Docker from Ansible
-    pip: name=docker-py state=latest
+  - name: Install Docker for Python to handle Docker from Ansible
+    pip: name=docker state=latest
     when: "platform == 'amd64'"
 
 
@@ -103,7 +88,7 @@
       - mongodb
 
   - name: Change the nginx configuration to expose /server-status, which Metricbeat nginx uses
-    template: src=templates/nginx-sites dest=/etc/nginx/sites-enabled/default
+    template: src=templates/nginx/nginx-sites dest=/etc/nginx/sites-enabled/default
 
   - name: Enable the default HTML site of nginx
     command: cp /var/www/html/index.nginx-debian.html /var/www/html/index.html
@@ -116,6 +101,56 @@
 
   - name: Reload the nginx configuration so that our change is applied
     service: name=nginx state=reloaded
+
+
+  - name: Add osquery's repository key
+    apt_key:
+      keyserver: keyserver.ubuntu.com
+      id: 1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B
+      state: present
+
+  - name: Add osquery's server repository
+    apt_repository:
+      repo: "deb [arch=amd64] https://osquery-packages.s3.amazonaws.com/{{ ansible_distribution_release }} {{ ansible_distribution_release }} main"
+      state: present
+
+  - name: Install osquery
+    apt: name=osquery update_cache=true
+
+  - name: Stop osquery since it sometimes need a few seconds between stop and start to work properly
+    service: name=osqueryd state=stopped
+
+  - name: Allow osquery to access the rsyslog.conf
+    blockinfile:
+      path: /etc/rsyslog.conf
+      block: |
+        template(
+          name="OsqueryCsvFormat"
+          type="string"
+          string="%timestamp:::date-rfc3339,csv%,%hostname:::csv%,%syslogseverity:::csv%,%syslogfacility-text:::csv%,%syslogtag:::csv%,%msg:::csv%\n"
+        )
+        *.* action(type="ompipe" Pipe="/var/osquery/syslog_pipe" template="OsqueryCsvFormat")
+
+  - name: Restart rsyslog
+    service: name=rsyslog state=restarted
+
+  - name: Provide the base configuration for osquery
+    template: src=templates/osquery/osquery.conf dest=/etc/osquery/osquery.conf
+
+  - name: Get the it-compliance configuration
+    get_url:
+      url: https://raw.githubusercontent.com/facebook/osquery/master/packs/it-compliance.conf
+      dest: /etc/osquery/it-compliance.conf
+      mode: 0644
+
+  - name: Get the ossec-rootkit configuration
+    get_url:
+      url: https://raw.githubusercontent.com/facebook/osquery/master/packs/ossec-rootkit.conf
+      dest: /etc/osquery/ossec-rootkit.conf
+      mode: 0644
+
+  - name: Restart osquery and make sure it autostarts
+    service: name=osqueryd state=restarted enabled=yes
 
 
   - name: Get Elasticsearch
@@ -142,43 +177,32 @@
     service: name=logstash enabled=yes state=stopped
 
 
-  - name: Get Filebeat
+  - name: Get the Beats
     get_url:
-      url={{ elastic_download }}/downloads/beats/filebeat/filebeat-{{ elastic_version }}-{{ platform }}.deb
-      dest=/opt/filebeat.deb
-
-  - name: Install Filebeat
-    apt: deb=/opt/filebeat.deb
-
-  - name: Get Heartbeat
-    get_url:
-      url={{ elastic_download }}/downloads/beats/heartbeat/heartbeat-{{ elastic_version }}-{{ platform }}.deb
-      dest=/opt/heartbeat.deb
-
-  - name: Install Heartbeat
-    apt: deb=/opt/heartbeat.deb
-
-  - name: Get Metricbeat
-    get_url:
-      url={{ elastic_download }}/downloads/beats/metricbeat/metricbeat-{{ elastic_version }}-{{ platform }}.deb
-      dest=/opt/metricbeat.deb
-
-  - name: Install Metricbeat
-    apt: deb=/opt/metricbeat.deb
-
-  - name: Get Packetbeat
-    get_url:
-      url={{ elastic_download }}/downloads/beats/packetbeat/packetbeat-{{ elastic_version }}-{{ platform }}.deb
-      dest=/opt/packetbeat.deb
-
-  - name: Install Packetbeat
-    apt: deb=/opt/packetbeat.deb
-
-  - name: Make sure Filebeat, Heartbeat, Metricbeat, and Packetbeat autostart, but are stopped until they are properly configured
-    service: name={{ item }} enabled=yes state=stopped
+      url={{ elastic_download }}/downloads/beats/{{ item }}/{{ item }}-{{ elastic_version }}-{{ platform }}.deb
+      dest=/opt/{{ item }}.deb
     with_items:
+      - auditbeat
       - filebeat
       - heartbeat
+      - metricbeat
+      - packetbeat
+
+  - name: Install the Beats
+    apt: deb=/opt/{{ item }}.deb
+    with_items:
+      - auditbeat
+      - filebeat
+      - heartbeat
+      - metricbeat
+      - packetbeat
+
+  - name: Make sure the Beats autostart, but are stopped until they are properly configured
+    service: name={{ item }} enabled=yes state=stopped
+    with_items:
+      - auditbeat
+      - filebeat
+      - heartbeat-elastic
       - metricbeat
       - packetbeat
 
@@ -194,16 +218,6 @@
   - name: Make sure Kibana autostarts, but is stopped until it is properly configured
     service: name=kibana enabled=yes state=stopped
 
-
-  - name: Download X-Pack
-    get_url:
-      url={{ elastic_download }}/downloads/packs/x-pack/x-pack-{{ elastic_version }}.zip
-      dest=/opt/x-pack.zip
-
-  - name: Download all dashboard
-    get_url:
-      url={{ elastic_download }}/downloads/beats/beats-dashboards/beats-dashboards-{{ elastic_version }}.zip
-      dest=/opt/dashboards.zip
 
   - name: Download the ingest-geoip plugin
     get_url:
@@ -225,6 +239,6 @@
 
   - name: Get the injector plugin to generate test data
     get_url:
-      url=https://download.elastic.co/workshops/basic-kibana/injector/injector-5.3.jar
+      url=https://download.elastic.co/workshops/basic-kibana/injector/injector-6.2.jar
       dest=/opt/injector.jar
       mode=0755

@@ -9,5 +9,5 @@
   - name: Change the Filebeat configuration
     template: src=templates/filebeat.yml dest=/etc/filebeat/filebeat.yml
 
-  - name: Start Filebeat
+  - name: Restart Filebeat
     service: name=filebeat state=restarted

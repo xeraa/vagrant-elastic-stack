@@ -1,0 +1,25 @@
+# ------------ Data path ------------------
+path.data: /var/lib/logstash
+#
+# ------------ Pipeline Settings --------------
+#
+# The ID of the pipeline.
+#
+# pipeline.id: main
+#
+# ------------ Debugging Settings --------------
+path.logs: /var/log/logstash
+#
+# ------------ X-Pack Settings (not applicable for OSS build)--------------
+#
+# X-Pack Monitoring
+# https://www.elastic.co/guide/en/logstash/current/monitoring-logstash.html
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.url: ["http://localhost:9200"]
+#
+# X-Pack Management
+# https://www.elastic.co/guide/en/logstash/current/logstash-centralized-pipeline-management.html
+xpack.management.enabled: false
+#xpack.management.pipeline.id: ["main", "packetbeat"]
+#xpack.management.elasticsearch.url: ["http://localhost:9200"]
+

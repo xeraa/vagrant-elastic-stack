@@ -9,5 +9,5 @@
   - name: Change the Metricbeat configuration
     template: src=templates/metricbeat.yml dest=/etc/metricbeat/metricbeat.yml
 
-  - name: Start Metricbeat
+  - name: Restart Metricbeat
     service: name=metricbeat state=restarted

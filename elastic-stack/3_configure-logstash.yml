@@ -2,26 +2,34 @@
 
 - hosts: localhost
   become: true
-
+  vars_files:
+    - vars.yml
 
   tasks:
 
+  - name: Add the Logstash configuration which activates monitoring
+    template: src=templates/logstash/logstash.yml dest=/etc/logstash/logstash.yml
+
   - name: Add the Logstash input configuration for Beats
-    template: src=templates/beats-input.conf dest=/etc/logstash/conf.d/00-beats-input.conf
+    template: src=templates/logstash/beats-input.conf dest=/etc/logstash/conf.d/00-beats-input.conf
 
   - name: Add the Logstash input configuration for Redis
-    template: src=templates/redis-input.conf dest=/etc/logstash/conf.d/01-redis-input.conf
+    template: src=templates/logstash/redis-input.conf dest=/etc/logstash/conf.d/01-redis-input.conf
 
-  - name: Add the Logstash filter configuration for Syslog
-    template: src=templates/syslog-filter.conf dest=/etc/logstash/conf.d/10-syslog-filter.conf
+#  - name: Add the Logstash filter configuration for Syslog
+#    template: src=templates/logstash/syslog-filter.conf dest=/etc/logstash/conf.d/10-syslog-filter.conf
+
+  - name: Add an empty Logstash filter configuration
+    template: src=templates/logstash/empty-filter.conf dest=/etc/logstash/conf.d/11-empty-filter.conf
 
   - name: Add the Logstash output configuration to Elasticsearch
-    template: src=templates/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
+    template: src=templates/logstash/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
 
   - name: Create the pattern directory
     file: path=/opt/logstash/patterns/ state=directory recurse=yes
+
   - name: Add the nginx pattern, so we can use it for workshops later on
-    template: src=templates/nginx-pattern dest=/opt/logstash/patterns/nginx
+    template: src=templates/logstash/nginx-pattern dest=/opt/logstash/patterns/nginx
 
   - name: Start Logstash
     service: name=logstash state=restarted

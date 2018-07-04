@@ -6,12 +6,18 @@
 
   tasks:
 
-  - name: Explicitly PUT the Packetbeat mapping, since it doesn't happen automatically via Redis
-    command: >
-      curl -XPUT 'http://localhost:9200/_template/packetbeat' -H "Content-Type: application/json" --data-binary @/etc/packetbeat/packetbeat.template.json
-
   - name: Change the Packetbeat configuration
     template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
+    vars:
+      output: elasticsearch
 
-  - name: Start Packetbeat
+  - name: Restart Packetbeat
+    service: name=packetbeat state=restarted
+
+  - name: Once index template and dashboards have been applied, switch to Redis
+    template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
+    vars:
+      output: redis
+
+  - name: Restart Packetbeat
     service: name=packetbeat state=restarted
