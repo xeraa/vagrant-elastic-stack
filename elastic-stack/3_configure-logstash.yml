@@ -16,14 +16,18 @@
   - name: Add the Logstash input configuration for Redis
     template: src=templates/logstash/redis-input.conf dest=/etc/logstash/conf.d/01-redis-input.conf
 
-  - name: Add the Logstash filter configuration for Syslog
-    template: src=templates/logstash/syslog-filter.conf dest=/etc/logstash/conf.d/10-syslog-filter.conf
+#  - name: Add the Logstash filter configuration for Syslog
+#    template: src=templates/logstash/syslog-filter.conf dest=/etc/logstash/conf.d/10-syslog-filter.conf
+
+  - name: Add an empty Logstash filter configuration
+    template: src=templates/logstash/empty-filter.conf dest=/etc/logstash/conf.d/11-empty-filter.conf
 
   - name: Add the Logstash output configuration to Elasticsearch
     template: src=templates/logstash/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
 
   - name: Create the pattern directory
     file: path=/opt/logstash/patterns/ state=directory recurse=yes
+
   - name: Add the nginx pattern, so we can use it for workshops later on
     template: src=templates/logstash/nginx-pattern dest=/opt/logstash/patterns/nginx
 
