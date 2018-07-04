@@ -6,14 +6,12 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 ## Features
 
-* ~~Filebeat collecting Syslog and Kibana's JSON log, Logstash parsing the Syslog file~~
-* Filebeat modules for nginx and system
-* Heartbeat pinging nginx
-* Metricbeat collecting system metrics plus nginx, MongoDB, and Redis
+* Filebeat `system`, `auditd`, `logstash`, `mongodb`, `nginx` and `redis` modules
+* Filebeat collecting kibana json logs from `/var/log/kibana/kibana.log`
+* Auditbeat `file_integrity` module on `/home/ubuntu/` dir and `auditd` module
+* Heartbeat pinging nginx every 10s
+* Metricbeat `system`, `docker`, `elasticsearch`, `kibana`, `logstash`, `mongodb`, `nginx` and `redis` modules
 * Packetbeat sending its data via Redis + Logstash, monitoring flows, ICMP, DNS, HTTP (nginx and Kibana), Redis, and MongoDB (generate traffic with `$ mongo /elastic-stack/mongodb.js`)
-* On 64bit instances Redis in a container, monitored by Metricbeat's Docker module, and Filebeat collects the *json-file* log
-* Dashboards for Filebeat, Heartbeat, Metricbeat, and Packetbeat
-* X-Pack monitoring for Elasticsearch, Logstash, Beats, and Kibana
 * The pattern for nginx is already prepared in */opt/logstash/patterns/* and you can collect */var/log/nginx/access.log* with Filebeat and add a filter in Logstash with the pattern as an exercise
 
 ![](screenshot.png)
@@ -21,7 +19,7 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 ## Vagrant and Ansible
 
-Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (1.8.6+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 2.5GB of RAM.
+Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (2.1.2+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 2.5GB of RAM.
 
 With the [Ansible playbooks](https://docs.ansible.com/ansible/playbooks.html) in the */elastic-stack/* folder you can configure the whole system step by step. Just run them in the given order inside the Vagrant box:
 
