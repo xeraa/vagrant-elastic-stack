@@ -46,7 +46,7 @@ output.redis:
   hosts: ["localhost:6379"]
   datatype: "list"
   key: "packetbeat"
-  db: 0
+  bulk_max_size: 100 # Fixing occasional "Failed to read integer reply: Expected digit" errors
 {% endif %}
 
 #============================== Kibana =====================================
