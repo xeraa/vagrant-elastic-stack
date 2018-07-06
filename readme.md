@@ -33,6 +33,7 @@ $ ansible-playbook /elastic-stack/4_configure-filebeat.yml
 $ ansible-playbook /elastic-stack/4_configure-heartbeat.yml
 $ ansible-playbook /elastic-stack/4_configure-metricbeat.yml
 $ ansible-playbook /elastic-stack/4_configure-packetbeat.yml
+$ ansible-playbook /elastic-stack/5_trial-xpack.yml
 ```
 
 Or if you are in a hurry, run all playbooks with `$ /elastic-stack/all.sh` at once.

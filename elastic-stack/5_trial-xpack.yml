@@ -1,0 +1,15 @@
+---
+
+- hosts: localhost
+  become: true
+
+
+  tasks:
+
+  - name: Active the 30 day X-Pack trial
+    uri:
+      url: http://localhost:9200/_xpack/license/start_trial?acknowledge=true
+      method: POST
+      status_code:
+        - 200
+        - 403 #Trial was already activated
