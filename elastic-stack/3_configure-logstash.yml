@@ -7,6 +7,20 @@
 
   tasks:
 
+  - name: Change Logstash's minimum memory usage to 512MB
+    lineinfile:
+      dest: /etc/logstash/jvm.options
+      regexp: "^-Xms"
+      line: "-Xms512m"
+      state: present
+
+  - name: Change Logstash's maximum memory usage to 512MB
+    lineinfile:
+      dest: /etc/logstash/jvm.options
+      regexp: "^-Xmx"
+      line: "-Xmx512m"
+      state: present
+
   - name: Add the Logstash configuration which activates monitoring
     template: src=templates/logstash/logstash.yml dest=/etc/logstash/logstash.yml
 
