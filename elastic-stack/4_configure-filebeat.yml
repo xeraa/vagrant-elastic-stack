@@ -11,3 +11,10 @@
 
   - name: Restart Filebeat
     service: name=filebeat state=restarted
+
+  - name: Wait if Filebeat is actually running
+    pause: seconds=3
+
+  - name: Get the state of all services and check the status of Filebeat
+    service_facts: ~
+    failed_when: ansible_facts.services.filebeat.state != "running"

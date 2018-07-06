@@ -12,3 +12,9 @@
   - name: Restart Heartbeat
     service: name=heartbeat-elastic state=restarted
 
+  - name: Wait if Heartbeat is actually running
+    pause: seconds=3
+
+  - name: Get the state of all services and check the status of Heartbeat
+    service_facts: ~
+    failed_when: ansible_facts.services["heartbeat-elastic"].state != "running"

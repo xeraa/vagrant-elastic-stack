@@ -11,3 +11,10 @@
 
   - name: Restart Auditbeat
     service: name=auditbeat state=restarted
+
+  - name: Wait if Auditbeat is actually running
+    pause: seconds=3
+
+  - name: Get the state of all services and check the status of Auditbeat
+    service_facts: ~
+    failed_when: ansible_facts.services.auditbeat.state != "running"
