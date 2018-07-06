@@ -19,7 +19,7 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 ## Vagrant and Ansible
 
-Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (2.1.2+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 2.5GB of RAM.
+Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (2.1.2+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 3GB of RAM.
 
 With the [Ansible playbooks](https://docs.ansible.com/ansible/playbooks.html) in the */elastic-stack/* folder you can configure the whole system step by step. Just run them in the given order inside the Vagrant box:
 
@@ -44,7 +44,7 @@ Or if you are in a hurry, run all playbooks with `$ /elastic-stack/all.sh` at on
 If Vagrant and Ansible sound too complicated, there is also the final result: An OVA image, which you can import directly into [VirtualBox](https://www.virtualbox.org):
 
 * Download the image from [https://s3.eu-central-1.amazonaws.com/xeraa/public/elastic-stack.ova](https://s3.eu-central-1.amazonaws.com/xeraa/public/elastic-stack.ova).
-* Load the OVA file into VirtualBox and make sure you have 2.5GB of RAM available for it: **File** -> **Import Appliance...** -> Select the file and start it
+* Load the OVA file into VirtualBox and make sure you have 3GB of RAM available for it: **File** -> **Import Appliance...** -> Select the file and start it
 * Connect to the instance with the credentials `vagrant` and `vagrant` in the VirtualBox window.
 * Or use SSH with the same credentials:
   * Windows: Use [http://www.putty.org](http://www.putty.org) and connect to `vagrant@127.0.0.1` on port 2222.

@@ -25,7 +25,7 @@ Vagrant.configure(2) do |config|
     # Configure the VirtualBox parameters
     config.vm.provider "virtualbox" do |vb|
         vb.name = "elastic-stack"
-        vb.customize [ "modifyvm", :id, "--memory", "2560" ]
+        vb.customize [ "modifyvm", :id, "--memory", "3072" ]
     end
 
 
