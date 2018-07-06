@@ -20,13 +20,15 @@
   - name: Add the ingest-user-agent plugin to Elasticsearch
     command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/ingest-user-agent.zip --batch
 
-  - name: Change Elasticsearch's memory usage to 512MB
+  - name: Change Elasticsearch's minimum memory usage to 512MB
     lineinfile:
       dest: /etc/elasticsearch/jvm.options
       regexp: "^-Xms"
       line: "-Xms512m"
       state: present
-  - lineinfile:
+
+  - name: Change Elasticsearch's maximum memory usage to 512MB
+    lineinfile:
       dest: /etc/elasticsearch/jvm.options
       regexp: "^-Xmx"
       line: "-Xmx512m"
