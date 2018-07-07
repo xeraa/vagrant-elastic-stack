@@ -113,10 +113,12 @@ output.logstash:
 
 #============================== Kibana =====================================
 
-setup.kibana:
-  host: "localhost:5601"
-
-setup.dashboards.enabled: true
+setup:
+  kibana.host: "localhost:5601"
+  dashboards:
+    enabled: true
+    always_kibana: true #Only talk to Kibana, which is important for the retry
+    retry.enabled: true #Retry in case Kibana is not up yet
 
 #============================== Xpack Monitoring =====================================
 
