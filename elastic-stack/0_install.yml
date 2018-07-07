@@ -111,7 +111,7 @@
 
   - name: Add osquery's server repository
     apt_repository:
-      repo: "deb [arch=amd64] https://osquery-packages.s3.amazonaws.com/{{ ansible_distribution_release }} {{ ansible_distribution_release }} main"
+      repo: "deb [arch=amd64] https://osquery-packages.s3.amazonaws.com/deb deb main"
       state: present
 
   - name: Install osquery
