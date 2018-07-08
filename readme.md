@@ -25,15 +25,16 @@ With the [Ansible playbooks](https://docs.ansible.com/ansible/playbooks.html) in
 
 ```sh
 > vagrant ssh
-$ ansible-playbook /elastic-stack/1_configure-elasticsearch.yml
-$ ansible-playbook /elastic-stack/2_configure-kibana.yml
-$ ansible-playbook /elastic-stack/3_configure-logstash.yml
-$ ansible-playbook /elastic-stack/4_configure-auditbeat.yml
-$ ansible-playbook /elastic-stack/4_configure-filebeat.yml
-$ ansible-playbook /elastic-stack/4_configure-heartbeat.yml
-$ ansible-playbook /elastic-stack/4_configure-metricbeat.yml
-$ ansible-playbook /elastic-stack/4_configure-packetbeat.yml
-$ ansible-playbook /elastic-stack/5_trial-xpack.yml
+$ cd /elastic-stack/
+$ ansible-playbook 1_configure-elasticsearch.yml
+$ ansible-playbook 2_configure-kibana.yml
+$ ansible-playbook 3_configure-logstash.yml
+$ ansible-playbook 4_configure-auditbeat.yml
+$ ansible-playbook 4_configure-filebeat.yml
+$ ansible-playbook 4_configure-heartbeat.yml
+$ ansible-playbook 4_configure-metricbeat.yml
+$ ansible-playbook 4_configure-packetbeat.yml
+$ ansible-playbook 5_trial-xpack.yml
 ```
 
 Or if you are in a hurry, run all playbooks with `$ /elastic-stack/all.sh` at once.
