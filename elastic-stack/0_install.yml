@@ -22,7 +22,7 @@
   - name: Install Vim, because plain Vi is driving me crazy
     apt: name=vim state=latest
 
-  - name: Install cURL, which is missing on the Bento image
+  - name: Install cURL for testing
     apt: name=curl state=latest
 
   - name: Install NTP to avoid time drift inside the VM
