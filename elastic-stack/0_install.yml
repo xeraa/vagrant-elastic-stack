@@ -16,13 +16,6 @@
     set_fact:
       platform: "{{ print_architecture.stdout }}"
 
-
-  - name: Get rid of Chef and Puppet to save some resources and autoremove unused packages to save some disk space
-    apt: name={{ item }} state=absent autoremove=yes
-    with_items:
-      - chef
-      - puppet
-
   - name: Install unzip for unpacking files later on
     apt: name=unzip state=latest
 
