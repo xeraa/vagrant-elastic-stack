@@ -137,17 +137,16 @@
   - name: Provide the base configuration for osquery
     template: src=templates/osquery/osquery.conf dest=/etc/osquery/osquery.conf
 
-  - name: Get the it-compliance configuration
-    get_url:
-      url: https://raw.githubusercontent.com/facebook/osquery/master/packs/it-compliance.conf
-      dest: /etc/osquery/it-compliance.conf
-      mode: 0644
-
-  - name: Get the ossec-rootkit configuration
-    get_url:
-      url: https://raw.githubusercontent.com/facebook/osquery/master/packs/ossec-rootkit.conf
-      dest: /etc/osquery/ossec-rootkit.conf
-      mode: 0644
+  - name: Change the interval of the osquery queries to 5min so we can see results quicker
+    replace:
+      path: "/usr/share/osquery/packs/{{ item }}.conf"
+      regexp: '"interval" : .*'
+      replace: '"interval" : "300",'
+    loop:
+      - osquery-monitoring
+      - incident-response
+      - it-compliance
+      - vuln-management
 
   - name: Restart osquery and make sure it autostarts
     service: name=osqueryd state=restarted enabled=yes
