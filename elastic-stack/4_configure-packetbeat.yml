@@ -8,16 +8,6 @@
 
   - name: Change the Packetbeat configuration
     template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
-    vars:
-      output: elasticsearch
-
-  - name: Restart Packetbeat
-    service: name=packetbeat state=restarted
-
-  - name: Once index template and dashboards have been applied, switch to Redis
-    template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
-    vars:
-      output: redis
 
   - name: Restart Packetbeat
     service: name=packetbeat state=restarted

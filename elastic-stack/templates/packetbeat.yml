@@ -33,13 +33,11 @@ processors:
 
 #================================ Outputs ======================================
 
-{% if output == "elasticsearch" %}
 #-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
+  enabled: false
   hosts: ["http://localhost:9200"]
-{% endif %}
 
-{% if output == "redis" %}
 #------------------------------- Redis output ----------------------------------
 output.redis:
   enabled: true
@@ -47,7 +45,6 @@ output.redis:
   datatype: "list"
   key: "packetbeat"
   bulk_max_size: 100 # Fixing occasional "Failed to read integer reply: Expected digit" errors
-{% endif %}
 
 #============================== Kibana =====================================
 
@@ -60,10 +57,6 @@ setup:
 
 #============================== Xpack Monitoring =====================================
 
-xpack.monitoring.enabled: true
-{% if output != "elasticsearch" %}
-xpack.monitoring.elasticsearch:
-  hosts: ["localhost:9200"]
-{% endif %}
-
-
+xpack.monitoring:
+  enabled: true
+  elasticsearch.hosts: ["localhost:9200"] #Required if you connect through Logstash
