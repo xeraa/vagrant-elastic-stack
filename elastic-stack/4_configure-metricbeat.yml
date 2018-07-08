@@ -13,7 +13,7 @@
     service: name=metricbeat state=restarted
 
   - name: Wait if Metricbeat is actually running
-    pause: seconds=3
+    pause: minutes=2
 
   - name: Get the state of all services and check the status of Metricbeat
     service_facts: ~
