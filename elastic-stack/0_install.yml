@@ -34,7 +34,7 @@
 
   - name: Install NTP to avoid time drift inside the VM
     apt: name={{ item }} state=latest
-    with_items:
+    loop:
       - ntp
       - ntpdate
 
@@ -82,7 +82,7 @@
 
   - name: Install Redis CLI, nginx, and MongoDB so we have services in action
     apt: name={{ item }} state=latest
-    with_items:
+    loop:
       - redis-tools
       - nginx
       - mongodb
@@ -95,7 +95,7 @@
 
   - name: Make sure nginx and MongoDB autostart and are started
     service: name={{ item }} enabled=yes state=started
-    with_items:
+    loop:
       - nginx
       - mongodb
 
@@ -181,7 +181,7 @@
     get_url:
       url={{ elastic_download }}/downloads/beats/{{ item }}/{{ item }}-{{ elastic_version }}-{{ platform }}.deb
       dest=/opt/{{ item }}.deb
-    with_items:
+    loop:
       - auditbeat
       - filebeat
       - heartbeat
@@ -190,7 +190,7 @@
 
   - name: Install the Beats
     apt: deb=/opt/{{ item }}.deb
-    with_items:
+    loop:
       - auditbeat
       - filebeat
       - heartbeat
@@ -199,7 +199,7 @@
 
   - name: Make sure the Beats autostart, but are stopped until they are properly configured
     service: name={{ item }} enabled=yes state=stopped
-    with_items:
+    loop:
       - auditbeat
       - filebeat
       - heartbeat-elastic
@@ -232,7 +232,7 @@
 
   - name: Make the shell scripts executable
     file: path=/elastic-stack/{{ item }} mode=0755
-    with_items:
+    loop:
       - all.sh
       - fix-time.sh
 

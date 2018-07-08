@@ -22,35 +22,35 @@
 
   - name: Change Elasticsearch's minimum memory usage to 512MB
     lineinfile:
-      dest: /etc/elasticsearch/jvm.options
+      path: /etc/elasticsearch/jvm.options
       regexp: "^-Xms"
       line: "-Xms512m"
       state: present
 
   - name: Change Elasticsearch's maximum memory usage to 512MB
     lineinfile:
-      dest: /etc/elasticsearch/jvm.options
+      path: /etc/elasticsearch/jvm.options
       regexp: "^-Xmx"
       line: "-Xmx512m"
       state: present
 
   - name: Do not swap
     lineinfile:
-      dest: /etc/elasticsearch/elasticsearch.yml
+      path: /etc/elasticsearch/elasticsearch.yml
       regexp: "bootstrap.memory_lock"
       line: "bootstrap.memory_lock: true"
       state: present
 
   - name: We only have a single node, set minimum master nodes accordingly
     lineinfile:
-      dest: /etc/elasticsearch/elasticsearch.yml
+      path: /etc/elasticsearch/elasticsearch.yml
       regexp: "discovery.zen.minimum_master_nodes"
       line: "discovery.zen.minimum_master_nodes: 1"
       state: present
 
   - name: Require explicit names when deleting indices
     lineinfile:
-      dest: /etc/elasticsearch/elasticsearch.yml
+      path: /etc/elasticsearch/elasticsearch.yml
       regexp: "action.destructive_requires_name"
       line: "action.destructive_requires_name: true"
       state: present

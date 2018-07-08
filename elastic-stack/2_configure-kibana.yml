@@ -7,19 +7,19 @@
   tasks:
 
   - name: Make Kibana available on all network interfaces
-    lineinfile: >
-      dest=/etc/kibana/kibana.yml
-      regexp='^server.host'
-      line='server.host: "0.0.0.0"'
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: '^server.host'
+      line: 'server.host: "0.0.0.0"'
 
   - name: Create the Kibana logging directory
     file: path=/var/log/kibana/ state=directory owner=kibana group=kibana
 
   - name: Enable persistent Kibana logs
-    lineinfile: >
-      dest=/etc/kibana/kibana.yml
-      regexp='^logging.dest'
-      line='logging.dest: /var/log/kibana/kibana.log'
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: '^logging.dest'
+      line: 'logging.dest: /var/log/kibana/kibana.log'
 
   - name: Start Kibana
     service: name=kibana state=restarted
