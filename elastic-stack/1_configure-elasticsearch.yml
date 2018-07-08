@@ -62,6 +62,13 @@
       line:  "cluster.routing.allocation.disk.threshold_enabled: false"
       state: present
 
+  - name: Enable monitoring of the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.monitoring.collection.enabled"
+      line:  "xpack.monitoring.collection.enabled: true"
+      state: present
+
   - name: Set the right ulimits
     shell: ulimit -n 65536
   - shell: ulimit -l unlimited
