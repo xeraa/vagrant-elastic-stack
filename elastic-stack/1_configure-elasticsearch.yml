@@ -55,6 +55,13 @@
       line: "action.destructive_requires_name: true"
       state: present
 
+  - name: Disable watermarks, since disk space might be tight on the 10GB base box
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "cluster.routing.allocation.disk.threshold_enabled"
+      line:  "cluster.routing.allocation.disk.threshold_enabled: false"
+      state: present
+
   - name: Set the right ulimits
     shell: ulimit -n 65536
   - shell: ulimit -l unlimited
