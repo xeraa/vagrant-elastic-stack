@@ -28,3 +28,13 @@
   - name: Get the state of all services and check the status of Packetbeat
     service_facts: ~
     failed_when: ansible_facts.services.packetbeat.state != "running"
+
+  - name: Check if we actually have documents in Packetbeat's index
+    uri:
+      url: http://localhost:9200/packetbeat-*/_count
+      method: GET
+      status_code:
+        - 200
+      return_content: yes
+    register: response
+    failed_when: 'response.json["count"]|int == 0'

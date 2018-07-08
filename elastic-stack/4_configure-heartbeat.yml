@@ -18,3 +18,13 @@
   - name: Get the state of all services and check the status of Heartbeat
     service_facts: ~
     failed_when: ansible_facts.services["heartbeat-elastic"].state != "running"
+
+  - name: Check if we actually have documents in Heartbeat's index
+    uri:
+      url: http://localhost:9200/heartbeat-*/_count
+      method: GET
+      status_code:
+        - 200
+      return_content: yes
+    register: response
+    failed_when: 'response.json["count"]|int == 0'

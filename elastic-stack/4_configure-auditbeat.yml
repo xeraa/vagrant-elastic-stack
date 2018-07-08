@@ -18,3 +18,13 @@
   - name: Get the state of all services and check the status of Auditbeat
     service_facts: ~
     failed_when: ansible_facts.services.auditbeat.state != "running"
+
+  - name: Check if we actually have documents in Auditbeat's index
+    uri:
+      url: http://localhost:9200/auditbeat-*/_count
+      method: GET
+      status_code:
+        - 200
+      return_content: yes
+    register: response
+    failed_when: 'response.json["count"]|int == 0'
