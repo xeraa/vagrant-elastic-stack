@@ -1,2 +1,3 @@
-elastic_version: 6.4.2
+elastic_version: 6.5.0
+injector_version: 6.4.2
 elastic_download: https://artifacts.elastic.co
