@@ -1,6 +1,6 @@
 # Elastic Stack in a Box
 
-This repository will install the [Elastic Stack](https://www.elastic.co/products) (Elasticsearch, Logstash, Kibana, and Beats) and optionally X-Pack. You can either start from scratch and configure everything with [Vagrant and Ansible](#vagrant-and-ansible) or you can [download the final OVA image](#ova-image).
+This repository will install the [Elastic Stack](https://www.elastic.co/products) (Elasticsearch, Logstash, Kibana, and Beats) and optionally start a trial of commercial features. You can either start from scratch and configure everything with [Vagrant and Ansible](#vagrant-and-ansible) or you can [download the final OVA image](#ova-image).
 
 
 
