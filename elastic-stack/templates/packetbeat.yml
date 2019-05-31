@@ -19,7 +19,7 @@ packetbeat.protocols:
   include_authorities: true
   include_additionals: true
 - type: http
-  ports: [80, 5601]
+  ports: [80]
 - type: redis
   ports: [6379]
 - type: mongodb
@@ -35,12 +35,17 @@ processors:
 
 #-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
-  enabled: false
-  hosts: ["http://localhost:9200"]
+  enabled: true
+  hosts: ["127.0.0.1:9200"]
+  protocol: "https"
+  ssl.certificate_authorities: ["/usr/share/elasticsearch/ca/ca.crt"]
+  ssl.certificate: "/usr/share/elasticsearch/instance/instance.crt"
+  ssl.key: "/usr/share/elasticsearch/instance/instance.key"
+  username: "elastic"
 
 #------------------------------- Redis output ----------------------------------
 output.redis:
-  enabled: true
+  enabled: false
   hosts: ["localhost:6379"]
   datatype: "list"
   key: "packetbeat"
@@ -48,8 +53,14 @@ output.redis:
 
 #============================== Kibana =====================================
 
-setup:
-  kibana.host: "localhost:5601"
+setup.kibana:
+  host: "127.0.0.1:5601"
+  protocol: "https"
+  username: "elastic"
+  ssl.enabled: true
+  ssl.certificate_authorities: ["/usr/share/elasticsearch/ca/ca.crt"]
+  ssl.certificate: "/usr/share/elasticsearch/instance/instance.crt"
+  ssl.key: "/usr/share/elasticsearch/instance/instance.key"
   dashboards:
     enabled: true
     always_kibana: true #Only talk to Kibana, which is important for the retry
@@ -57,6 +68,5 @@ setup:
 
 #============================== Xpack Monitoring =====================================
 
-xpack.monitoring:
-  enabled: true
-  elasticsearch.hosts: ["localhost:9200"] #Required if you connect through Logstash
+xpack.monitoring.enabled: true
+  

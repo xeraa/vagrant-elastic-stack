@@ -2,18 +2,47 @@
 
 - hosts: localhost
   become: true
-
+  vars_files:
+    - vars.yml
 
   tasks:
 
   - name: Change the Metricbeat configuration
     template: src=templates/metricbeat.yml dest=/etc/metricbeat/metricbeat.yml
 
+  - name: Apply elastic user password to configuration
+    lineinfile:
+      path: /etc/metricbeat/metricbeat.yml
+      regexp: "output.elasticsearch.password"
+      line:  "output.elasticsearch.password: '{{ elastic_user_password }}'"
+      state: present
+
+  - name: Apply kibana user password to configuration
+    lineinfile:
+      path: /etc/metricbeat/metricbeat.yml
+      regexp: "setup.kibana.password"
+      line:  "setup.kibana.password: '{{ elastic_user_password }}'"
+      state: present
+
+  - name: Apply elastic user password to module configuration
+    lineinfile:
+      path: /etc/metricbeat/metricbeat.yml
+      regexp: "^- module: elasticsearch"
+      line:  "- module: elasticsearch\n  password: '{{ elastic_user_password }}'"
+      state: present
+  
+  - name: Apply kibana password to module configuration
+    lineinfile:
+      path: /etc/metricbeat/metricbeat.yml
+      regexp: "^- module: kibana"
+      line:  "- module: kibana\n  password: '{{ kibana_user_password }}'"
+      state: present
+
   - name: Restart Metricbeat
     service: name=metricbeat state=restarted
 
   - name: Wait if Metricbeat is actually running
-    pause: minutes=2
+    pause: minutes=1
 
   - name: Get the state of all services and check the status of Metricbeat
     service_facts: ~
@@ -21,10 +50,13 @@
 
   - name: Check if we actually have documents in Metricbeat's index
     uri:
-      url: http://localhost:9200/metricbeat-*/_count
+      url: https://127.0.0.1:9200/metricbeat-*/_count
+      user: elastic
+      password: "{{ elastic_user_password }}"
       method: GET
       status_code:
         - 200
       return_content: yes
+      validate_certs: no
     register: response
     failed_when: 'response.json["count"]|int == 0'

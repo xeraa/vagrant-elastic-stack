@@ -2,23 +2,88 @@
 
 - hosts: localhost
   become: true
-
+  vars_files:
+    - vars.yml
 
   tasks:
 
-  - name: Remove the ingest-geoip plugin if existing
-    command: /usr/share/elasticsearch/bin/elasticsearch-plugin remove ingest-geoip --purge
-    ignore_errors: yes
+  - name: Create CA certificates
+    expect:
+      command: /usr/share/elasticsearch/bin/elasticsearch-certutil ca --pem
+      responses:
+        'Please enter the desired output file \[elastic-stack-ca.zip\]:' : "\n"
 
-  - name: Add the ingest-geoip plugin to Elasticsearch
-    command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/ingest-geoip.zip --batch
+  - name: Creates CA directory
+    file:
+      path: /usr/share/elasticsearch/ca
+      state: directory
 
-  - name: Remove the ingest-user-agent plugin if existing
-    command: /usr/share/elasticsearch/bin/elasticsearch-plugin remove ingest-user-agent --purge
-    ignore_errors: yes
+  - name: Unzip CA certificates
+    command: unzip /usr/share/elasticsearch/elastic-stack-ca.zip -d /usr/share/elasticsearch/
 
-  - name: Add the ingest-user-agent plugin to Elasticsearch
-    command: /usr/share/elasticsearch/bin/elasticsearch-plugin install file:///opt/ingest-user-agent.zip --batch
+  - name: Create instance certificates
+    expect:
+      command: /usr/share/elasticsearch/bin/elasticsearch-certutil cert --ca-cert /usr/share/elasticsearch/ca/ca.crt --ca-key /usr/share/elasticsearch/ca/ca.key --ip 127.0.0.1 --pem
+      responses:
+        'Please enter the desired output file \[certificate-bundle.zip\]:' : "\n"
+
+  - name: Creates certificate directory
+    file:
+      path: /usr/share/elasticsearch/instance
+      state: directory
+
+  - name: Unzip instance certificates
+    command: unzip /usr/share/elasticsearch/certificate-bundle.zip -d /usr/share/elasticsearch/
+
+  - name: Creates configuration ca directory
+    file:
+      path: /etc/elasticsearch/ca
+      state: directory
+
+  - name: Creates configuration instance directory
+    file:
+      path: /etc/elasticsearch/instance
+      state: directory
+
+  - name: Creates elastic directory in server ca directory
+    file:
+      path: /usr/local/share/ca-certificates/elastic
+      state: directory
+
+  - name: Copy CA certificate to server ca directory
+    copy:
+      src: /usr/share/elasticsearch/ca/ca.crt
+      dest: /usr/local/share/ca-certificates/elastic/
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Update server certificates
+    command: update-ca-certificates
+
+  - name: Copy CA certificate to elasticsearch directory
+    copy:
+      src: /usr/share/elasticsearch/ca/ca.crt
+      dest: /etc/elasticsearch/ca/ca.crt
+      owner: root
+      group: elasticsearch
+      mode: 0644
+
+  - name: Copy instance certificate to elasticsearch directory
+    copy:
+      src: /usr/share/elasticsearch/instance/instance.crt
+      dest: /etc/elasticsearch/instance/instance.crt
+      owner: root
+      group: elasticsearch
+      mode: 0644
+
+  - name: Copy instance key to elasticsearch directory
+    copy:
+      src: /usr/share/elasticsearch/instance/instance.key
+      dest: /etc/elasticsearch/instance/instance.key
+      owner: root
+      group: elasticsearch
+      mode: 0644
 
   - name: Change Elasticsearch's minimum memory usage to 512MB
     lineinfile:
@@ -69,6 +134,76 @@
       line:  "xpack.monitoring.collection.enabled: true"
       state: present
 
+  - name: Enable security for the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.enabled"
+      line:  "xpack.security.enabled: true"
+      state: present
+
+  - name: Enable SSL for transport within the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.transport.ssl.enabled"
+      line:  "xpack.security.transport.ssl.enabled: true"
+      state: present
+
+  - name: Make transport SSL verification mode 'certificate' within the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.transport.ssl.verification_mode"
+      line:  "xpack.security.transport.ssl.verification_mode: certificate"
+      state: present
+
+  - name: Set path to transport ssl key within the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.transport.ssl.key"
+      line:  "xpack.security.transport.ssl.key: /etc/elasticsearch/instance/instance.key"
+      state: present
+
+  - name: Set path to transport ssl certificate within the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.transport.ssl.certificate"
+      line:  "xpack.security.transport.ssl.certificate: /etc/elasticsearch/instance/instance.crt"
+      state: present
+
+  - name: Set path to transport ssl CA certificate within the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.transport.ssl.certificate_authorities"
+      line:  "xpack.security.transport.ssl.certificate_authorities: [ '/etc/elasticsearch/ca/ca.crt' ]"
+      state: present
+
+  - name: Enable SSL for HTTP for the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.http.ssl.enabled"
+      line:  "xpack.security.http.ssl.enabled: true"
+      state: present
+
+  - name: Set path to HTTP ssl key within the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.http.ssl.key"
+      line:  "xpack.security.http.ssl.key:  /etc/elasticsearch/instance/instance.key"
+      state: present
+
+  - name: Set path to HTTP ssl certificate within the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.http.ssl.certificate"
+      line:  "xpack.security.http.ssl.certificate: /etc/elasticsearch/instance/instance.crt"
+      state: present
+
+  - name: Set path to HTTP ssl CA certificate within the Elastic Stack
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      regexp: "xpack.security.http.ssl.certificate_authorities"
+      line:  "xpack.security.http.ssl.certificate_authorities: [ '/etc/elasticsearch/ca/ca.crt' ]"
+      state: present
+
   - name: Set the right ulimits
     shell: ulimit -n 65536
   - shell: ulimit -l unlimited
@@ -81,17 +216,60 @@
       port: 9200
       delay: 5
 
-  - name: Set the number of shards to one and the number of replicas to 0
+  - name: Create reserved user passwords
+    expect:
+      command: /usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive
+      responses:
+        'Please confirm that you would like to continue \[y\/N\]' : "y\n"
+        'Enter password for \[elastic\]:' : "{{ elastic_user_password }}\n"
+        'Reenter password for \[elastic\]:' : "{{ elastic_user_password }}\n"
+        'Enter password for \[apm_system\]:' : "{{ apm_system_user_password }}\n"
+        'Reenter password for \[apm_system\]:' : "{{ apm_system_user_password }}\n"
+        'Enter password for \[kibana\]:' : "{{ kibana_user_password }}\n"
+        'Reenter password for \[kibana\]:' : "{{ kibana_user_password }}\n"
+        'Enter password for \[logstash_system\]:' : "{{ logstash_system_user_password }}\n"
+        'Reenter password for \[logstash_system\]:' : "{{ logstash_system_user_password }}\n"
+        'Enter password for \[beats_system\]:' : "{{ beats_system_user_password }}\n"
+        'Reenter password for \[beats_system\]:' : "{{ beats_system_user_password }}\n"
+        'Enter password for \[remote_monitoring_user\]:' : "{{ remote_monitoring_user_password }}\n"
+        'Reenter password for \[remote_monitoring_user\]:' : "{{ remote_monitoring_user_password }}\n"
+
+  - name: Active the 30 day X-Pack trial
     uri:
-      url: http://localhost:9200/_template/template_global
-      body_format: json
-      method: PUT
-      body:
-        template: "*"
-        order: 0
-        settings:
-          number_of_shards: 1
-          number_of_replicas: 0
+      url: https://127.0.0.1:9200/_xpack/license/start_trial?acknowledge=true
+      user: elastic
+      password: "{{ elastic_user_password }}"
+      method: POST
+      force_basic_auth: yes
+      validate_certs: false
       status_code:
         - 200
-        - 201
+        - 403 #Trial was already activated
+
+  - name: Wait for trial to register
+    pause: 
+      minutes: 1
+
+  - name: Create Logstash Writer role
+    uri:
+      url: https://127.0.0.1:9200/_xpack/security/role/logstash_writer
+      user: elastic
+      password: "{{ elastic_user_password }}"
+      method: POST
+      body: '{"cluster": ["manage_index_templates", "monitor", "manage_ilm"], "indices": [{"names": [ "logstash-*" ], "privileges": ["write","delete","create_index","manage","manage_ilm"]  }]}'
+      force_basic_auth: yes
+      status_code: 200
+      body_format: json
+      validate_certs: no
+
+  - name: Create logstash_internal user
+    uri:
+      url: https://127.0.0.1:9200/_xpack/security/user/logstash_internal
+      user: elastic
+      password: "{{ elastic_user_password }}"
+      method: POST
+      body: '{"password" : "{{ logstash_internal_password }}","roles" : [ "logstash_writer"],"full_name" : "Internal Logstash User"}'
+      force_basic_auth: yes
+      status_code: 200
+      body_format: json
+      validate_certs: no
