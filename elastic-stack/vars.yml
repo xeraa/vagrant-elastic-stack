@@ -1,3 +1,10 @@
-elastic_version: 6.5.0
-injector_version: 6.4.2
+elastic_version: 7.1.1
+injector_version: 7.1.1
 elastic_download: https://artifacts.elastic.co
+elastic_user_password: password
+apm_system_user_password: password
+kibana_user_password: password
+logstash_system_user_password: password
+beats_system_user_password: password
+remote_monitoring_user_password: password
+logstash_internal_password: password

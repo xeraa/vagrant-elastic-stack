@@ -2,18 +2,33 @@
 
 - hosts: localhost
   become: true
-
+  vars_files:
+    - vars.yml
 
   tasks:
 
   - name: Change the Packetbeat configuration
     template: src=templates/packetbeat.yml dest=/etc/packetbeat/packetbeat.yml
 
+  - name: Apply elastic user password to configuration
+    lineinfile:
+      path: /etc/packetbeat/packetbeat.yml
+      regexp: "output.elasticsearch.password"
+      line:  "output.elasticsearch.password: '{{ elastic_user_password }}'"
+      state: present
+
+  - name: Apply kibana user password to configuration
+    lineinfile:
+      path: /etc/packetbeat/packetbeat.yml
+      regexp: "setup.kibana.password"
+      line:  "setup.kibana.password: '{{ elastic_user_password }}'"
+      state: present
+
   - name: Restart Packetbeat
     service: name=packetbeat state=restarted
 
   - name: Wait if Packetbeat is actually running
-    pause: minutes=2
+    pause: minutes=1
 
   - name: Get the state of all services and check the status of Packetbeat
     service_facts: ~
@@ -21,10 +36,15 @@
 
   - name: Check if we actually have documents in Packetbeat's index
     uri:
-      url: http://localhost:9200/packetbeat-*/_count
+      url: https://127.0.0.1:9200/packetbeat-*/_count
+      user: elastic
+      password: "{{ elastic_user_password }}"
       method: GET
       status_code:
         - 200
       return_content: yes
+      validate_certs: no
     register: response
     failed_when: 'response.json["count"]|int == 0'
+
+

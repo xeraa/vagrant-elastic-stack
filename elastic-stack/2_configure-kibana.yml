@@ -2,7 +2,8 @@
 
 - hosts: localhost
   become: true
-
+  vars_files:
+    - vars.yml
 
   tasks:
 
@@ -21,6 +22,100 @@
       regexp: '^logging.dest'
       line: 'logging.dest: /var/log/kibana/kibana.log'
 
+  - name: Creates configuration ca directory
+    file:
+      path: /etc/kibana/ca
+      state: directory
+
+  - name: Creates configuration instance directory
+    file:
+      path: /etc/kibana/instance
+      state: directory
+
+  - name: Copy CA certificate to kibana directory
+    copy:
+      src: /usr/share/elasticsearch/ca/ca.crt
+      dest: /etc/kibana/ca/ca.crt
+      owner: root
+      group: kibana
+      mode: 0644
+
+  - name: Copy instance certificate to kibana directory
+    copy:
+      src: /usr/share/elasticsearch/instance/instance.crt
+      dest: /etc/kibana/instance/instance.crt
+      owner: root
+      group: kibana
+      mode: 0644
+
+  - name: Copy instance key to kibana directory
+    copy:
+      src: /usr/share/elasticsearch/instance/instance.key
+      dest: /etc/kibana/instance/instance.key
+      owner: root
+      group: kibana
+      mode: 0644
+
+  - name: Change Elasticsearch hosts
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'elasticsearch.hosts'
+      line: 'elasticsearch.hosts: ["https://127.0.0.1:9200"]'
+
+  - name: Set Elasticsearch username 
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'elasticsearch.username'
+      line: 'elasticsearch.username: "kibana"'
+
+  - name: Set Kibana user password 
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'elasticsearch.password'
+      line: 'elasticsearch.password: {{ kibana_user_password }}'
+
+  - name: Enable SSL for Kibana server
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'server.ssl.enabled'
+      line: 'server.ssl.enabled: true'
+
+  - name: Set path to instance certificate for server
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'server.ssl.certificate'
+      line: 'server.ssl.certificate: /etc/kibana/instance/instance.crt'
+
+  - name: Set path to instance key for server
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'server.ssl.key'
+      line: 'server.ssl.key: /etc/kibana/instance/instance.key'
+
+  - name: Set path to instance certificate for elasticsearch
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'elasticsearch.ssl.certificate'
+      line: 'elasticsearch.ssl.certificate: /etc/kibana/instance/instance.crt'
+
+  - name: Set path to instance key for elasticsearch
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'elasticsearch.ssl.key'
+      line: 'elasticsearch.ssl.key: /etc/kibana/instance/instance.key'
+
+  - name: Set path to CA
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'elasticsearch.ssl.certificateAuthorities'
+      line: 'elasticsearch.ssl.certificateAuthorities: /etc/kibana/ca/ca.crt'
+
+  - name: Set certificate verification mode for elasticsearch
+    lineinfile:
+      path: /etc/kibana/kibana.yml
+      regexp: 'elasticsearch.ssl.verificationMode'
+      line: 'elasticsearch.ssl.verificationMode: certificate'
+
   - name: Start Kibana
     service: name=kibana state=restarted
 
@@ -28,3 +123,23 @@
     wait_for:
       port: 5601
       delay: 5
+  
+  - name: Wait for Kibana to be ready
+    pause: 
+      minutes: 2
+
+  - name: Set dark mode
+    uri:
+      url: https://127.0.0.1:5601/api/kibana/settings/theme:darkMode
+      user: elastic
+      password: "{{ elastic_user_password }}"
+      method: POST
+      body: '{"value":"true"}'
+      headers:
+        Content-Type: "application/json"
+        kbn-xsrf: true
+      force_basic_auth: yes
+      status_code: 200
+      body_format: json
+      validate_certs: no
+

@@ -7,6 +7,14 @@
 
   tasks:
 
+  - name: Copy CA certificate to elasticsearch directory
+    copy:
+      src: /usr/share/elasticsearch/ca/ca.crt
+      dest: /etc/logstash/ca.crt
+      owner: root
+      group: root
+      mode: 0644
+
   - name: Change Logstash's minimum memory usage to 512MB
     lineinfile:
       path: /etc/logstash/jvm.options
@@ -38,6 +46,34 @@
 
   - name: Add the Logstash output configuration to Elasticsearch
     template: src=templates/logstash/elasticsearch-output.conf dest=/etc/logstash/conf.d/20-elasticsearch-output.conf
+
+  - name: Change Elasticsearch output user password
+    lineinfile:
+      path: /etc/logstash/conf.d/20-elasticsearch-output.conf
+      regexp: "password => x-pack-test-password"
+      line: "password => {{ logstash_internal_password }}"
+      state: present
+
+  - name: Add logstash system user for monitoring
+    lineinfile:
+      path: /etc/logstash/logstash.yml
+      regexp: "xpack.monitoring.elasticsearch.username"
+      line: "xpack.monitoring.elasticsearch.username: 'logstash_system'"
+      state: present
+
+  - name: Add logstash system user for monitoring
+    lineinfile:
+      path: /etc/logstash/logstash.yml
+      regexp: "xpack.monitoring.elasticsearch.password"
+      line: "xpack.monitoring.elasticsearch.password: '{{ logstash_system_user_password }}'"
+      state: present
+
+  - name: Add CA cert for monitoring
+    lineinfile:
+      path: /etc/logstash/logstash.yml
+      regexp: "xpack.monitoring.elasticsearch.ssl.certificate_authority"
+      line: "xpack.monitoring.elasticsearch.ssl.certificate_authority: /etc/logstash/ca.crt"
+      state: present
 
   - name: Create the pattern directory
     file: path=/opt/logstash/patterns/ state=directory recurse=yes

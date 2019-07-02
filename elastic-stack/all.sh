@@ -10,4 +10,5 @@ ansible-playbook 4_configure-filebeat.yml &&\
 ansible-playbook 4_configure-heartbeat.yml &&\
 ansible-playbook 4_configure-metricbeat.yml &&\
 ansible-playbook 4_configure-packetbeat.yml &&\
-ansible-playbook 5_trial-xpack.yml
+ansible-playbook 5_configure-dashboards.yml
+

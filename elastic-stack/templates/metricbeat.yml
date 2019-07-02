@@ -57,15 +57,18 @@ metricbeat.modules:
 - module: elasticsearch
   metricsets: ["node", "node_stats"]
   period: 10s
-  hosts: ["localhost:9200"]
+  hosts: ["https://127.0.0.1:9200"]
   enabled: true
+  username: "elastic"
 
 #------------------------------- Kibana Module -------------------------------
 - module: kibana
   metricsets: ["status"]
   period: 10s
-  hosts: ["localhost:5601"]
+  hosts: ["https://127.0.0.1:5601"]
   enabled: true
+  username: "kibana"
+  
 
 #------------------------------ Logstash Module ------------------------------
 - module: logstash
@@ -104,7 +107,13 @@ processors:
 
 #-------------------------- Elasticsearch output -------------------------------
 output.elasticsearch:
-  hosts: ["localhost:9200"]
+  enabled: true
+  hosts: ["127.0.0.1:9200"]
+  protocol: "https"
+  ssl.certificate_authorities: ["/usr/share/elasticsearch/ca/ca.crt"]
+  ssl.certificate: "/usr/share/elasticsearch/instance/instance.crt"
+  ssl.key: "/usr/share/elasticsearch/instance/instance.key"
+  username: "elastic"
 
 #----------------------------- Logstash output ---------------------------------
 output.logstash:
@@ -113,8 +122,14 @@ output.logstash:
 
 #============================== Kibana =====================================
 
-setup:
-  kibana.host: "localhost:5601"
+setup.kibana:
+  host: "127.0.0.1:5601"
+  protocol: "https"
+  username: "elastic"
+  ssl.enabled: true
+  ssl.certificate_authorities: ["/usr/share/elasticsearch/ca/ca.crt"]
+  ssl.certificate: "/usr/share/elasticsearch/instance/instance.crt"
+  ssl.key: "/usr/share/elasticsearch/instance/instance.key"
   dashboards:
     enabled: true
     always_kibana: true #Only talk to Kibana, which is important for the retry

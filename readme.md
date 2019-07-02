@@ -19,7 +19,7 @@ This repository will install the [Elastic Stack](https://www.elastic.co/products
 
 ## Vagrant and Ansible
 
-Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (2.1.2+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 3GB of RAM.
+Do a simple `vagrant up` by using [Vagrant](https://www.vagrantup.com)'s [Ansible provisioner](https://www.vagrantup.com/docs/provisioning/ansible.html). All you need is a working [Vagrant installation](https://www.vagrantup.com/docs/installation/) (2.2.4+ but the latest version is always recommended), a [provider](https://www.vagrantup.com/docs/providers/) (tested with the latest [VirtualBox](https://www.virtualbox.org) version), and 3GB of RAM.
 
 With the [Ansible playbooks](https://docs.ansible.com/ansible/playbooks.html) in the */elastic-stack/* folder you can configure the whole system step by step. Just run them in the given order inside the Vagrant box:
 
@@ -34,7 +34,7 @@ $ ansible-playbook 4_configure-filebeat.yml
 $ ansible-playbook 4_configure-heartbeat.yml
 $ ansible-playbook 4_configure-metricbeat.yml
 $ ansible-playbook 4_configure-packetbeat.yml
-$ ansible-playbook 5_trial-xpack.yml
+$ ansible-playbook 5_configure-dashboards.yml
 ```
 
 Or if you are in a hurry, run all playbooks with `$ /elastic-stack/all.sh` at once.
@@ -57,7 +57,7 @@ If Vagrant and Ansible sound too complicated, there is also the final result: An
 
 ## Kibana
 
-Access Kibana at [http://localhost:5601](http://localhost:5601).
+Access Kibana at [https://127.0.0.1:5601](https://127.0.0.1:5601).
 
 
 

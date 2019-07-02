@@ -1,0 +1,18 @@
+---
+
+- hosts: localhost
+  become: true
+
+  tasks:
+
+  - name: Setup Auditbeat dashboards 
+    command: auditbeat setup --dashboards
+      
+  - name: Setup Filebeat dashboards 
+    command: filebeat setup --dashboards
+
+  - name: Setup Packetbeat dashboards 
+    command: packetbeat setup --dashboards
+
+  - name: Setup Metricbeat dashboards 
+    command: metricbeat setup --dashboards
